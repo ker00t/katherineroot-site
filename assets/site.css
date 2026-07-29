@@ -89,6 +89,13 @@ a.card:hover .card__arrow,a.card:focus-visible .card__arrow{transform:translateX
 .card--soon{opacity:.6}
 .card--soon .card__tag{background:transparent;border:1px solid rgba(var(--surface-rgb),.3);color:var(--muted)}
 
+/* --- empty state: a whole page that's still being written --- */
+.empty-state{max-width:1080px;margin:clamp(48px,9vw,88px) auto 0;padding:0 clamp(20px,5vw,48px) clamp(64px,10vw,112px)}
+.empty-state__frame{min-height:240px;border-radius:24px;
+      border:1.5px dashed rgba(var(--surface-rgb),.25);background:rgba(var(--surface-rgb),.03);
+      display:flex;align-items:center;justify-content:center;padding:48px 24px;text-align:center}
+.empty-state__label{font-size:15px;color:var(--muted)}
+
 @media (prefers-reduced-motion: reduce){
   .nav__mark,.nav__links a,.card,.card__arrow{transition:none}
   .nav__mark:hover,.nav__mark:focus-visible,
