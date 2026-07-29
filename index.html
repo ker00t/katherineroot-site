@@ -1,0 +1,315 @@
+<!-- ============================================================
+     THE FLIP — portfolio header for katherineroot.com
+     Self-contained. No build step, no dependencies.
+     Drop into any page, or lift the <style>/<header>/<script> apart.
+
+     Three states, all handled below:
+       1. Pointer + hover  -> flip on hover (the real interaction)
+       2. Touch / no-hover  -> flip on tap, one letter active at a time
+       3. prefers-reduced-motion -> static name, no motion, tags hidden
+
+     Accessibility: the <h1> exposes the plain name "Katherine Root"
+     to screen readers; the animated glyphs and tags are decorative
+     (aria-hidden), so nothing reads as gibberish.
+     ============================================================ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Katherine Root — experience designer</title>
+<script>
+  /* Runs before the stylesheet paints anything, so the right time-of-day
+     theme applies immediately — no flash of the wrong colors.
+     5–11:59 morning · 12–16:59 afternoon · 17–20:59 evening · 21–4:59 night */
+  (function () {
+    var h = new Date().getHours();
+    var time = (h >= 5 && h < 12) ? 'morning'
+             : (h >= 12 && h < 17) ? 'afternoon'
+             : (h >= 17 && h < 21) ? 'evening'
+             : 'night';
+    document.documentElement.setAttribute('data-time', time);
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* night (also the no-JS fallback) */
+    --paper:#17140F;      /* dark field */
+    --ink:#FFF1D6;        /* cream type */
+    --muted:#9B9384;
+    --surface-rgb:255,241,214;  /* --ink as r,g,b — translucent borders/tints on dark bg */
+    --accent:#C8F135;     /* one bold action color, constant across all times of day */
+    --lift: -8px;         /* how high a flipped letter jumps */
+    --dur: .5s;
+    --spring: cubic-bezier(.34,1.56,.64,1);
+  }
+
+  /* --- time of day: JS sets data-time on <html> before first paint --- */
+  :root[data-time="morning"]{
+    --paper:#FFF3E0;
+    --ink:#231B12;
+    --muted:#8C7C63;
+    --surface-rgb:35,27,18;
+  }
+  :root[data-time="afternoon"]{
+    --paper:#FAF7F0;
+    --ink:#1B1710;
+    --muted:#7A7562;
+    --surface-rgb:27,23,16;
+  }
+  :root[data-time="evening"]{
+    --paper:#4A2E2A;
+    --ink:#FFF1D6;
+    --muted:#D8B9A4;
+    --surface-rgb:255,241,214;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+       font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+       -webkit-font-smoothing:antialiased}
+
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+           overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+  .header{max-width:1080px;margin:0 auto;padding:28px clamp(20px,5vw,48px) 0}
+
+  /* --- nav --- */
+  .nav{display:flex;align-items:center;justify-content:flex-end;gap:16px;flex-wrap:wrap}
+  .nav__links{display:flex;gap:clamp(14px,3vw,22px);list-style:none;margin:0;padding:0}
+  .nav__links a{--tilt:-4deg;font-size:14px;color:var(--muted);text-decoration:none;
+                display:inline-block;transition:transform .18s var(--spring),color .18s}
+  .nav__links a:hover,.nav__links a:focus-visible{transform:translateY(-3px) rotate(var(--tilt));color:var(--accent);outline:none}
+  .nav__links a:focus-visible{text-decoration:underline;text-underline-offset:4px}
+
+  /* --- the name --- */
+  .name{margin:clamp(56px,10vw,104px) 0 0;display:flex;flex-wrap:nowrap;
+        justify-content:center;perspective:800px}
+  .word{display:flex}
+  .word + .word{margin-left:clamp(12px,3vw,40px)}
+
+  .letter{position:relative;display:inline-block;cursor:default;-webkit-tap-highlight-color:transparent}
+  .glyph{display:inline-block;
+         font-size:clamp(36px,12vw,146px);line-height:1;font-weight:600;letter-spacing:-.035em;
+         transition:transform var(--dur) var(--spring),color var(--dur)}
+  .letter:hover .glyph,
+  .letter.is-active .glyph{transform:translateY(var(--lift)) rotateY(180deg) scale(1.12);color:var(--accent)}
+
+  .tag{--tilt:-3deg;position:absolute;left:50%;top:-46px;white-space:nowrap;
+       font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;
+       opacity:0;pointer-events:none;
+       transform:translateX(-50%) translateY(10px) scale(.75) rotate(var(--tilt));
+       transition:opacity .34s var(--spring),transform .34s var(--spring)}
+  .letter:hover .tag,
+  .letter.is-active .tag{opacity:1;transform:translateX(-50%) translateY(0) scale(1) rotate(var(--tilt))}
+
+  .hint{text-align:center;margin:0;font-size:13px;color:var(--muted);letter-spacing:.05em}
+  .hint__tap{display:none}
+
+  /* --- video intro placeholder --- */
+  .video-intro{max-width:1080px;margin:clamp(48px,9vw,88px) auto 0;padding:0 clamp(20px,5vw,48px)}
+  .video-intro__frame{aspect-ratio:16/9;border-radius:24px;
+         border:1.5px dashed rgba(var(--surface-rgb),.25);background:rgba(var(--surface-rgb),.03);
+         display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+  .video-intro__play{width:clamp(52px,6vw,72px);height:clamp(52px,6vw,72px);border-radius:50%;
+         background:var(--accent);color:#17140F;display:flex;align-items:center;justify-content:center;
+         font-size:clamp(18px,2vw,24px)}
+  .video-intro__play span{transform:translateX(2px)}
+  .video-intro__label{font-size:13px;letter-spacing:.05em;color:var(--muted)}
+
+  /* --- routes: the ways off this page --- */
+  .routes{max-width:1080px;margin:0 auto;
+          padding:clamp(48px,9vw,88px) clamp(20px,5vw,48px) clamp(64px,10vw,112px);
+          display:grid;grid-template-columns:1fr;gap:16px}
+  @media (min-width:720px){
+    .routes{grid-template-columns:repeat(3,1fr)}
+  }
+  .route{--route-accent:var(--accent);--tilt:-1deg;position:relative;display:flex;flex-direction:column;gap:10px;
+         min-height:200px;padding:28px 24px 24px;border-radius:22px;
+         border:1px solid rgba(var(--surface-rgb),.14);background:rgba(var(--surface-rgb),.03);
+         text-decoration:none;color:var(--ink);
+         transition:transform .3s var(--spring),border-color .3s,background .3s}
+  .route:hover,.route:focus-visible{transform:translateY(-6px) rotate(var(--tilt));
+         border-color:var(--route-accent);background:rgba(var(--surface-rgb),.06);outline:none}
+  .route__tag{align-self:flex-start;font-size:11px;font-weight:600;letter-spacing:.06em;
+         text-transform:uppercase;padding:5px 10px;border-radius:999px;
+         background:var(--route-accent);color:var(--tag-ink,#17140F)}
+  .route__title{font-size:clamp(22px,3.2vw,28px);font-weight:600;letter-spacing:-.02em}
+  .route__desc{font-size:14px;color:var(--muted);line-height:1.45}
+  .route__arrow{margin-top:auto;padding-top:16px;font-size:18px;color:var(--route-accent);
+         transition:transform .3s var(--spring)}
+  .route:hover .route__arrow,.route:focus-visible .route__arrow{transform:translateX(6px)}
+
+  /* the time-of-day card is a <button>, not a link — reset UA button chrome */
+  .route--action{font-family:inherit;text-align:left;cursor:pointer}
+  .route__cycle{margin-top:auto;padding-top:16px;color:var(--route-accent);
+         display:inline-block;line-height:0}
+
+  /* --- touch / no-hover: JS drives .is-active per tap --- */
+  @media (hover: none){
+    .letter{cursor:pointer}
+    .hint{margin-top:16px}
+    .hint__tap{display:inline}
+  }
+
+  /* --- reduced motion: no flips, no tags, calm static name --- */
+  @media (prefers-reduced-motion: reduce){
+    .glyph{transition:none}
+    .letter:hover .glyph,.letter.is-active .glyph{transform:none;color:var(--ink)}
+    .tag{display:none}
+    .hint{display:none}
+    .route{transition:none}
+    .route:hover,.route:focus-visible{transform:none}
+    .route__arrow{transition:none}
+    .route:hover .route__arrow,.route:focus-visible .route__arrow{transform:none}
+  }
+</style>
+</head>
+<body>
+  <header class="header">
+    <nav class="nav" aria-label="Primary">
+      <ul class="nav__links">
+        <li><a href="#work" style="--tilt:-4deg">work</a></li>
+        <li><a href="#writing" style="--tilt:3deg">writing</a></li>
+        <li><a href="#about" style="--tilt:-5deg">about</a></li>
+        <li><a href="#contact" style="--tilt:4deg">say hi</a></li>
+      </ul>
+    </nav>
+
+    <!-- h1 carries the real, readable name for AT + SEO -->
+    <h1 class="name" id="name">
+      <span class="sr-only">Katherine Root</span>
+
+      <!-- everything below is decorative; data-tag/data-color drive the reveal -->
+      <span class="word" aria-hidden="true">
+        <span class="letter"><span class="glyph">K</span><span class="tag" style="background:#FF2E93;color:#FFF1D6;--tilt:-4deg">10 yrs in community</span></span>
+        <span class="letter"><span class="glyph">a</span><span class="tag" style="background:#C8F135;color:#17140F;--tilt:5deg">0 → 1</span></span>
+        <span class="letter"><span class="glyph">t</span><span class="tag" style="background:#1B45E8;color:#FFF1D6;--tilt:-7deg">design systems</span></span>
+        <span class="letter"><span class="glyph">h</span><span class="tag" style="background:#FF5A1F;color:#17140F;--tilt:3deg">cancer care</span></span>
+        <span class="letter"><span class="glyph">e</span><span class="tag" style="background:#00C2A8;color:#17140F;--tilt:-2deg">hired 8 designers</span></span>
+        <span class="letter"><span class="glyph">r</span><span class="tag" style="background:#7B2FF7;color:#FFF1D6;--tilt:6deg">HopeAI · 5x growth</span></span>
+        <span class="letter"><span class="glyph">i</span><span class="tag" style="background:#FF2E93;color:#FFF1D6;--tilt:-5deg">iOS + Android</span></span>
+        <span class="letter"><span class="glyph">n</span><span class="tag" style="background:#C8F135;color:#17140F;--tilt:2deg">1,408 patients</span></span>
+        <span class="letter"><span class="glyph">e</span><span class="tag" style="background:#1B45E8;color:#FFF1D6;--tilt:-6deg">88–96% conversion</span></span>
+      </span>
+
+      <span class="word" aria-hidden="true">
+        <span class="letter"><span class="glyph">R</span><span class="tag" style="background:#FF5A1F;color:#17140F;--tilt:4deg">still hands on</span></span>
+        <span class="letter"><span class="glyph">o</span><span class="tag" style="background:#FFF1D6;color:#17140F;--tilt:-3deg">I voted ✓</span></span>
+        <span class="letter"><span class="glyph">o</span><span class="tag" style="background:#FF2E93;color:#FFF1D6;--tilt:6deg">wants to open a brunch spot</span></span>
+        <span class="letter"><span class="glyph">t</span><span class="tag" style="background:#00C2A8;color:#17140F;--tilt:-5deg">say hi 👋</span></span>
+      </span>
+    </h1>
+
+    <p class="hint" id="hint">
+      <span class="hint__tap">tap each letter</span>
+    </p>
+  </header>
+
+  <!-- placeholder for a video introduction — swap this whole block for a
+       <video>/embed once the video exists. -->
+  <section class="video-intro" aria-label="Video introduction (coming soon)">
+    <div class="video-intro__frame">
+      <span class="video-intro__play" aria-hidden="true"><span>▶</span></span>
+      <span class="video-intro__label">video intro — coming soon</span>
+    </div>
+  </section>
+
+  <!-- the ways off this page — each one goes to a different site.
+       TODO: swap the href="#" placeholders for the real URLs. -->
+  <main class="routes" aria-label="Where to go next">
+    <a class="route" href="#" target="_blank" rel="noopener noreferrer" style="--route-accent:#9826F5;--tilt:-2deg;--tag-ink:#FFF1D6">
+      <span class="route__tag">community platform</span>
+      <span class="route__title">Mighty Networks</span>
+      <span class="route__desc">Product design for online communities.</span>
+      <span class="route__arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="route" href="#" target="_blank" rel="noopener noreferrer" style="--route-accent:#1E71A9;--tilt:2deg;--tag-ink:#FFF1D6">
+      <span class="route__tag">case study</span>
+      <span class="route__title">Manta Cares</span>
+      <span class="route__desc">Product design in cancer care.</span>
+      <span class="route__arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="route" href="#" target="_blank" rel="noopener noreferrer" style="--route-accent:#FF5A1F;--tilt:-3deg">
+      <span class="route__tag">leadership</span>
+      <span class="route__title">Design Leadership</span>
+      <span class="route__desc">Notes on building and leading design teams.</span>
+      <span class="route__arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="route" href="#" target="_blank" rel="noopener noreferrer" style="--route-accent:#80BD3E;--tilt:3deg">
+      <span class="route__tag">app</span>
+      <span class="route__title">Word Vomit</span>
+      <span class="route__desc">Get it all out. A place to just dump your thoughts.</span>
+      <span class="route__arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="route" href="#" target="_blank" rel="noopener noreferrer" style="--route-accent:#FF2E93;--tilt:-2deg;--tag-ink:#FFF1D6">
+      <span class="route__tag">writing</span>
+      <span class="route__title">Writing</span>
+      <span class="route__desc">Essays and notes on design.</span>
+      <span class="route__arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="route" href="#" target="_blank" rel="noopener noreferrer" style="--route-accent:#C8F135;--tilt:4deg">
+      <span class="route__tag">about</span>
+      <span class="route__title">About Me</span>
+      <span class="route__desc">Who's behind all of this.</span>
+      <span class="route__arrow" aria-hidden="true">→</span>
+    </a>
+
+    <!-- not a real destination — cycles the site's own time-of-day theme -->
+    <button type="button" class="route route--action" id="time-cycle" style="--route-accent:var(--accent);--tilt:-2deg">
+      <span class="route__tag">time of day</span>
+      <span class="route__title" id="time-cycle-label">Time of Day</span>
+      <span class="route__desc">Tap to preview morning, afternoon, evening, and night.</span>
+      <span class="route__cycle" id="time-cycle-icon" aria-hidden="true"></span>
+    </button>
+  </main>
+
+<script>
+(function () {
+  // Time-of-day card: click cycles the theme, independent of motion/hover prefs.
+  var order = ['morning', 'afternoon', 'evening', 'night'];
+  var icons = {
+    morning: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18"/><path d="M6 18a6 6 0 0 1 12 0"/><path d="M12 8V3"/><path d="M9 5.5 12 3l3 2.5"/></svg>',
+    afternoon: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>',
+    evening: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18"/><path d="M6 18a6 6 0 0 1 12 0"/><path d="M12 3v5"/><path d="M9 5.5 12 8l3-2.5"/></svg>',
+    night: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>'
+  };
+  var current = document.documentElement.getAttribute('data-time') || 'night';
+  var cycleBtn = document.getElementById('time-cycle');
+  var cycleLabel = document.getElementById('time-cycle-label');
+  var cycleIcon = document.getElementById('time-cycle-icon');
+  function renderTimeState() {
+    var text = current.charAt(0).toUpperCase() + current.slice(1);
+    cycleLabel.textContent = text;
+    cycleIcon.innerHTML = icons[current];
+    cycleBtn.setAttribute('aria-label', 'Preview a different time of day. Currently showing ' + text + '.');
+  }
+  renderTimeState();
+  cycleBtn.addEventListener('click', function () {
+    current = order[(order.indexOf(current) + 1) % order.length];
+    document.documentElement.setAttribute('data-time', current);
+    renderTimeState();
+  });
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var noHover = window.matchMedia('(hover: none)').matches;
+  if (reduce) return; // static name, nothing to animate
+
+  // Touch / no-hover devices can't hover, so flip on tap instead.
+  if (noHover) {
+    var letters = Array.prototype.slice.call(document.querySelectorAll('.letter'));
+    letters.forEach(function (letter) {
+      letter.addEventListener('click', function () {
+        var wasActive = letter.classList.contains('is-active');
+        letters.forEach(function (l) { l.classList.remove('is-active'); });
+        if (!wasActive) letter.classList.add('is-active');
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>
