@@ -25,7 +25,7 @@
   --ink:#231B12;
   --muted:#5C4A28;
   --surface-rgb:35,27,18;
-  --accent:#1B3A8C;
+  --accent:#5C6BAD;      /* pastel periwinkle — still ~3.2:1 on this paper */
   --accent-ink:#FFF1D6;
 }
 :root[data-time="afternoon"]{
@@ -33,7 +33,7 @@
   --ink:#142430;
   --muted:#2D4552;
   --surface-rgb:20,36,48;
-  --accent:#1E2A78;
+  --accent:#5A4A96;      /* pastel dusty violet — still ~3.7:1 on this paper */
   --accent-ink:#FFF1D6;
 }
 :root[data-time="evening"]{
