@@ -12,9 +12,6 @@
   --surface-rgb:255,241,214;  /* --ink as r,g,b — translucent borders/tints on dark bg */
   --accent:#C8F135;     /* the pop color — bright enough to read on this dark paper */
   --accent-ink:#17140F; /* text/icon color for content drawn ON TOP of --accent */
-  --glow-1:#E8ECFF;      /* footer glow: center → mid → edge (edge always matches --paper) */
-  --glow-2:#A9AFD9;
-  --glow-3:#17140F;
   --dur: .5s;
   --spring: cubic-bezier(.34,1.56,.64,1);
 }
@@ -30,9 +27,6 @@
   --surface-rgb:35,27,18;
   --accent:#5C6BAD;      /* pastel periwinkle — ~4:1 on this paper */
   --accent-ink:#FFF1D6;
-  --glow-1:#FFFB00;
-  --glow-2:#FFF36D;
-  --glow-3:#FFE49E;
 }
 :root[data-time="afternoon"]{
   --paper:#C8E5F5;
@@ -41,9 +35,6 @@
   --surface-rgb:20,36,48;
   --accent:#5A4A96;      /* pastel dusty violet — ~5.8:1 on this paper */
   --accent-ink:#FFF1D6;
-  --glow-1:#FFFDF0;
-  --glow-2:#EAF6FF;
-  --glow-3:#C8E5F5;
 }
 :root[data-time="evening"]{
   --paper:#4F294C;
@@ -51,9 +42,6 @@
   --muted:#C9A8C6;
   --surface-rgb:255,241,214;
   /* lime still pops fine on this dark plum — no accent override needed */
-  --glow-1:#FF9A5A;
-  --glow-2:#C15B85;
-  --glow-3:#4F294C;
 }
 
 *{box-sizing:border-box}
@@ -135,8 +123,16 @@ a.card:hover .card__arrow,a.card:focus-visible .card__arrow{transform:translateX
 .site-footer{position:relative;height:215px;overflow:hidden;
       display:flex;justify-content:center;margin-top:clamp(24px,5vw,48px)}
 .site-footer__glow{position:absolute;left:50%;top:10px;width:1508px;height:817px;
-      transform:translateX(-50%);border-radius:50%;pointer-events:none;opacity:.6;
-      background:radial-gradient(ellipse at center,var(--glow-1) 46%,var(--glow-2) 80%,var(--glow-3) 100%)}
+      transform:translateX(-50%);border-radius:50%;pointer-events:none;
+      /* night (also the no-JS fallback) — a faint moonlit haze */
+      opacity:.2;background:radial-gradient(ellipse at center,#fff 80%,var(--paper) 100%)}
+/* exact stop offsets/colors/opacity pulled from the Figma ellipse per frame */
+:root[data-time="morning"] .site-footer__glow{opacity:.6;
+      background:radial-gradient(ellipse at center,#FFFB00 46.1538%,#FFF36D 80%,var(--paper) 100%)}
+:root[data-time="afternoon"] .site-footer__glow{opacity:.6;
+      background:radial-gradient(ellipse at center,#CAFF1B 35.0962%,#FAFFEB 68.75%,var(--paper) 100%)}
+:root[data-time="evening"] .site-footer__glow{opacity:.3;
+      background:radial-gradient(ellipse at center,#FFFB00 46.1538%,#FFF36D 80%,var(--paper) 100%)}
 .site-footer__toggle{position:relative;z-index:1;margin-top:68px;width:40px;height:40px;
       background:none;border:none;padding:0;cursor:pointer;color:var(--ink);
       display:flex;align-items:center;justify-content:center}
