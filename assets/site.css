@@ -153,6 +153,30 @@ a.card:hover .card__arrow,a.card:focus-visible .card__arrow{transform:translateX
 #time-toggle-icon{display:inline-block;line-height:0;transition:opacity .18s ease,transform .18s ease}
 #time-toggle-icon.is-swapping{opacity:0;transform:scale(.5) rotate(-90deg)}
 
+/* --- morning/afternoon: lighter surfaces on cards/buttons/video frame ---
+   --surface-rgb is --ink's r,g,b, which works as a subtle tint on the dark
+   evening/night papers (ink there is light cream). On morning/afternoon
+   ink is dark, so the same trick made these surfaces read as a dark tint
+   instead of light. Figma's own reference uses a plain white overlay for
+   cards on these two light papers (rgba(255,255,255,.4) fill / .5 border),
+   so these overrides switch to that instead of reusing --surface-rgb. */
+:root[data-time="morning"] .card,:root[data-time="afternoon"] .card,
+:root[data-time="morning"] .route,:root[data-time="afternoon"] .route{
+      background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.55)}
+:root[data-time="morning"] a.card:hover,:root[data-time="afternoon"] a.card:hover,
+:root[data-time="morning"] a.card:focus-visible,:root[data-time="afternoon"] a.card:focus-visible,
+:root[data-time="morning"] .route:hover,:root[data-time="afternoon"] .route:hover,
+:root[data-time="morning"] .route:focus-visible,:root[data-time="afternoon"] .route:focus-visible{
+      background:rgba(255,255,255,.55)}
+:root[data-time="morning"] .say-hi__icon,:root[data-time="afternoon"] .say-hi__icon{
+      background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.55)}
+:root[data-time="morning"] .say-hi__icon:hover,:root[data-time="afternoon"] .say-hi__icon:hover,
+:root[data-time="morning"] .say-hi__icon:focus-visible,:root[data-time="afternoon"] .say-hi__icon:focus-visible{
+      background:rgba(255,255,255,.55)}
+:root[data-time="morning"] .video-intro__frame,:root[data-time="afternoon"] .video-intro__frame,
+:root[data-time="morning"] .empty-state__frame,:root[data-time="afternoon"] .empty-state__frame{
+      background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.5)}
+
 @media (prefers-reduced-motion: reduce){
   .nav__mark,.nav__links a,.card,.card__arrow,.say-hi__icon,.site-footer__toggle svg,#time-toggle-icon{transition:none}
   .nav__mark:hover,.nav__mark:focus-visible,
