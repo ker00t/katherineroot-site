@@ -119,20 +119,21 @@ a.card:hover .card__arrow,a.card:focus-visible .card__arrow{transform:translateX
 .say-hi__icon svg{width:22px;height:22px}
 .say-hi__icon--linkedin{font-size:19px;font-weight:700;letter-spacing:-.02em}
 
-/* --- footer: a glow that shifts with the time of day, and the time toggle --- */
+/* --- footer: a glow that shifts with the time of day, and the time toggle ---
+   The glow is the exact exported Figma asset (assets/glow-*.svg, one per
+   theme, opacity baked into each file) — not a recreated gradient. Only one
+   is shown at a time; which one is picked purely by CSS off data-time. */
 .site-footer{position:relative;height:215px;overflow:hidden;
       display:flex;justify-content:center;margin-top:clamp(24px,5vw,48px)}
-.site-footer__glow{position:absolute;left:50%;top:10px;width:1508px;height:817px;
-      transform:translateX(-50%);border-radius:50%;pointer-events:none;
-      /* night (also the no-JS fallback) — a faint moonlit haze */
-      opacity:.2;background:radial-gradient(ellipse at center,#fff 80%,var(--paper) 100%)}
-/* exact stop offsets/colors/opacity pulled from the Figma ellipse per frame */
-:root[data-time="morning"] .site-footer__glow{opacity:.6;
-      background:radial-gradient(ellipse at center,#FFFB00 46.1538%,#FFF36D 80%,var(--paper) 100%)}
-:root[data-time="afternoon"] .site-footer__glow{opacity:.6;
-      background:radial-gradient(ellipse at center,#CAFF1B 35.0962%,#FAFFEB 68.75%,var(--paper) 100%)}
-:root[data-time="evening"] .site-footer__glow{opacity:.3;
-      background:radial-gradient(ellipse at center,#FFFB00 46.1538%,#FFF36D 80%,var(--paper) 100%)}
+.site-footer__glow-img{position:absolute;left:50%;top:10px;width:1508px;height:817px;
+      transform:translateX(-50%);pointer-events:none;display:none}
+.site-footer__glow-img.is-night{display:block} /* also the no-JS fallback */
+:root[data-time="morning"] .site-footer__glow-img.is-night,
+:root[data-time="afternoon"] .site-footer__glow-img.is-night,
+:root[data-time="evening"] .site-footer__glow-img.is-night{display:none}
+:root[data-time="morning"] .site-footer__glow-img.is-morning{display:block}
+:root[data-time="afternoon"] .site-footer__glow-img.is-afternoon{display:block}
+:root[data-time="evening"] .site-footer__glow-img.is-evening{display:block}
 .site-footer__toggle{position:relative;z-index:1;margin-top:68px;width:40px;height:40px;
       background:none;border:none;padding:0;cursor:pointer;color:var(--ink);
       display:flex;align-items:center;justify-content:center}
