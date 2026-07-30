@@ -79,7 +79,8 @@
   *{box-sizing:border-box}
   body{margin:0;background:var(--paper);color:var(--ink);
        font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
-       -webkit-font-smoothing:antialiased}
+       -webkit-font-smoothing:antialiased;
+       transition:background-color .5s ease,color .5s ease}
 
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
            overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
@@ -135,16 +136,22 @@
   @media (min-width:720px){
     .routes{grid-template-columns:repeat(3,1fr)}
   }
-  .route{--route-accent:var(--accent);--tilt:-1deg;position:relative;display:flex;flex-direction:column;gap:10px;
+  /* --accent-vivid/--accent-pastel are set per-instance inline; --route-accent
+     resolves to vivid normally, and to pastel on morning/afternoon (below). */
+  .route{--route-accent:var(--accent-vivid, var(--accent));--tilt:-1deg;position:relative;display:flex;flex-direction:column;gap:10px;
          min-height:200px;padding:28px 24px 24px;border-radius:22px;
          border:1px solid rgba(var(--surface-rgb),.14);background:rgba(var(--surface-rgb),.03);
          text-decoration:none;color:var(--ink);
          transition:transform .3s var(--spring),border-color .3s,background .3s}
   .route:hover,.route:focus-visible{transform:translateY(-6px) rotate(var(--tilt));
          border-color:var(--route-accent);background:rgba(var(--surface-rgb),.06);outline:none}
+  :root[data-time="morning"] .route,:root[data-time="afternoon"] .route{
+         --route-accent:var(--accent-pastel, var(--accent-vivid, var(--accent)))}
   .route__tag{align-self:flex-start;font-size:11px;font-weight:600;letter-spacing:.06em;
          text-transform:uppercase;padding:5px 10px;border-radius:999px;
-         background:var(--route-accent);color:var(--tag-ink,#17140F)}
+         background:var(--route-accent);color:var(--tag-ink,#FFF1D6)}
+  /* pastel pills are all light — dark text reads better across the board */
+  :root[data-time="morning"] .route__tag,:root[data-time="afternoon"] .route__tag{color:#17140F}
   .route__title{font-size:clamp(22px,3.2vw,28px);font-weight:600;letter-spacing:-.02em}
   .route__desc{font-size:14px;color:var(--muted);line-height:1.45}
   .route__arrow{margin-top:auto;padding-top:16px;display:inline-block;line-height:0;color:var(--route-accent);
@@ -155,17 +162,17 @@
   .say-hi{max-width:1080px;margin:0 auto;padding:clamp(24px,5vw,48px) clamp(20px,5vw,48px) 0;
           display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center}
   .say-hi__title{font-size:clamp(32px,5.5vw,56px);font-weight:600;letter-spacing:-.03em;margin:0}
-  .say-hi__icons{display:flex;gap:11px}
+  .say-hi__icons{display:flex;gap:14px}
   /* same hover treatment as .route: lift + tilt + accent border + bg tint */
-  .say-hi__icon{--icon-accent:var(--accent);--tilt:-1deg;width:50px;height:50px;border-radius:6px;
+  .say-hi__icon{--icon-accent:var(--accent);--tilt:-1deg;width:64px;height:64px;border-radius:8px;
          display:flex;align-items:center;justify-content:center;
          background:rgba(var(--surface-rgb),.03);border:1px solid rgba(var(--surface-rgb),.14);
          color:var(--ink);text-decoration:none;
          transition:transform .3s var(--spring),border-color .3s,background .3s}
   .say-hi__icon:hover,.say-hi__icon:focus-visible{transform:translateY(-6px) rotate(var(--tilt));
          border-color:var(--icon-accent);background:rgba(var(--surface-rgb),.06);outline:none}
-  .say-hi__icon svg{width:22px;height:22px}
-  .say-hi__icon--linkedin{font-size:19px;font-weight:700;letter-spacing:-.02em}
+  .say-hi__icon svg{width:28px;height:28px}
+  .say-hi__icon--linkedin{font-size:24px;font-weight:700;letter-spacing:-.02em}
 
   /* --- footer: a glow that shifts with the time of day, and the time toggle ---
      The glow is the exact exported Figma asset (assets/glow-*.svg, one per
@@ -221,8 +228,8 @@
     <nav class="nav" aria-label="Primary">
       <ul class="nav__links">
         <li><a href="#work" style="--tilt:-4deg">work</a></li>
-        <li><a href="#writing" style="--tilt:3deg">writing</a></li>
-        <li><a href="#about" style="--tilt:-5deg">about</a></li>
+        <li><a href="/writing/" style="--tilt:3deg">writing</a></li>
+        <li><a href="/about/" style="--tilt:-5deg">about</a></li>
         <li><a href="#contact" style="--tilt:4deg">say hi</a></li>
       </ul>
     </nav>
@@ -261,63 +268,63 @@
        <video>/embed once the video exists. -->
   <section class="video-intro" aria-label="Video introduction (coming soon)">
     <div class="video-intro__frame">
-      <span class="video-intro__play" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/></svg></span>
+      <span class="video-intro__play" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/></svg></span>
       <span class="video-intro__label">video intro — coming soon</span>
     </div>
   </section>
 
-  <!-- the ways off this page. Mighty/Manta/Leadership/Writing/About are
-       same-site pages, so they navigate normally (no target="_blank").
-       Word Vomit lives on its own domain, wordvomit.xyz, so it opens in
-       a new tab. -->
-  <main class="routes" aria-label="Where to go next">
-    <a class="route" href="/mighty/" style="--route-accent:#9826F5;--tilt:-2deg;--tag-ink:#FFF1D6">
-      <span class="route__tag">community platform</span>
-      <span class="route__title">Mighty Networks</span>
-      <span class="route__desc">Product design for online communities.</span>
-      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-    </a>
-    <a class="route" href="/manta/" style="--route-accent:#1E71A9;--tilt:2deg;--tag-ink:#FFF1D6">
-      <span class="route__tag">case study</span>
+  <!-- content/order/colors match the Figma "cards" frame exactly.
+       Mighty/Manta/Leadership/Writing are same-site pages, so they navigate
+       normally (no target="_blank"). Word Vomit lives on wordvomit.xyz, so
+       it opens in a new tab. Resume has no page yet — TODO real destination. -->
+  <main class="routes" id="work" aria-label="Where to go next">
+    <a class="route" href="/manta/" style="--accent-vivid:#0074AF;--accent-pastel:#A8D6EF;--tilt:-2deg">
+      <span class="route__tag">work</span>
       <span class="route__title">Manta Cares</span>
-      <span class="route__desc">Product design in cancer care.</span>
-      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      <span class="route__desc">Helping patients and caregivers navigate cancer diagnosis.</span>
+      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
     </a>
-    <a class="route" href="/leadership/" style="--route-accent:#FF5A1F;--tilt:-3deg">
-      <span class="route__tag">leadership</span>
+    <a class="route" href="/mighty/" style="--accent-vivid:#A614FE;--accent-pastel:#D9BEFA;--tilt:2deg">
+      <span class="route__tag">work</span>
+      <span class="route__title">Mighty Networks</span>
+      <span class="route__desc">Creating people magic, one community at a time.</span>
+      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+    </a>
+    <a class="route" href="#" style="--accent-vivid:#BDF300;--accent-pastel:#E9F7AD;--tilt:-3deg;--tag-ink:#17140F">
+      <span class="route__tag">work</span>
+      <span class="route__title">Resume</span>
+      <span class="route__desc">All the nitty gritty details.</span>
+      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+    </a>
+    <a class="route" href="/leadership/" style="--accent-vivid:#FF4800;--accent-pastel:#FFCBB0;--tilt:3deg">
+      <span class="route__tag">work</span>
       <span class="route__title">Design Leadership</span>
       <span class="route__desc">Notes on building and leading design teams.</span>
-      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
     </a>
-    <a class="route" href="https://www.wordvomit.xyz" target="_blank" rel="noopener noreferrer" style="--route-accent:#80BD3E;--tilt:3deg">
-      <span class="route__tag">app</span>
+    <a class="route" href="https://www.wordvomit.xyz" target="_blank" rel="noopener noreferrer" style="--accent-vivid:#80BD3E;--accent-pastel:#CBE8A8;--tilt:-2deg">
+      <span class="route__tag">vibe coding</span>
       <span class="route__title">Word Vomit</span>
-      <span class="route__desc">Get it all out. A place to just dump your thoughts.</span>
-      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      <span class="route__desc">The number one app for your many existential millennial woes.</span>
+      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
     </a>
-    <a class="route" href="/writing/" style="--route-accent:#FF2E93;--tilt:-2deg;--tag-ink:#FFF1D6">
-      <span class="route__tag">writing</span>
+    <a class="route" href="/writing/" style="--accent-vivid:#FF0096;--accent-pastel:#FFB8DC;--tilt:2deg">
+      <span class="route__tag">fun</span>
       <span class="route__title">Writing</span>
-      <span class="route__desc">Essays and notes on design.</span>
-      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-    </a>
-    <a class="route" href="/about/" style="--route-accent:#C8F135;--tilt:4deg">
-      <span class="route__tag">about</span>
-      <span class="route__title">About Me</span>
-      <span class="route__desc">Who's behind all of this.</span>
-      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      <span class="route__desc">Thoughts, essays, notes, etc.</span>
+      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
     </a>
   </main>
 
-  <section class="say-hi" aria-label="Contact">
+  <section class="say-hi" id="contact" aria-label="Contact">
     <h2 class="say-hi__title">Say hi sometime</h2>
     <div class="say-hi__icons">
       <a class="say-hi__icon say-hi__icon--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="--tilt:-2deg"><span aria-hidden="true">in</span></a>
       <a class="say-hi__icon" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="--tilt:2deg">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
       </a>
       <a class="say-hi__icon" href="mailto:keroot@gmail.com" aria-label="Email" style="--tilt:-3deg">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
       </a>
     </div>
   </section>
