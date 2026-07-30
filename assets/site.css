@@ -12,6 +12,9 @@
   --surface-rgb:255,241,214;  /* --ink as r,g,b — translucent borders/tints on dark bg */
   --accent:#C8F135;     /* the pop color — bright enough to read on this dark paper */
   --accent-ink:#17140F; /* text/icon color for content drawn ON TOP of --accent */
+  --glow-1:#E8ECFF;      /* footer glow: center → mid → edge (edge always matches --paper) */
+  --glow-2:#A9AFD9;
+  --glow-3:#17140F;
   --dur: .5s;
   --spring: cubic-bezier(.34,1.56,.64,1);
 }
@@ -21,20 +24,26 @@
    that pops on dark paper (lime) goes nearly invisible on a light one, so
    morning/afternoon get their own darker accent instead of inheriting lime. */
 :root[data-time="morning"]{
-  --paper:#F5CB5C;
+  --paper:#FFE49E;
   --ink:#231B12;
   --muted:#5C4A28;
   --surface-rgb:35,27,18;
-  --accent:#5C6BAD;      /* pastel periwinkle — still ~3.2:1 on this paper */
+  --accent:#5C6BAD;      /* pastel periwinkle — ~4:1 on this paper */
   --accent-ink:#FFF1D6;
+  --glow-1:#FFFB00;
+  --glow-2:#FFF36D;
+  --glow-3:#FFE49E;
 }
 :root[data-time="afternoon"]{
-  --paper:#84BCDA;
+  --paper:#C8E5F5;
   --ink:#142430;
   --muted:#2D4552;
   --surface-rgb:20,36,48;
-  --accent:#5A4A96;      /* pastel dusty violet — still ~3.7:1 on this paper */
+  --accent:#5A4A96;      /* pastel dusty violet — ~5.8:1 on this paper */
   --accent-ink:#FFF1D6;
+  --glow-1:#FFFDF0;
+  --glow-2:#EAF6FF;
+  --glow-3:#C8E5F5;
 }
 :root[data-time="evening"]{
   --paper:#4F294C;
@@ -42,6 +51,9 @@
   --muted:#C9A8C6;
   --surface-rgb:255,241,214;
   /* lime still pops fine on this dark plum — no accent override needed */
+  --glow-1:#FF9A5A;
+  --glow-2:#C15B85;
+  --glow-3:#4F294C;
 }
 
 *{box-sizing:border-box}
@@ -105,10 +117,39 @@ a.card:hover .card__arrow,a.card:focus-visible .card__arrow{transform:translateX
       display:flex;align-items:center;justify-content:center;padding:48px 24px;text-align:center}
 .empty-state__label{font-size:15px;color:var(--muted)}
 
+/* --- say hi: contact icons --- */
+.say-hi{max-width:1080px;margin:0 auto;padding:clamp(24px,5vw,48px) clamp(20px,5vw,48px) 0;
+        display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center}
+.say-hi__title{font-size:clamp(32px,5.5vw,56px);font-weight:600;letter-spacing:-.03em;margin:0}
+.say-hi__icons{display:flex;gap:11px}
+.say-hi__icon{width:50px;height:50px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+      background:rgba(var(--surface-rgb),.08);border:1px solid rgba(var(--surface-rgb),.16);
+      color:var(--ink);text-decoration:none;
+      transition:transform .2s var(--spring),background .2s,border-color .2s}
+.say-hi__icon:hover,.say-hi__icon:focus-visible{transform:translateY(-3px);
+      background:rgba(var(--surface-rgb),.14);border-color:rgba(var(--surface-rgb),.3);outline:none}
+.say-hi__icon svg{width:22px;height:22px}
+.say-hi__icon--linkedin{font-size:19px;font-weight:700;letter-spacing:-.02em}
+
+/* --- footer: a glow that shifts with the time of day, and the time toggle --- */
+.site-footer{position:relative;height:215px;overflow:hidden;
+      display:flex;justify-content:center;margin-top:clamp(24px,5vw,48px)}
+.site-footer__glow{position:absolute;left:50%;top:10px;width:1508px;height:817px;
+      transform:translateX(-50%);border-radius:50%;pointer-events:none;opacity:.6;
+      background:radial-gradient(ellipse at center,var(--glow-1) 46%,var(--glow-2) 80%,var(--glow-3) 100%)}
+.site-footer__toggle{position:relative;z-index:1;margin-top:68px;width:40px;height:40px;
+      background:none;border:none;padding:0;cursor:pointer;color:var(--ink);
+      display:flex;align-items:center;justify-content:center}
+.site-footer__toggle svg{transition:transform .3s var(--spring)}
+.site-footer__toggle:hover svg,.site-footer__toggle:focus-visible svg{transform:scale(1.1)}
+.site-footer__toggle:focus-visible{outline:2px solid var(--ink);outline-offset:4px;border-radius:50%}
+
 @media (prefers-reduced-motion: reduce){
-  .nav__mark,.nav__links a,.card,.card__arrow{transition:none}
+  .nav__mark,.nav__links a,.card,.card__arrow,.say-hi__icon,.site-footer__toggle svg{transition:none}
   .nav__mark:hover,.nav__mark:focus-visible,
   .nav__links a:hover,.nav__links a:focus-visible{transform:none}
   a.card:hover,a.card:focus-visible{transform:none}
   a.card:hover .card__arrow,a.card:focus-visible .card__arrow{transform:none}
+  .say-hi__icon:hover,.say-hi__icon:focus-visible{transform:none}
+  .site-footer__toggle:hover svg,.site-footer__toggle:focus-visible svg{transform:none}
 }

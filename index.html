@@ -43,6 +43,9 @@
     --surface-rgb:255,241,214;  /* --ink as r,g,b — translucent borders/tints on dark bg */
     --accent:#C8F135;     /* the pop color — bright enough to read on this dark paper */
     --accent-ink:#17140F; /* text/icon color for content drawn ON TOP of --accent */
+    --glow-1:#E8ECFF;      /* footer glow: center → mid → edge (edge always matches --paper) */
+    --glow-2:#A9AFD9;
+    --glow-3:#17140F;
     --lift: -8px;         /* how high a flipped letter jumps */
     --dur: .5s;
     --spring: cubic-bezier(.34,1.56,.64,1);
@@ -53,20 +56,26 @@
      that pops on dark paper (lime) goes nearly invisible on a light one, so
      morning/afternoon get their own darker accent instead of inheriting lime. */
   :root[data-time="morning"]{
-    --paper:#F5CB5C;
+    --paper:#FFE49E;
     --ink:#231B12;
     --muted:#5C4A28;
     --surface-rgb:35,27,18;
-    --accent:#5C6BAD;      /* pastel periwinkle — still ~3.2:1 on this paper */
+    --accent:#5C6BAD;      /* pastel periwinkle — ~4:1 on this paper */
     --accent-ink:#FFF1D6;
+    --glow-1:#FFFB00;
+    --glow-2:#FFF36D;
+    --glow-3:#FFE49E;
   }
   :root[data-time="afternoon"]{
-    --paper:#84BCDA;
+    --paper:#C8E5F5;
     --ink:#142430;
     --muted:#2D4552;
     --surface-rgb:20,36,48;
-    --accent:#5A4A96;      /* pastel dusty violet — still ~3.7:1 on this paper */
+    --accent:#5A4A96;      /* pastel dusty violet — ~5.8:1 on this paper */
     --accent-ink:#FFF1D6;
+    --glow-1:#FFFDF0;
+    --glow-2:#EAF6FF;
+    --glow-3:#C8E5F5;
   }
   :root[data-time="evening"]{
     --paper:#4F294C;
@@ -74,6 +83,9 @@
     --muted:#C9A8C6;
     --surface-rgb:255,241,214;
     /* lime still pops fine on this dark plum — no accent override needed */
+    --glow-1:#FF9A5A;
+    --glow-2:#C15B85;
+    --glow-3:#4F294C;
   }
 
   *{box-sizing:border-box}
@@ -152,13 +164,32 @@
          transition:transform .3s var(--spring)}
   .route:hover .route__arrow,.route:focus-visible .route__arrow{transform:translateX(6px)}
 
-  /* the time-of-day card is a <button>, not a link — reset UA button chrome.
-     Its --route-accent is var(--accent), which changes color per theme, so
-     its tag pill needs --accent-ink rather than the usual fixed dark text. */
-  .route--action{font-family:inherit;text-align:left;cursor:pointer}
-  #time-cycle .route__tag{color:var(--accent-ink)}
-  .route__cycle{margin-top:auto;padding-top:16px;color:var(--route-accent);
-         display:inline-block;line-height:0}
+  /* --- say hi: contact icons --- */
+  .say-hi{max-width:1080px;margin:0 auto;padding:clamp(24px,5vw,48px) clamp(20px,5vw,48px) 0;
+          display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center}
+  .say-hi__title{font-size:clamp(32px,5.5vw,56px);font-weight:600;letter-spacing:-.03em;margin:0}
+  .say-hi__icons{display:flex;gap:11px}
+  .say-hi__icon{width:50px;height:50px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+         background:rgba(var(--surface-rgb),.08);border:1px solid rgba(var(--surface-rgb),.16);
+         color:var(--ink);text-decoration:none;
+         transition:transform .2s var(--spring),background .2s,border-color .2s}
+  .say-hi__icon:hover,.say-hi__icon:focus-visible{transform:translateY(-3px);
+         background:rgba(var(--surface-rgb),.14);border-color:rgba(var(--surface-rgb),.3);outline:none}
+  .say-hi__icon svg{width:22px;height:22px}
+  .say-hi__icon--linkedin{font-size:19px;font-weight:700;letter-spacing:-.02em}
+
+  /* --- footer: a glow that shifts with the time of day, and the time toggle --- */
+  .site-footer{position:relative;height:215px;overflow:hidden;
+         display:flex;justify-content:center;margin-top:clamp(24px,5vw,48px)}
+  .site-footer__glow{position:absolute;left:50%;top:10px;width:1508px;height:817px;
+         transform:translateX(-50%);border-radius:50%;pointer-events:none;opacity:.6;
+         background:radial-gradient(ellipse at center,var(--glow-1) 46%,var(--glow-2) 80%,var(--glow-3) 100%)}
+  .site-footer__toggle{position:relative;z-index:1;margin-top:68px;width:40px;height:40px;
+         background:none;border:none;padding:0;cursor:pointer;color:var(--ink);
+         display:flex;align-items:center;justify-content:center}
+  .site-footer__toggle svg{transition:transform .3s var(--spring)}
+  .site-footer__toggle:hover svg,.site-footer__toggle:focus-visible svg{transform:scale(1.1)}
+  .site-footer__toggle:focus-visible{outline:2px solid var(--ink);outline-offset:4px;border-radius:50%}
 
   /* --- touch / no-hover: JS drives .is-active per tap --- */
   @media (hover: none){
@@ -177,6 +208,9 @@
     .route:hover,.route:focus-visible{transform:none}
     .route__arrow{transition:none}
     .route:hover .route__arrow,.route:focus-visible .route__arrow{transform:none}
+    .say-hi__icon,.site-footer__toggle svg{transition:none}
+    .say-hi__icon:hover,.say-hi__icon:focus-visible{transform:none}
+    .site-footer__toggle:hover svg,.site-footer__toggle:focus-visible svg{transform:none}
   }
 </style>
 </head>
@@ -271,43 +305,31 @@
       <span class="route__desc">Who's behind all of this.</span>
       <span class="route__arrow" aria-hidden="true">→</span>
     </a>
-
-    <!-- not a real destination — cycles the site's own time-of-day theme -->
-    <button type="button" class="route route--action" id="time-cycle" style="--route-accent:var(--accent);--tilt:-2deg">
-      <span class="route__tag">time of day</span>
-      <span class="route__title" id="time-cycle-label">Time of Day</span>
-      <span class="route__desc">Tap to preview morning, afternoon, evening, and night.</span>
-      <span class="route__cycle" id="time-cycle-icon" aria-hidden="true"></span>
-    </button>
   </main>
 
+  <section class="say-hi" aria-label="Contact">
+    <h2 class="say-hi__title">Say hi sometime</h2>
+    <div class="say-hi__icons">
+      <a class="say-hi__icon say-hi__icon--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><span aria-hidden="true">in</span></a>
+      <a class="say-hi__icon" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+      </a>
+      <a class="say-hi__icon" href="mailto:keroot@gmail.com" aria-label="Email">
+        <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 9C21 8.37 20.7 7.78 20.2 7.4L12.2 1.4C11.8538 1.14036 11.4327 1 11 1C10.5673 1 10.1462 1.14036 9.8 1.4L1.8 7.4C1.55161 7.58629 1.35 7.82786 1.21115 8.10557C1.07229 8.38328 1 8.68951 1 9M21 9V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H3C2.46957 21 1.96086 20.7893 1.58579 20.4142C1.21071 20.0391 1 19.5304 1 19V9M21 9L12.03 14.7C11.7213 14.8934 11.3643 14.996 11 14.996C10.6357 14.996 10.2787 14.8934 9.97 14.7L1 9"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="site-footer__glow" aria-hidden="true"></div>
+    <button type="button" class="site-footer__toggle" id="time-toggle">
+      <span id="time-toggle-icon"></span>
+    </button>
+  </footer>
+
+<script src="/assets/time-toggle.js"></script>
 <script>
 (function () {
-  // Time-of-day card: click cycles the theme, independent of motion/hover prefs.
-  var order = ['morning', 'afternoon', 'evening', 'night'];
-  var icons = {
-    morning: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18"/><path d="M6 18a6 6 0 0 1 12 0"/><path d="M12 8V3"/><path d="M9 5.5 12 3l3 2.5"/></svg>',
-    afternoon: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>',
-    evening: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18"/><path d="M6 18a6 6 0 0 1 12 0"/><path d="M12 3v5"/><path d="M9 5.5 12 8l3-2.5"/></svg>',
-    night: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>'
-  };
-  var current = document.documentElement.getAttribute('data-time') || 'night';
-  var cycleBtn = document.getElementById('time-cycle');
-  var cycleLabel = document.getElementById('time-cycle-label');
-  var cycleIcon = document.getElementById('time-cycle-icon');
-  function renderTimeState() {
-    var text = current.charAt(0).toUpperCase() + current.slice(1);
-    cycleLabel.textContent = text;
-    cycleIcon.innerHTML = icons[current];
-    cycleBtn.setAttribute('aria-label', 'Preview a different time of day. Currently showing ' + text + '.');
-  }
-  renderTimeState();
-  cycleBtn.addEventListener('click', function () {
-    current = order[(order.indexOf(current) + 1) % order.length];
-    document.documentElement.setAttribute('data-time', current);
-    renderTimeState();
-  });
-
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var noHover = window.matchMedia('(hover: none)').matches;
   if (reduce) return; // static name, nothing to animate
