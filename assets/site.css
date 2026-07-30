@@ -90,7 +90,7 @@ a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt))
       background:var(--card-accent);color:var(--tag-ink,#17140F)}
 .card__title{font-size:clamp(22px,3.2vw,28px);font-weight:600;letter-spacing:-.02em}
 .card__desc{font-size:14px;color:var(--muted);line-height:1.45}
-.card__arrow{margin-top:auto;padding-top:16px;font-size:18px;color:var(--card-accent);
+.card__arrow{margin-top:auto;padding-top:16px;display:inline-block;line-height:0;color:var(--card-accent);
       transition:transform .3s var(--spring)}
 a.card:hover .card__arrow,a.card:focus-visible .card__arrow{transform:translateX(6px)}
 
@@ -110,12 +110,14 @@ a.card:hover .card__arrow,a.card:focus-visible .card__arrow{transform:translateX
         display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center}
 .say-hi__title{font-size:clamp(32px,5.5vw,56px);font-weight:600;letter-spacing:-.03em;margin:0}
 .say-hi__icons{display:flex;gap:11px}
-.say-hi__icon{width:50px;height:50px;border-radius:6px;display:flex;align-items:center;justify-content:center;
-      background:rgba(var(--surface-rgb),.08);border:1px solid rgba(var(--surface-rgb),.16);
+/* same hover treatment as .card: lift + tilt + accent border + bg tint */
+.say-hi__icon{--icon-accent:var(--accent);--tilt:-1deg;width:50px;height:50px;border-radius:6px;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(var(--surface-rgb),.03);border:1px solid rgba(var(--surface-rgb),.14);
       color:var(--ink);text-decoration:none;
-      transition:transform .2s var(--spring),background .2s,border-color .2s}
-.say-hi__icon:hover,.say-hi__icon:focus-visible{transform:translateY(-3px);
-      background:rgba(var(--surface-rgb),.14);border-color:rgba(var(--surface-rgb),.3);outline:none}
+      transition:transform .3s var(--spring),border-color .3s,background .3s}
+.say-hi__icon:hover,.say-hi__icon:focus-visible{transform:translateY(-6px) rotate(var(--tilt));
+      border-color:var(--icon-accent);background:rgba(var(--surface-rgb),.06);outline:none}
 .say-hi__icon svg{width:22px;height:22px}
 .say-hi__icon--linkedin{font-size:19px;font-weight:700;letter-spacing:-.02em}
 
@@ -140,13 +142,17 @@ a.card:hover .card__arrow,a.card:focus-visible .card__arrow{transform:translateX
 .site-footer__toggle svg{transition:transform .3s var(--spring)}
 .site-footer__toggle:hover svg,.site-footer__toggle:focus-visible svg{transform:scale(1.1)}
 .site-footer__toggle:focus-visible{outline:2px solid var(--ink);outline-offset:4px;border-radius:50%}
+/* click transition: the icon spins/shrinks out, swaps, then springs back in — driven by assets/time-toggle.js toggling .is-swapping */
+#time-toggle-icon{display:inline-block;line-height:0;transition:opacity .18s ease,transform .18s ease}
+#time-toggle-icon.is-swapping{opacity:0;transform:scale(.5) rotate(-90deg)}
 
 @media (prefers-reduced-motion: reduce){
-  .nav__mark,.nav__links a,.card,.card__arrow,.say-hi__icon,.site-footer__toggle svg{transition:none}
+  .nav__mark,.nav__links a,.card,.card__arrow,.say-hi__icon,.site-footer__toggle svg,#time-toggle-icon{transition:none}
   .nav__mark:hover,.nav__mark:focus-visible,
   .nav__links a:hover,.nav__links a:focus-visible{transform:none}
   a.card:hover,a.card:focus-visible{transform:none}
   a.card:hover .card__arrow,a.card:focus-visible .card__arrow{transform:none}
   .say-hi__icon:hover,.say-hi__icon:focus-visible{transform:none}
   .site-footer__toggle:hover svg,.site-footer__toggle:focus-visible svg{transform:none}
+  #time-toggle-icon.is-swapping{opacity:1;transform:none}
 }
