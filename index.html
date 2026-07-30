@@ -41,30 +41,39 @@
     --ink:#FFF1D6;        /* cream type */
     --muted:#9B9384;
     --surface-rgb:255,241,214;  /* --ink as r,g,b — translucent borders/tints on dark bg */
-    --accent:#C8F135;     /* one bold action color, constant across all times of day */
+    --accent:#C8F135;     /* the pop color — bright enough to read on this dark paper */
+    --accent-ink:#17140F; /* text/icon color for content drawn ON TOP of --accent */
     --lift: -8px;         /* how high a flipped letter jumps */
     --dur: .5s;
     --spring: cubic-bezier(.34,1.56,.64,1);
   }
 
-  /* --- time of day: JS sets data-time on <html> before first paint --- */
+  /* --- time of day: JS sets data-time on <html> before first paint ---
+     Each theme repicks --accent (and --accent-ink) for its own paper — a color
+     that pops on dark paper (lime) goes nearly invisible on a light one, so
+     morning/afternoon get their own darker accent instead of inheriting lime. */
   :root[data-time="morning"]{
-    --paper:#FFF3E0;
+    --paper:#F5CB5C;
     --ink:#231B12;
-    --muted:#8C7C63;
+    --muted:#5C4A28;
     --surface-rgb:35,27,18;
+    --accent:#1B3A8C;
+    --accent-ink:#FFF1D6;
   }
   :root[data-time="afternoon"]{
-    --paper:#FAF7F0;
-    --ink:#1B1710;
-    --muted:#7A7562;
-    --surface-rgb:27,23,16;
+    --paper:#84BCDA;
+    --ink:#142430;
+    --muted:#2D4552;
+    --surface-rgb:20,36,48;
+    --accent:#1E2A78;
+    --accent-ink:#FFF1D6;
   }
   :root[data-time="evening"]{
-    --paper:#4A2E2A;
+    --paper:#4F294C;
     --ink:#FFF1D6;
-    --muted:#D8B9A4;
+    --muted:#C9A8C6;
     --surface-rgb:255,241,214;
+    /* lime still pops fine on this dark plum — no accent override needed */
   }
 
   *{box-sizing:border-box}
@@ -115,7 +124,7 @@
          border:1.5px dashed rgba(var(--surface-rgb),.25);background:rgba(var(--surface-rgb),.03);
          display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
   .video-intro__play{width:clamp(52px,6vw,72px);height:clamp(52px,6vw,72px);border-radius:50%;
-         background:var(--accent);color:#17140F;display:flex;align-items:center;justify-content:center;
+         background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;
          font-size:clamp(18px,2vw,24px)}
   .video-intro__play span{transform:translateX(2px)}
   .video-intro__label{font-size:13px;letter-spacing:.05em;color:var(--muted)}
@@ -143,8 +152,11 @@
          transition:transform .3s var(--spring)}
   .route:hover .route__arrow,.route:focus-visible .route__arrow{transform:translateX(6px)}
 
-  /* the time-of-day card is a <button>, not a link — reset UA button chrome */
+  /* the time-of-day card is a <button>, not a link — reset UA button chrome.
+     Its --route-accent is var(--accent), which changes color per theme, so
+     its tag pill needs --accent-ink rather than the usual fixed dark text. */
   .route--action{font-family:inherit;text-align:left;cursor:pointer}
+  #time-cycle .route__tag{color:var(--accent-ink)}
   .route__cycle{margin-top:auto;padding-top:16px;color:var(--route-accent);
          display:inline-block;line-height:0}
 

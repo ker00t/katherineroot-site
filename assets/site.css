@@ -10,29 +10,38 @@
   --ink:#FFF1D6;        /* cream type */
   --muted:#9B9384;
   --surface-rgb:255,241,214;  /* --ink as r,g,b — translucent borders/tints on dark bg */
-  --accent:#C8F135;     /* one bold action color, constant across all times of day */
+  --accent:#C8F135;     /* the pop color — bright enough to read on this dark paper */
+  --accent-ink:#17140F; /* text/icon color for content drawn ON TOP of --accent */
   --dur: .5s;
   --spring: cubic-bezier(.34,1.56,.64,1);
 }
 
-/* --- time of day: theme-init.js sets data-time on <html> before first paint --- */
+/* --- time of day: theme-init.js sets data-time on <html> before first paint ---
+   Each theme repicks --accent (and --accent-ink) for its own paper — a color
+   that pops on dark paper (lime) goes nearly invisible on a light one, so
+   morning/afternoon get their own darker accent instead of inheriting lime. */
 :root[data-time="morning"]{
-  --paper:#FFF3E0;
+  --paper:#F5CB5C;
   --ink:#231B12;
-  --muted:#8C7C63;
+  --muted:#5C4A28;
   --surface-rgb:35,27,18;
+  --accent:#1B3A8C;
+  --accent-ink:#FFF1D6;
 }
 :root[data-time="afternoon"]{
-  --paper:#FAF7F0;
-  --ink:#1B1710;
-  --muted:#7A7562;
-  --surface-rgb:27,23,16;
+  --paper:#84BCDA;
+  --ink:#142430;
+  --muted:#2D4552;
+  --surface-rgb:20,36,48;
+  --accent:#1E2A78;
+  --accent-ink:#FFF1D6;
 }
 :root[data-time="evening"]{
-  --paper:#4A2E2A;
+  --paper:#4F294C;
   --ink:#FFF1D6;
-  --muted:#D8B9A4;
+  --muted:#C9A8C6;
   --surface-rgb:255,241,214;
+  /* lime still pops fine on this dark plum — no accent override needed */
 }
 
 *{box-sizing:border-box}
