@@ -97,14 +97,20 @@
 
   /* --- the name --- */
   .name{margin:clamp(56px,10vw,104px) 0 0;display:flex;flex-wrap:nowrap;
-        justify-content:center;perspective:800px}
+        justify-content:center;perspective:800px;column-gap:clamp(12px,3vw,40px)}
   .word{display:flex}
-  .word + .word{margin-left:clamp(12px,3vw,40px)}
 
   .letter{position:relative;display:inline-block;cursor:default;-webkit-tap-highlight-color:transparent}
   .glyph{display:inline-block;
          font-size:clamp(36px,12vw,146px);line-height:1;font-weight:600;letter-spacing:-.035em;
          transition:transform var(--dur) var(--spring),color var(--dur)}
+
+  /* mobile: there's no room to keep both words on one line at a size
+     worth reading, so let "Root" wrap and go bigger instead */
+  @media (max-width:640px){
+    .name{flex-wrap:wrap;row-gap:.05em}
+    .glyph{font-size:clamp(56px,22vw,110px)}
+  }
   .letter:hover .glyph,
   .letter.is-active .glyph{transform:translateY(var(--lift)) rotateY(180deg) scale(1.12);color:var(--accent)}
 
@@ -287,7 +293,7 @@
   </h1>
 
   <p class="hint" id="hint">
-    <span class="hint__tap">tap each letter</span>
+    <span class="hint__tap">(tap each letter)</span>
   </p>
 
   <!-- placeholder for a video introduction — swap this whole block for a
@@ -397,6 +403,12 @@
         letters.forEach(function (l) { l.classList.remove('is-active'); });
         if (!wasActive) letter.classList.add('is-active');
       });
+    });
+    // Tapping anywhere outside the name deselects whichever letter was active.
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.name')) {
+        letters.forEach(function (l) { l.classList.remove('is-active'); });
+      }
     });
   }
 })();
