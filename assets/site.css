@@ -64,6 +64,13 @@ body{margin:0;background:var(--paper);color:var(--ink);
      backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
 :root[data-time="evening"] .nav,:root[data-time="night"] .nav{
      --header-ink:#FFF1D3;background:rgba(255,255,255,.1);border-color:rgba(255,247,226,.1)}
+/* Figma's white pill reads fine on its plain white mockup canvas, but
+   morning/afternoon's actual papers (golden/sky-blue) are close enough in
+   value that the same white tint nearly disappears — bump the contrast
+   and add a soft shadow so the pill still visibly floats over the page. */
+:root[data-time="morning"] .nav,:root[data-time="afternoon"] .nav{
+     background:rgba(255,255,255,.6);border-color:rgba(28,23,15,.12);
+     box-shadow:0 8px 28px rgba(28,23,15,.1)}
 .nav__mark{--tilt:-3deg;font-size:20px;font-weight:600;color:var(--header-ink);text-decoration:none;
            letter-spacing:.02em;display:inline-block;transition:transform .18s var(--spring),color .18s}
 .nav__mark:hover,.nav__mark:focus-visible{transform:translateY(-3px) rotate(var(--tilt));color:var(--accent);outline:none}
