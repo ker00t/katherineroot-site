@@ -83,10 +83,9 @@
        text: "Katherine Root  |  Experience Designer" 20px, tracking .2px
        links: work / resume / linkedin / email, 18px, gap 16px, tracking .18px
        position when visible: 32px from top, pill inset ~64px from the frame edges
-     The one adaptation beyond the literal spec: Figma's light pill was
-     designed against a plain white canvas, so on our actual golden/blue
-     morning and afternoon papers the same white tint nearly disappears —
-     bumped its opacity and added a soft shadow so it still visibly floats. */
+     On morning/afternoon the pill has no fill or shadow at all — just the
+     border tracing the shape, per explicit feedback (Figma's own light
+     fill read as an unwanted solid box against our actual papers). */
   .header{position:fixed;top:32px;left:0;right:0;z-index:20;
          padding:0 clamp(20px,5vw,48px);
          opacity:0;transform:translateY(-16px);pointer-events:none;
@@ -259,10 +258,6 @@
         background:rgba(255,255,255,.55)}
   :root[data-time="morning"] .video-intro__frame,:root[data-time="afternoon"] .video-intro__frame{
         background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.5)}
-  /* same root cause hit the floating header's backdrop too: dark-ink-tinted
-     background behind dark-ink nav text was nearly unreadable. */
-  :root[data-time="morning"] .header,:root[data-time="afternoon"] .header{
-        background:rgba(255,255,255,.75)}
 
   /* --- touch / no-hover: JS drives .is-active per tap --- */
   @media (hover: none){
