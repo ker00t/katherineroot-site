@@ -75,25 +75,36 @@
 
   /* fixed + hidden until you scroll past the hero name — see the
      IntersectionObserver near the bottom of this file. Subpages keep the
-     plain static header from assets/site.css; this override is home-only. */
-  .header{position:fixed;top:0;left:0;right:0;z-index:20;
-         padding:16px clamp(20px,5vw,48px);
-         background:rgba(var(--surface-rgb),.85);
-         backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+     always-visible static header from assets/site.css; this fixed/hidden
+     wrapper is home-only, but the pill styling below matches it exactly. */
+  .header{position:fixed;top:20px;left:0;right:0;z-index:20;
+         padding:0 clamp(20px,5vw,48px);
          opacity:0;transform:translateY(-16px);pointer-events:none;
-         transition:opacity .35s ease,transform .35s ease,background-color .5s ease}
+         transition:opacity .35s ease,transform .35s ease}
   .header.is-visible{opacity:1;transform:translateY(0);pointer-events:auto}
 
-  /* --- nav --- */
-  .nav{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-  .nav__mark{--tilt:-3deg;font-size:14px;font-weight:600;color:var(--ink);text-decoration:none;
-             display:inline-block;transition:transform .18s var(--spring),color .18s}
+  /* --- nav: the Figma "header" pill component —
+     light papers get a bright frosted pill, dark papers a much fainter one. */
+  .nav{--header-ink:#1C170F;max-width:1080px;margin:0 auto;display:flex;align-items:center;
+       justify-content:space-between;gap:16px;flex-wrap:wrap;border-radius:100px;
+       padding:18px clamp(20px,4vw,40px);
+       background:rgba(255,255,255,.4);border:1px solid #FFF7E2;
+       backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+  :root[data-time="evening"] .nav,:root[data-time="night"] .nav{
+       --header-ink:#FFF1D3;background:rgba(255,255,255,.1);border-color:rgba(255,247,226,.1)}
+  .nav__mark{--tilt:-3deg;font-size:20px;font-weight:600;color:var(--header-ink);text-decoration:none;
+             letter-spacing:.02em;display:inline-block;transition:transform .18s var(--spring),color .18s}
   .nav__mark:hover,.nav__mark:focus-visible{transform:translateY(-3px) rotate(var(--tilt));color:var(--accent);outline:none}
+  .nav__tagline{font-size:20px;color:var(--header-ink);letter-spacing:.02em;margin-left:.35em}
+  .nav__id{display:flex;align-items:baseline}
   .nav__links{display:flex;gap:clamp(14px,3vw,22px);list-style:none;margin:0;padding:0}
-  .nav__links a{--tilt:-4deg;font-size:14px;color:var(--muted);text-decoration:none;
+  .nav__links a{--tilt:-4deg;font-size:18px;color:var(--header-ink);text-decoration:none;
                 display:inline-block;transition:transform .18s var(--spring),color .18s}
   .nav__links a:hover,.nav__links a:focus-visible{transform:translateY(-3px) rotate(var(--tilt));color:var(--accent);outline:none}
   .nav__links a:focus-visible{text-decoration:underline;text-underline-offset:4px}
+  @media (max-width:720px){
+    .nav__tagline{display:none}
+  }
 
   /* --- the name --- */
   .name{margin:clamp(56px,10vw,104px) 0 0;display:flex;flex-wrap:nowrap;
@@ -257,12 +268,15 @@
 <body>
   <header class="header">
     <nav class="nav" aria-label="Primary">
-      <a class="nav__mark" href="/">Katherine Root</a>
+      <span class="nav__id">
+        <a class="nav__mark" href="/">Katherine Root</a>
+        <span class="nav__tagline">| Experience Designer</span>
+      </span>
       <ul class="nav__links">
         <li><a href="/#work" style="--tilt:-4deg">work</a></li>
         <li><a href="https://static1.squarespace.com/static/649378526c54e630f4b17c1a/t/6a56af8dda4aaa7c4e2ef8d4/1784065933655/KatherineRootResume_2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:3deg">resume</a></li>
-        <li><a href="mailto:keroot@gmail.com" style="--tilt:-5deg">email</a></li>
-        <li><a href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" style="--tilt:4deg">linkedin</a></li>
+        <li><a href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" style="--tilt:-5deg">linkedin</a></li>
+        <li><a href="mailto:keroot@gmail.com" style="--tilt:4deg">email</a></li>
       </ul>
     </nav>
   </header>
