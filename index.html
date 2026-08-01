@@ -126,6 +126,17 @@
   .word{display:flex}
 
   .letter{position:relative;display:inline-block;cursor:default;-webkit-tap-highlight-color:transparent}
+  /* click bounce on non-touch devices — applied to .letter (not .glyph),
+     which already carries its own hover-driven transform, so the two
+     never fight over the same property */
+  @keyframes letterBounce{
+    0%,100%{transform:translateY(0)}
+    30%{transform:translateY(-10px)}
+    55%{transform:translateY(3px)}
+    75%{transform:translateY(-2px)}
+  }
+  .letter.is-bouncing{animation:letterBounce .5s var(--spring)}
+
   .glyph{display:inline-block;
          font-size:clamp(36px,12vw,146px);line-height:1;font-weight:600;letter-spacing:-.035em;
          transition:transform var(--dur) var(--spring),color var(--dur)}
@@ -374,6 +385,13 @@
       <span class="route__desc">Thoughts, essays, notes, etc.</span>
       <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
     </a>
+    <!-- TODO: swap href="#" for the real destination once there is one. -->
+    <a class="route" href="#" style="--accent-vivid:#00C2A8;--accent-pastel:#A8E8DD;--tilt:-3deg">
+      <span class="route__tag">volunteer</span>
+      <span class="route__title">Vote Center Lead</span>
+      <span class="route__desc">Running a polling location on election day — civic infrastructure needs good UX too.</span>
+      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+    </a>
   </main>
 
   <section class="say-hi" id="contact" aria-label="Contact">
@@ -437,6 +455,19 @@
       if (!e.target.closest('.name')) {
         letters.forEach(function (l) { l.classList.remove('is-active'); });
       }
+    });
+  } else {
+    // Non-touch: hover already flips the letter, so a click on top of that
+    // just adds a quick bounce for tactile click feedback.
+    Array.prototype.slice.call(document.querySelectorAll('.letter')).forEach(function (letter) {
+      letter.addEventListener('click', function () {
+        letter.classList.remove('is-bouncing');
+        void letter.offsetWidth; // force reflow so the animation can restart on rapid clicks
+        letter.classList.add('is-bouncing');
+      });
+      letter.addEventListener('animationend', function () {
+        letter.classList.remove('is-bouncing');
+      });
     });
   }
 })();

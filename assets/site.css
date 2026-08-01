@@ -77,6 +77,10 @@ a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt))
       border-color:var(--card-accent);background:rgba(var(--surface-rgb),.06);outline:none}
 :root[data-time="morning"] .card,:root[data-time="afternoon"] .card{
       --card-accent:var(--accent-pastel, var(--accent-vivid, var(--accent)))}
+/* optional full-bleed image at the top of a card — bleeds out to the
+   card's own edges via negative margin matching its padding */
+.card__img{width:calc(100% + 48px);margin:-28px -24px 6px;display:block;
+      aspect-ratio:16/10;object-fit:cover;border-radius:22px 22px 0 0}
 .card__tag{align-self:flex-start;font-size:11px;font-weight:600;letter-spacing:.06em;
       text-transform:uppercase;padding:5px 10px;border-radius:999px;
       background:var(--card-accent);color:var(--tag-ink,#FFF1D6)}
