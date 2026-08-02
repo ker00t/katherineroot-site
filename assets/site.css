@@ -53,8 +53,16 @@ body{margin:0;background:var(--paper);color:var(--ink);
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
          overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
+/* --- back link: oversized icon back to the homepage, replaces the
+   header on subpages (header is home-page-only) --- */
+.back-link{max-width:1080px;margin:clamp(32px,8vw,64px) auto 0;padding:0 clamp(20px,5vw,48px)}
+.back-link a{display:inline-flex;color:var(--ink);text-decoration:none;
+      transition:transform .2s var(--spring),color .2s}
+.back-link a:hover,.back-link a:focus-visible{transform:translateX(-6px);color:var(--accent);outline:none}
+.back-link svg{width:clamp(36px,5vw,48px);height:clamp(36px,5vw,48px)}
+
 /* --- page heading (subpages use this instead of the animated home name) --- */
-.page-head{max-width:1080px;margin:clamp(48px,10vw,96px) auto 0;padding:0 clamp(20px,5vw,48px)}
+.page-head{max-width:1080px;margin:clamp(16px,3vw,24px) auto 0;padding:0 clamp(20px,5vw,48px)}
 .page-head__title{font-size:clamp(40px,9vw,88px);line-height:1;font-weight:600;letter-spacing:-.03em;margin:0}
 .page-head__intro{font-size:clamp(16px,2vw,19px);color:var(--muted);line-height:1.55;
                    max-width:640px;margin:20px 0 0}
@@ -169,10 +177,11 @@ a.card:hover .card__arrow,a.card:focus-visible .card__arrow{transform:translateX
       background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.5)}
 
 @media (prefers-reduced-motion: reduce){
-  .card,.card__arrow,.say-hi__icon,.site-footer__toggle svg,#time-toggle-icon{transition:none}
+  .card,.card__arrow,.say-hi__icon,.site-footer__toggle svg,#time-toggle-icon,.back-link a{transition:none}
   a.card:hover,a.card:focus-visible{transform:none}
   a.card:hover .card__arrow,a.card:focus-visible .card__arrow{transform:none}
   .say-hi__icon:hover,.say-hi__icon:focus-visible{transform:none}
   .site-footer__toggle:hover svg,.site-footer__toggle:focus-visible svg{transform:none}
   #time-toggle-icon.is-swapping{opacity:1;transform:none}
+  .back-link a:hover,.back-link a:focus-visible{transform:none}
 }

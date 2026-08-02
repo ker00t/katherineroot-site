@@ -91,6 +91,9 @@
          opacity:0;transform:translateY(-16px);pointer-events:none;
          transition:opacity .35s ease,transform .35s ease}
   .header.is-visible{opacity:1;transform:translateY(0);pointer-events:auto}
+  /* TEMP: header hidden site-wide per request — everything above is left
+     intact so it can come back by deleting this one rule. */
+  .header{display:none}
 
   .nav{--header-ink:#1C170F;max-width:1080px;margin:0 auto;display:flex;align-items:center;
        justify-content:space-between;gap:16px;flex-wrap:wrap;border-radius:100px;
@@ -156,6 +159,9 @@
   .letter:hover .tag,
   .letter.is-active .tag{opacity:1;transform:translateX(-50%) translateY(0) scale(1) rotate(var(--tilt))}
 
+  .subtitle{text-align:center;margin:clamp(14px,3vw,20px) 0 0;
+         font-size:clamp(15px,2.2vw,20px);color:var(--muted);letter-spacing:.02em}
+
   .hint{text-align:center;margin:0;font-size:13px;color:var(--muted);letter-spacing:.05em}
   .hint__tap{display:none}
 
@@ -172,9 +178,20 @@
   /* --- routes: the ways off this page --- */
   .routes{max-width:1080px;margin:0 auto;
           padding:clamp(48px,9vw,88px) clamp(20px,5vw,48px) clamp(64px,10vw,112px);
-          display:grid;grid-template-columns:1fr;gap:16px}
+          display:flex;flex-direction:column;gap:16px}
+  /* Manta + Mighty: a bigger, 2-up featured row with each company's logo */
+  .routes__featured{display:grid;grid-template-columns:1fr;gap:16px}
   @media (min-width:720px){
-    .routes{grid-template-columns:repeat(3,1fr)}
+    .routes__featured{grid-template-columns:repeat(2,1fr)}
+  }
+  .route--featured{min-height:280px}
+  .route__logo{align-self:flex-start;display:inline-flex;align-items:center;
+         background:#fff;padding:10px 14px;border-radius:12px;margin-bottom:2px}
+  .route__logo img{height:24px;width:auto;display:block}
+  /* everything else: the regular 3-up grid */
+  .routes__grid{display:grid;grid-template-columns:1fr;gap:16px}
+  @media (min-width:720px){
+    .routes__grid{grid-template-columns:repeat(3,1fr)}
   }
   /* --accent-vivid/--accent-pastel are set per-instance inline; --route-accent
      resolves to vivid normally, and to pastel on morning/afternoon (below). */
@@ -325,6 +342,8 @@
       </span>
   </h1>
 
+  <p class="subtitle">Product, AI, and Experience Design Expert</p>
+
   <p class="hint" id="hint">
     <span class="hint__tap">(tap each letter)</span>
   </p>
@@ -343,49 +362,56 @@
        (no target="_blank"). Word Vomit, Resume, and Writing all point off-site
        (wordvomit.xyz, a Squarespace-hosted PDF, and the Bear Blog respectively). -->
   <main class="routes" id="work" aria-label="Where to go next">
-    <a class="route" href="/manta/" style="--accent-vivid:#0074AF;--accent-pastel:#A8D6EF;--tilt:-2deg">
-      <span class="route__tag">work</span>
-      <span class="route__title">Manta Cares</span>
-      <span class="route__desc">Helping patients and caregivers navigate cancer diagnosis.</span>
-      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-    </a>
-    <a class="route" href="/mighty/" style="--accent-vivid:#A614FE;--accent-pastel:#D9BEFA;--tilt:2deg">
-      <span class="route__tag">work</span>
-      <span class="route__title">Mighty Networks</span>
-      <span class="route__desc">Creating people magic, one community at a time.</span>
-      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-    </a>
-    <a class="route" href="https://static1.squarespace.com/static/649378526c54e630f4b17c1a/t/6a56af8dda4aaa7c4e2ef8d4/1784065933655/KatherineRootResume_2026.pdf" target="_blank" rel="noopener noreferrer" style="--accent-vivid:#BDF300;--accent-pastel:#E9F7AD;--tilt:-3deg;--tag-ink:#17140F">
-      <span class="route__tag">work</span>
-      <span class="route__title">Resume</span>
-      <span class="route__desc">All the nitty gritty details.</span>
-      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-    </a>
-    <a class="route" href="/leadership/" style="--accent-vivid:#FF4800;--accent-pastel:#FFCBB0;--tilt:3deg">
-      <span class="route__tag">work</span>
-      <span class="route__title">Design Leadership</span>
-      <span class="route__desc">Notes on building and leading design teams.</span>
-      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-    </a>
-    <a class="route" href="https://www.wordvomit.xyz" target="_blank" rel="noopener noreferrer" style="--accent-vivid:#80BD3E;--accent-pastel:#CBE8A8;--tilt:-2deg">
-      <span class="route__tag">vibe coding</span>
-      <span class="route__title">Word Vomit</span>
-      <span class="route__desc">The number one app for your many existential millennial woes.</span>
-      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-    </a>
-    <a class="route" href="https://midnightcrisis.bearblog.dev/blog/" target="_blank" rel="noopener noreferrer" style="--accent-vivid:#FF0096;--accent-pastel:#FFB8DC;--tilt:2deg">
-      <span class="route__tag">fun</span>
-      <span class="route__title">Writing</span>
-      <span class="route__desc">Thoughts, essays, notes, etc.</span>
-      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-    </a>
-    <!-- TODO: swap href="#" for the real destination once there is one. -->
-    <a class="route" href="#" style="--accent-vivid:#00C2A8;--accent-pastel:#A8E8DD;--tilt:-3deg">
-      <span class="route__tag">volunteer</span>
-      <span class="route__title">Vote Center Lead</span>
-      <span class="route__desc">Running a polling location on election day — civic infrastructure needs good UX too.</span>
-      <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-    </a>
+    <!-- Manta + Mighty are the flagship work, so they get their own bigger
+         row with each company's real logo. -->
+    <div class="routes__featured">
+      <a class="route route--featured" href="/manta/" style="--accent-vivid:#0074AF;--accent-pastel:#A8D6EF;--tilt:-2deg">
+        <span class="route__logo"><img src="/assets/logos/manta-cares.svg" alt="Manta Cares"></span>
+        <span class="route__tag">work</span>
+        <span class="route__title">Manta Cares</span>
+        <span class="route__desc">Helping patients and caregivers navigate cancer diagnosis.</span>
+        <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+      <a class="route route--featured" href="/mighty/" style="--accent-vivid:#A614FE;--accent-pastel:#D9BEFA;--tilt:2deg">
+        <span class="route__logo"><img src="/assets/logos/mighty-networks.svg" alt="Mighty Networks"></span>
+        <span class="route__tag">work</span>
+        <span class="route__title">Mighty Networks</span>
+        <span class="route__desc">Creating people magic, one community at a time.</span>
+        <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+    </div>
+    <div class="routes__grid">
+      <a class="route" href="https://static1.squarespace.com/static/649378526c54e630f4b17c1a/t/6a56af8dda4aaa7c4e2ef8d4/1784065933655/KatherineRootResume_2026.pdf" target="_blank" rel="noopener noreferrer" style="--accent-vivid:#BDF300;--accent-pastel:#E9F7AD;--tilt:-3deg;--tag-ink:#17140F">
+        <span class="route__tag">work</span>
+        <span class="route__title">Resume</span>
+        <span class="route__desc">All the nitty gritty details.</span>
+        <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+      <a class="route" href="/leadership/" style="--accent-vivid:#FF4800;--accent-pastel:#FFCBB0;--tilt:3deg">
+        <span class="route__tag">work</span>
+        <span class="route__title">Design Leadership</span>
+        <span class="route__desc">Notes on building and leading design teams.</span>
+        <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+      <a class="route" href="https://www.wordvomit.xyz" target="_blank" rel="noopener noreferrer" style="--accent-vivid:#80BD3E;--accent-pastel:#CBE8A8;--tilt:-2deg">
+        <span class="route__tag">vibe coding</span>
+        <span class="route__title">Word Vomit</span>
+        <span class="route__desc">The number one app for your many existential millennial woes.</span>
+        <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+      <a class="route" href="https://midnightcrisis.bearblog.dev/blog/" target="_blank" rel="noopener noreferrer" style="--accent-vivid:#FF0096;--accent-pastel:#FFB8DC;--tilt:2deg">
+        <span class="route__tag">fun</span>
+        <span class="route__title">Writing</span>
+        <span class="route__desc">Thoughts, essays, notes, etc.</span>
+        <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+      <a class="route" href="/votecenter/" style="--accent-vivid:#00C2A8;--accent-pastel:#A8E8DD;--tilt:-3deg">
+        <span class="route__tag">volunteer</span>
+        <span class="route__title">Vote Center Lead</span>
+        <span class="route__desc">Running a polling location on election day — civic infrastructure needs good UX too.</span>
+        <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+    </div>
   </main>
 
   <section class="say-hi" id="contact" aria-label="Contact">
