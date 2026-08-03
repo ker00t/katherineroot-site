@@ -238,7 +238,9 @@
   .site-footer{position:relative;height:215px;overflow:hidden;
          display:flex;justify-content:center;margin-top:clamp(24px,5vw,48px)}
   .site-footer__glow-img{position:absolute;left:50%;top:10px;width:1508px;height:817px;
-         transform:translateX(-50%);pointer-events:none;display:none}
+         transform:translateX(-50%);pointer-events:none;display:none;
+         -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 18%,transparent 25%);
+         mask-image:linear-gradient(to bottom,#000 0%,#000 18%,transparent 25%)}
   .site-footer__glow-img.is-night{display:block} /* also the no-JS fallback */
   :root[data-time="morning"] .site-footer__glow-img.is-night,
   :root[data-time="afternoon"] .site-footer__glow-img.is-night,

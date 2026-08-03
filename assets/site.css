@@ -130,11 +130,19 @@ a.card:hover .card__arrow,a.card:focus-visible .card__arrow{transform:translateX
 /* --- footer: a glow that shifts with the time of day, and the time toggle ---
    The glow is the exact exported Figma asset (assets/glow-*.svg, one per
    theme, opacity baked into each file) — not a recreated gradient. Only one
-   is shown at a time; which one is picked purely by CSS off data-time. */
+   is shown at a time; which one is picked purely by CSS off data-time.
+
+   The footer only shows the top slice of the full ellipse (817px tall vs a
+   215px box), so without a mask it gets clipped mid-glow — a hard edge
+   right where the page ends, which reads as an abrupt cutoff when you
+   overscroll past the bottom. A mask fades that slice to fully transparent
+   by the clip line, so it dissolves into the page instead of hard-stopping. */
 .site-footer{position:relative;height:215px;overflow:hidden;
       display:flex;justify-content:center;margin-top:clamp(24px,5vw,48px)}
 .site-footer__glow-img{position:absolute;left:50%;top:10px;width:1508px;height:817px;
-      transform:translateX(-50%);pointer-events:none;display:none}
+      transform:translateX(-50%);pointer-events:none;display:none;
+      -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 18%,transparent 25%);
+      mask-image:linear-gradient(to bottom,#000 0%,#000 18%,transparent 25%)}
 .site-footer__glow-img.is-night{display:block} /* also the no-JS fallback */
 :root[data-time="morning"] .site-footer__glow-img.is-night,
 :root[data-time="afternoon"] .site-footer__glow-img.is-night,
