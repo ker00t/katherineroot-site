@@ -5,9 +5,19 @@
 
    If the visitor has manually picked a time of day (via the footer toggle,
    see time-toggle.js), that choice is saved in localStorage and takes
-   priority on every page, overriding the real clock, until they pick again. */
+   priority when navigating to other pages — but a hard refresh always
+   resets back to the real current time. */
 (function () {
   var order = ['morning', 'afternoon', 'evening', 'night'];
+
+  try {
+    var navEntries = performance.getEntriesByType('navigation');
+    var isReload = navEntries.length && navEntries[0].type === 'reload';
+    if (isReload) {
+      localStorage.removeItem('kr-time-override');
+    }
+  } catch (e) {}
+
   var override = null;
   try {
     override = localStorage.getItem('kr-time-override');
