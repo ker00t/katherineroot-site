@@ -66,6 +66,13 @@ body{margin:0;background:var(--paper);color:var(--ink);
 .page-head__title{font-size:clamp(40px,9vw,88px);line-height:1;font-weight:600;letter-spacing:-.03em;margin:0}
 .page-head__intro{font-size:clamp(16px,2vw,19px);color:var(--muted);line-height:1.55;
                    max-width:640px;margin:20px 0 0}
+/* same hover treatment as the header's .nav__links a: tilt + lift + accent
+   color. Underlined (nav links aren't) since this sits inline in a
+   paragraph rather than in its own pill, and needs to read as a link. */
+.page-head__intro a{--tilt:-3deg;color:var(--ink);text-decoration:underline;text-underline-offset:3px;
+                   display:inline-block;transition:transform .18s var(--spring),color .18s}
+.page-head__intro a:hover,.page-head__intro a:focus-visible{transform:translateY(-3px) rotate(var(--tilt));
+                   color:var(--accent);outline:none}
 
 /* --- card grid: reused for routes, case studies, about-me sections, etc --- */
 .cards{max-width:1080px;margin:0 auto;
