@@ -215,6 +215,27 @@
          transition:transform .3s var(--spring)}
   .route:hover .route__arrow,.route:focus-visible .route__arrow{transform:translateX(6px)}
 
+  /* --- by the numbers: headline metrics from Manta + Mighty. Same card
+     visual language as .route (border/bg/hover treatment, vivid-normally-
+     pastel-on-light accent), just laid out as a stat list instead of a
+     link grid since these aren't clickable. */
+  .stats{max-width:1080px;margin:0 auto;padding:0 clamp(20px,5vw,48px) clamp(64px,10vw,112px)}
+  .stats__title{font-size:clamp(32px,5.5vw,56px);font-weight:600;letter-spacing:-.03em;
+         margin:0 0 clamp(24px,5vw,40px);text-align:center}
+  .stats__groups{display:grid;grid-template-columns:1fr;gap:16px}
+  @media (min-width:720px){
+    .stats__groups{grid-template-columns:repeat(2,1fr)}
+  }
+  .stats__group{--group-accent:var(--accent-vivid, var(--accent));border-radius:22px;
+         padding:28px 24px;border:1px solid rgba(var(--surface-rgb),.14);background:rgba(var(--surface-rgb),.03)}
+  :root[data-time="morning"] .stats__group,:root[data-time="afternoon"] .stats__group{
+         --group-accent:var(--accent-pastel, var(--accent-vivid, var(--accent)))}
+  .stats__group-title{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+         color:var(--group-accent);margin:0 0 22px}
+  .stat-list{display:grid;grid-template-columns:1fr;gap:20px;list-style:none;margin:0;padding:0}
+  .stat__value{display:block;font-size:clamp(26px,3.6vw,36px);font-weight:600;letter-spacing:-.02em}
+  .stat__label{display:block;font-size:14px;color:var(--muted);line-height:1.4;margin-top:2px}
+
   /* --- say hi: contact icons --- */
   .say-hi{max-width:1080px;margin:0 auto;padding:clamp(24px,5vw,48px) clamp(20px,5vw,48px) 0;
           display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center}
@@ -265,6 +286,8 @@
      instead of light. Figma's own reference uses a plain white overlay for
      cards on these two light papers (rgba(255,255,255,.4) fill / .5 border),
      so these overrides switch to that instead of reusing --surface-rgb. */
+  :root[data-time="morning"] .stats__group,:root[data-time="afternoon"] .stats__group{
+        background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.55)}
   :root[data-time="morning"] .route,:root[data-time="afternoon"] .route{
         background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.55)}
   :root[data-time="morning"] .route:hover,:root[data-time="afternoon"] .route:hover,
@@ -415,6 +438,33 @@
       </a>
     </div>
   </main>
+
+  <!-- Manta figures match the stat cards on /manta/ (HopeAI, patients reached,
+       conversion). Mighty figures are the cleanest, most-cited-without-caveats
+       numbers from Mighty Metrics.md — App Store rating, G2 #1 ranking, and
+       total creator earnings; figures flagged in that doc as self-reported/
+       not independently audited (engagement %s, headcount) are left out. -->
+  <section class="stats" aria-label="By the numbers">
+    <h2 class="stats__title">By the Numbers</h2>
+    <div class="stats__groups">
+      <div class="stats__group" style="--accent-vivid:#0074AF;--accent-pastel:#A8D6EF">
+        <h3 class="stats__group-title">Manta Cares</h3>
+        <ul class="stat-list">
+          <li class="stat"><span class="stat__value">5x</span><span class="stat__label">Growth in HopeAI usage after a redesign of how patients find support</span></li>
+          <li class="stat"><span class="stat__value">1,408</span><span class="stat__label">Patients reached through redesigned intake and care flows</span></li>
+          <li class="stat"><span class="stat__value">88–96%</span><span class="stat__label">Onboarding conversion, built for a moment with zero patience for friction</span></li>
+        </ul>
+      </div>
+      <div class="stats__group" style="--accent-vivid:#A614FE;--accent-pastel:#D9BEFA">
+        <h3 class="stats__group-title">Mighty Networks</h3>
+        <ul class="stat-list">
+          <li class="stat"><span class="stat__value">4.84/5</span><span class="stat__label">iOS App Store rating across ~66,000 ratings (2025)</span></li>
+          <li class="stat"><span class="stat__value">#1</span><span class="stat__label">G2 ranking in online community management software, out of 20+ platforms (2025)</span></li>
+          <li class="stat"><span class="stat__value">$500M</span><span class="stat__label">In total creator and host earnings generated on the platform in 2025</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
   <section class="say-hi" id="contact" aria-label="Contact">
     <h2 class="say-hi__title">Say hi sometime</h2>
