@@ -23,51 +23,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    /* night (also the no-JS fallback) */
-    --paper:#17140F;      /* dark field */
-    --ink:#FFF1D6;        /* cream type */
-    --muted:#9B9384;
-    --surface-rgb:255,241,214;  /* --ink as r,g,b — translucent borders/tints on dark bg */
-    --accent:#C8F135;     /* the pop color — bright enough to read on this dark paper */
-    --accent-ink:#17140F; /* text/icon color for content drawn ON TOP of --accent */
-    --lift: -8px;         /* how high a flipped letter jumps */
-    --dur: .5s;
-    --spring: cubic-bezier(.34,1.56,.64,1);
-  }
-
-  /* --- time of day: JS sets data-time on <html> before first paint ---
-     Each theme repicks --accent (and --accent-ink) for its own paper — a color
-     that pops on dark paper (lime) goes nearly invisible on a light one, so
-     morning/afternoon get their own darker accent instead of inheriting lime. */
-  :root[data-time="morning"]{
-    --paper:#FFE49E;
-    --ink:#231B12;
-    --muted:#5C4A28;
-    --surface-rgb:35,27,18;
-    --accent:#5C6BAD;      /* pastel periwinkle — ~4:1 on this paper */
-    --accent-ink:#FFF1D6;
-  }
-  :root[data-time="afternoon"]{
-    --paper:#C8E5F5;
-    --ink:#142430;
-    --muted:#2D4552;
-    --surface-rgb:20,36,48;
-    --accent:#5A4A96;      /* pastel dusty violet — ~5.8:1 on this paper */
-    --accent-ink:#FFF1D6;
-  }
-  :root[data-time="evening"]{
-    --paper:#4F294C;
-    --ink:#FFF1D6;
-    --muted:#C9A8C6;
-    --surface-rgb:255,241,214;
-    /* lime still pops fine on this dark plum — no accent override needed */
-  }
-
-  /* --- palette: fixed accent colors for cards/routes/tags, theme-independent.
-     Kept identical to the palette section in assets/site.css — this page is
-     self-contained and doesn't load that file, so update both if a value
-     changes. See that file's comment for the full rationale. */
+  /* --- palette: every fixed color on the site, named once. Used directly on
+     routes/tags/stats, and by the theme accents below (which are the only
+     colors that shift by time of day — everything here doesn't). Kept
+     identical to the palette section in assets/site.css — this page is
+     self-contained and doesn't load that file, so update both. */
   :root{
     --blue:#0074AF;    --blue-pastel:#A8D6EF;
     --teal:#00C2A8;    --teal-pastel:#A8E8DD;
@@ -75,14 +35,55 @@
     --violet:#7B2FF7;  --violet-pastel:#D9BEFA;
     --purple:#A614FE;  --purple-pastel:#D9BEFA;
     --green:#80BD3E;   --green-pastel:#CBE8A8;
-    --lime:#BDF300;    --lime-pastel:#E9F7AD;
+    --lime:#C8F135;    --lime-pastel:#E9F7AD;
     --pink:#FF0096;    --pink-pastel:#FFB8DC;
     --orange:#FF4800;  --orange-pastel:#FFCBB0;
     --magenta:#FF2E93;
-    --tag-lime:#C8F135; /* a different lime from --lime — matches the night --accent */
     --orange-red:#FF5A1F;
     --charcoal:#17140F; /* fixed dark text-on-bright-chip color */
-    --cream:#FFF1D6;
+    --cream:#FFF1D6;    /* fixed light text-on-dark-chip color */
+  }
+
+  :root{
+    /* night (also the no-JS fallback) */
+    --paper:#17140F;      /* dark field */
+    --ink:#FFF1D6;        /* cream type */
+    --muted:#9B9384;
+    --surface-rgb:255,241,214;  /* --ink as r,g,b — translucent borders/tints on dark bg */
+    --accent:var(--lime);      /* the pop color — bright enough to read on this dark paper */
+    --accent-ink:var(--charcoal); /* text/icon color for content drawn ON TOP of --accent */
+    --lift: -8px;         /* how high a flipped letter jumps */
+    --dur: .5s;
+    --spring: cubic-bezier(.34,1.56,.64,1);
+  }
+
+  /* --- time of day: JS sets data-time on <html> before first paint ---
+     Morning and afternoon share one accent (indigo, ~5.2–5.5:1 contrast
+     against both papers) instead of each picking their own — one
+     light-theme accent, not two. Lime pops fine on dark papers (night/
+     evening) but disappears on light ones, hence the swap. */
+  :root[data-time="morning"]{
+    --paper:#FFE49E;
+    --ink:#231B12;
+    --muted:#5C4A28;
+    --surface-rgb:35,27,18;
+    --accent:var(--indigo);
+    --accent-ink:var(--cream);
+  }
+  :root[data-time="afternoon"]{
+    --paper:#C8E5F5;
+    --ink:#142430;
+    --muted:#2D4552;
+    --surface-rgb:20,36,48;
+    --accent:var(--indigo);
+    --accent-ink:var(--cream);
+  }
+  :root[data-time="evening"]{
+    --paper:#4F294C;
+    --ink:#FFF1D6;
+    --muted:#C9A8C6;
+    --surface-rgb:255,241,214;
+    /* lime still pops fine on this dark plum — no accent override needed */
   }
 
   *{box-sizing:border-box}
@@ -429,13 +430,13 @@
       <!-- everything below is decorative; data-tag/data-color drive the reveal -->
       <span class="word" aria-hidden="true">
         <span class="letter"><span class="glyph">K</span><span class="tag" style="background:var(--magenta);color:var(--cream);--tilt:-4deg">15 years of design</span></span>
-        <span class="letter"><span class="glyph">a</span><span class="tag" style="background:var(--tag-lime);color:var(--charcoal);--tilt:5deg">UX / UI / HCI</span></span>
+        <span class="letter"><span class="glyph">a</span><span class="tag" style="background:var(--lime);color:var(--charcoal);--tilt:5deg">UX / UI / HCI</span></span>
         <span class="letter"><span class="glyph">t</span><span class="tag" style="background:var(--indigo);color:var(--cream);--tilt:-7deg">startup expert</span></span>
         <span class="letter"><span class="glyph">h</span><span class="tag" style="background:var(--orange-red);color:var(--cream);--tilt:3deg">engineering whisperer</span></span>
         <span class="letter"><span class="glyph">e</span><span class="tag" style="background:var(--teal);color:var(--cream);--tilt:-2deg">currently vibe coding</span></span>
         <span class="letter"><span class="glyph">r</span><span class="tag" style="background:var(--violet);color:var(--cream);--tilt:6deg">co-founder?!</span></span>
         <span class="letter"><span class="glyph">i</span><span class="tag" style="background:var(--magenta);color:var(--cream);--tilt:-5deg">NJ native</span></span>
-        <span class="letter"><span class="glyph">n</span><span class="tag" style="background:var(--tag-lime);color:var(--charcoal);--tilt:2deg">sci-fi lover</span></span>
+        <span class="letter"><span class="glyph">n</span><span class="tag" style="background:var(--lime);color:var(--charcoal);--tilt:2deg">sci-fi lover</span></span>
         <span class="letter"><span class="glyph">e</span><span class="tag" style="background:var(--indigo);color:var(--cream);--tilt:-6deg">boy mom</span></span>
       </span>
 
