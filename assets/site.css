@@ -115,6 +115,29 @@ a.card:hover .card__arrow,a.card:focus-visible .card__arrow{transform:translateX
 .card--soon{opacity:.6}
 .card--soon .card__tag{background:transparent;border:1px solid rgba(var(--surface-rgb),.3);color:var(--muted)}
 
+/* --- article: long-form case-study deep dives (Manta case studies, etc) --- */
+.article{max-width:720px;margin:0 auto;padding:clamp(40px,7vw,72px) clamp(20px,5vw,48px) 0}
+.article__lede{font-size:clamp(17px,2.2vw,20px);color:var(--muted);line-height:1.6;margin:0 0 8px}
+.article__meta{font-size:13px;color:var(--muted);letter-spacing:.04em;margin:0 0 clamp(32px,6vw,48px)}
+.article h2{font-size:clamp(22px,3vw,26px);font-weight:600;letter-spacing:-.02em;margin:clamp(36px,6vw,52px) 0 14px}
+.article__eyebrow{display:block;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--card-accent, var(--accent));margin:clamp(36px,6vw,52px) 0 6px}
+.article__eyebrow + h2{margin-top:0}
+.article p{font-size:16px;line-height:1.75;color:var(--ink);margin:0 0 20px}
+.article__lede + .article p:first-of-type{margin-top:0}
+.article blockquote{margin:28px 0;padding:18px 22px;border-left:3px solid var(--card-accent, var(--accent));
+      font-size:17px;font-style:italic;line-height:1.55;color:var(--ink)}
+.article blockquote cite{display:block;margin-top:10px;font-size:13px;font-style:normal;color:var(--muted)}
+.article ul{margin:0 0 20px;padding-left:22px}
+.article li{font-size:16px;line-height:1.7;color:var(--ink);margin-bottom:10px}
+.article hr{border:none;border-top:1px solid rgba(var(--surface-rgb),.14);margin:clamp(36px,6vw,52px) 0}
+.article__nav{max-width:720px;margin:0 auto;padding:clamp(24px,5vw,40px) clamp(20px,5vw,48px) clamp(64px,10vw,112px)}
+.article__nav-label{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+.article__nav-links{display:flex;flex-direction:column;gap:10px}
+.article__nav-links a{--tilt:-2deg;color:var(--ink);text-decoration:none;font-size:15px;font-weight:600;
+      display:inline-flex;align-items:center;gap:6px;transition:transform .18s var(--spring),color .18s}
+.article__nav-links a:hover,.article__nav-links a:focus-visible{transform:translateX(4px);color:var(--accent);outline:none}
+
 /* --- empty state: a whole page that's still being written --- */
 .empty-state{max-width:1080px;margin:clamp(48px,9vw,88px) auto 0;padding:0 clamp(20px,5vw,48px) clamp(64px,10vw,112px)}
 .empty-state__frame{min-height:240px;border-radius:24px;
