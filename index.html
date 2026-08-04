@@ -64,6 +64,27 @@
     /* lime still pops fine on this dark plum — no accent override needed */
   }
 
+  /* --- palette: fixed accent colors for cards/routes/tags, theme-independent.
+     Kept identical to the palette section in assets/site.css — this page is
+     self-contained and doesn't load that file, so update both if a value
+     changes. See that file's comment for the full rationale. */
+  :root{
+    --blue:#0074AF;    --blue-pastel:#A8D6EF;
+    --teal:#00C2A8;    --teal-pastel:#A8E8DD;
+    --indigo:#1B45E8;  --indigo-pastel:#B8C4FA;
+    --violet:#7B2FF7;  --violet-pastel:#D9BEFA;
+    --purple:#A614FE;  --purple-pastel:#D9BEFA;
+    --green:#80BD3E;   --green-pastel:#CBE8A8;
+    --lime:#BDF300;    --lime-pastel:#E9F7AD;
+    --pink:#FF0096;    --pink-pastel:#FFB8DC;
+    --orange:#FF4800;  --orange-pastel:#FFCBB0;
+    --magenta:#FF2E93;
+    --tag-lime:#C8F135; /* a different lime from --lime — matches the night --accent */
+    --orange-red:#FF5A1F;
+    --charcoal:#17140F; /* fixed dark text-on-bright-chip color */
+    --cream:#FFF1D6;
+  }
+
   *{box-sizing:border-box}
   body{margin:0;background:var(--paper);color:var(--ink);
        font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
@@ -239,9 +260,9 @@
          --route-accent:var(--accent-pastel, var(--accent-vivid, var(--accent)))}
   .route__tag{align-self:flex-start;font-size:11px;font-weight:600;letter-spacing:.06em;
          text-transform:uppercase;padding:5px 10px;border-radius:999px;
-         background:var(--route-accent);color:var(--tag-ink,#FFF1D6)}
+         background:var(--route-accent);color:var(--tag-ink,var(--cream))}
   /* pastel pills are all light — dark text reads better across the board */
-  :root[data-time="morning"] .route__tag,:root[data-time="afternoon"] .route__tag{color:#17140F}
+  :root[data-time="morning"] .route__tag,:root[data-time="afternoon"] .route__tag{color:var(--charcoal)}
   .route__title{font-size:clamp(22px,3.2vw,28px);font-weight:600;letter-spacing:-.02em}
   .route__desc{font-size:14px;color:var(--muted);line-height:1.45}
   .route__arrow{margin-top:auto;padding-top:16px;display:inline-block;line-height:0;color:var(--route-accent);
@@ -407,22 +428,22 @@
 
       <!-- everything below is decorative; data-tag/data-color drive the reveal -->
       <span class="word" aria-hidden="true">
-        <span class="letter"><span class="glyph">K</span><span class="tag" style="background:#FF2E93;color:#FFF1D6;--tilt:-4deg">15 years of design</span></span>
-        <span class="letter"><span class="glyph">a</span><span class="tag" style="background:#C8F135;color:#17140F;--tilt:5deg">UX / UI / HCI</span></span>
-        <span class="letter"><span class="glyph">t</span><span class="tag" style="background:#1B45E8;color:#FFF1D6;--tilt:-7deg">startup expert</span></span>
-        <span class="letter"><span class="glyph">h</span><span class="tag" style="background:#FF5A1F;color:#FFF1D6;--tilt:3deg">engineering whisperer</span></span>
-        <span class="letter"><span class="glyph">e</span><span class="tag" style="background:#00C2A8;color:#FFF1D6;--tilt:-2deg">currently vibe coding</span></span>
-        <span class="letter"><span class="glyph">r</span><span class="tag" style="background:#7B2FF7;color:#FFF1D6;--tilt:6deg">co-founder?!</span></span>
-        <span class="letter"><span class="glyph">i</span><span class="tag" style="background:#FF2E93;color:#FFF1D6;--tilt:-5deg">NJ native</span></span>
-        <span class="letter"><span class="glyph">n</span><span class="tag" style="background:#C8F135;color:#17140F;--tilt:2deg">sci-fi lover</span></span>
-        <span class="letter"><span class="glyph">e</span><span class="tag" style="background:#1B45E8;color:#FFF1D6;--tilt:-6deg">boy mom</span></span>
+        <span class="letter"><span class="glyph">K</span><span class="tag" style="background:var(--magenta);color:var(--cream);--tilt:-4deg">15 years of design</span></span>
+        <span class="letter"><span class="glyph">a</span><span class="tag" style="background:var(--tag-lime);color:var(--charcoal);--tilt:5deg">UX / UI / HCI</span></span>
+        <span class="letter"><span class="glyph">t</span><span class="tag" style="background:var(--indigo);color:var(--cream);--tilt:-7deg">startup expert</span></span>
+        <span class="letter"><span class="glyph">h</span><span class="tag" style="background:var(--orange-red);color:var(--cream);--tilt:3deg">engineering whisperer</span></span>
+        <span class="letter"><span class="glyph">e</span><span class="tag" style="background:var(--teal);color:var(--cream);--tilt:-2deg">currently vibe coding</span></span>
+        <span class="letter"><span class="glyph">r</span><span class="tag" style="background:var(--violet);color:var(--cream);--tilt:6deg">co-founder?!</span></span>
+        <span class="letter"><span class="glyph">i</span><span class="tag" style="background:var(--magenta);color:var(--cream);--tilt:-5deg">NJ native</span></span>
+        <span class="letter"><span class="glyph">n</span><span class="tag" style="background:var(--tag-lime);color:var(--charcoal);--tilt:2deg">sci-fi lover</span></span>
+        <span class="letter"><span class="glyph">e</span><span class="tag" style="background:var(--indigo);color:var(--cream);--tilt:-6deg">boy mom</span></span>
       </span>
 
       <span class="word" aria-hidden="true">
-        <span class="letter"><span class="glyph">R</span><span class="tag" style="background:#FF5A1F;color:#FFF1D6;--tilt:4deg">forza ferrari</span></span>
-        <span class="letter"><span class="glyph">o</span><span class="tag" style="background:#FFF1D6;color:#17140F;--tilt:-3deg">I voted! 🗳️</span></span>
-        <span class="letter"><span class="glyph">o</span><span class="tag" style="background:#FF2E93;color:#FFF1D6;--tilt:6deg">skis &gt; snowboards</span></span>
-        <span class="letter"><span class="glyph">t</span><span class="tag" style="background:#00C2A8;color:#FFF1D6;--tilt:-5deg">say hi 👋</span></span>
+        <span class="letter"><span class="glyph">R</span><span class="tag" style="background:var(--orange-red);color:var(--cream);--tilt:4deg">forza ferrari</span></span>
+        <span class="letter"><span class="glyph">o</span><span class="tag" style="background:var(--cream);color:var(--charcoal);--tilt:-3deg">I voted! 🗳️</span></span>
+        <span class="letter"><span class="glyph">o</span><span class="tag" style="background:var(--magenta);color:var(--cream);--tilt:6deg">skis &gt; snowboards</span></span>
+        <span class="letter"><span class="glyph">t</span><span class="tag" style="background:var(--teal);color:var(--cream);--tilt:-5deg">say hi 👋</span></span>
       </span>
   </h1>
 
@@ -464,14 +485,14 @@
     <!-- Manta + Mighty are the flagship work, so they get their own bigger
          row with each company's real logo. -->
     <div class="routes__featured">
-      <a class="route route--featured" href="/manta/" style="--accent-vivid:#0074AF;--accent-pastel:#A8D6EF;--tilt:-2deg">
+      <a class="route route--featured" href="/manta/" style="--accent-vivid:var(--blue);--accent-pastel:var(--blue-pastel);--tilt:-2deg">
         <span class="route__logo"><img src="/assets/logos/manta-cares.svg" alt="Manta Cares"></span>
         <span class="route__tag">work</span>
         <span class="route__title">Manta Cares</span>
         <span class="route__desc">Helping patients and caregivers navigate cancer diagnosis.</span>
         <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
-      <a class="route route--featured" href="/mighty/" style="--accent-vivid:#A614FE;--accent-pastel:#D9BEFA;--tilt:2deg">
+      <a class="route route--featured" href="/mighty/" style="--accent-vivid:var(--purple);--accent-pastel:var(--purple-pastel);--tilt:2deg">
         <span class="route__logo"><img src="/assets/logos/mighty-networks.svg" alt="Mighty Networks"></span>
         <span class="route__tag">work</span>
         <span class="route__title">Mighty Networks</span>
@@ -480,31 +501,31 @@
       </a>
     </div>
     <div class="routes__grid">
-      <a class="route" href="https://static1.squarespace.com/static/649378526c54e630f4b17c1a/t/6a56af8dda4aaa7c4e2ef8d4/1784065933655/KatherineRootResume_2026.pdf" target="_blank" rel="noopener noreferrer" style="--accent-vivid:#BDF300;--accent-pastel:#E9F7AD;--tilt:-3deg;--tag-ink:#17140F">
+      <a class="route" href="https://static1.squarespace.com/static/649378526c54e630f4b17c1a/t/6a56af8dda4aaa7c4e2ef8d4/1784065933655/KatherineRootResume_2026.pdf" target="_blank" rel="noopener noreferrer" style="--accent-vivid:var(--lime);--accent-pastel:var(--lime-pastel);--tilt:-3deg;--tag-ink:var(--accent-ink)">
         <span class="route__tag">work</span>
         <span class="route__title">Resume</span>
         <span class="route__desc">All the nitty gritty details.</span>
         <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
-      <a class="route" href="/leadership/" style="--accent-vivid:#FF4800;--accent-pastel:#FFCBB0;--tilt:3deg">
+      <a class="route" href="/leadership/" style="--accent-vivid:var(--orange);--accent-pastel:var(--orange-pastel);--tilt:3deg">
         <span class="route__tag">work</span>
         <span class="route__title">Design Leadership</span>
         <span class="route__desc">Notes on building and leading design teams.</span>
         <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
-      <a class="route" href="https://www.wordvomit.xyz" target="_blank" rel="noopener noreferrer" style="--accent-vivid:#80BD3E;--accent-pastel:#CBE8A8;--tilt:-2deg">
+      <a class="route" href="https://www.wordvomit.xyz" target="_blank" rel="noopener noreferrer" style="--accent-vivid:var(--green);--accent-pastel:var(--green-pastel);--tilt:-2deg">
         <span class="route__tag">vibe coding</span>
         <span class="route__title">Word Vomit</span>
         <span class="route__desc">The number one app for your many existential millennial woes.</span>
         <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
-      <a class="route" href="https://midnightcrisis.bearblog.dev/blog/" target="_blank" rel="noopener noreferrer" style="--accent-vivid:#FF0096;--accent-pastel:#FFB8DC;--tilt:2deg">
+      <a class="route" href="https://midnightcrisis.bearblog.dev/blog/" target="_blank" rel="noopener noreferrer" style="--accent-vivid:var(--pink);--accent-pastel:var(--pink-pastel);--tilt:2deg">
         <span class="route__tag">fun</span>
         <span class="route__title">Writing</span>
         <span class="route__desc">Thoughts, essays, notes, etc.</span>
         <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
-      <a class="route" href="/votecenter/" style="--accent-vivid:#00C2A8;--accent-pastel:#A8E8DD;--tilt:-3deg">
+      <a class="route" href="/votecenter/" style="--accent-vivid:var(--teal);--accent-pastel:var(--teal-pastel);--tilt:-3deg">
         <span class="route__tag">volunteer</span>
         <span class="route__title">Vote Center Lead</span>
         <span class="route__desc">Running a polling location on election day — civic infrastructure needs good UX too.</span>
@@ -521,27 +542,27 @@
   <section class="stats" aria-label="By the numbers">
     <h2 class="stats__title">By the Numbers</h2>
     <ul class="stat-list">
-      <li class="stat" style="--accent-vivid:#FF4800;--accent-pastel:#FFCBB0">
+      <li class="stat" style="--accent-vivid:var(--orange);--accent-pastel:var(--orange-pastel)">
         <span class="stat__value">15 years</span>
         <span class="stat__label">Building and leading product design teams</span>
       </li>
-      <li class="stat" style="--accent-vivid:#00C2A8;--accent-pastel:#A8E8DD">
+      <li class="stat" style="--accent-vivid:var(--teal);--accent-pastel:var(--teal-pastel)">
         <span class="stat__value">5x</span>
         <span class="stat__label">Growth in HopeAI usage after a redesign of how patients find support</span>
       </li>
-      <li class="stat" style="--accent-vivid:#0074AF;--accent-pastel:#A8D6EF">
+      <li class="stat" style="--accent-vivid:var(--blue);--accent-pastel:var(--blue-pastel)">
         <span class="stat__value">88–96%</span>
         <span class="stat__label">Onboarding conversion, built for a moment with zero patience for friction</span>
       </li>
-      <li class="stat" style="--accent-vivid:#7B2FF7;--accent-pastel:#D9BEFA">
+      <li class="stat" style="--accent-vivid:var(--violet);--accent-pastel:var(--violet-pastel)">
         <span class="stat__value">1,408</span>
         <span class="stat__label">Patients reached through redesigned intake and care flows</span>
       </li>
-      <li class="stat" style="--accent-vivid:#FF0096;--accent-pastel:#FFB8DC">
+      <li class="stat" style="--accent-vivid:var(--pink);--accent-pastel:var(--pink-pastel)">
         <span class="stat__value">4.84/5</span>
         <span class="stat__label">iOS App Store rating across ~66,000 ratings, on an app I helped ship</span>
       </li>
-      <li class="stat" style="--accent-vivid:#1B45E8;--accent-pastel:#B8C4FA">
+      <li class="stat" style="--accent-vivid:var(--indigo);--accent-pastel:var(--indigo-pastel)">
         <span class="stat__value">#1</span>
         <span class="stat__label">G2 ranking in online community management software, out of 20+ platforms</span>
       </li>
