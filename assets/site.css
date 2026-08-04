@@ -44,6 +44,33 @@
   /* lime still pops fine on this dark plum — no accent override needed */
 }
 
+/* --- palette: the fixed accent colors hand-assigned per card/route/tag.
+   Unlike --accent above, these don't shift with time of day — a card's
+   --accent-vivid/--accent-pastel pair stays the same color in every theme,
+   only swapping WHICH of the two shows (vivid normally, pastel on
+   morning/afternoon). Named here once so every card/route/tag/stat
+   references a color instead of repeating hex values everywhere.
+   index.html is self-contained (doesn't load this file), so it keeps its
+   own copy of this exact block — update both if a value changes here. */
+:root{
+  --blue:#0074AF;    --blue-pastel:#A8D6EF;
+  --teal:#00C2A8;    --teal-pastel:#A8E8DD;
+  --indigo:#1B45E8;  --indigo-pastel:#B8C4FA;
+  --violet:#7B2FF7;  --violet-pastel:#D9BEFA;
+  --purple:#A614FE;  --purple-pastel:#D9BEFA;
+  --green:#80BD3E;   --green-pastel:#CBE8A8;
+  --lime:#BDF300;    --lime-pastel:#E9F7AD;
+  --pink:#FF0096;    --pink-pastel:#FFB8DC;
+  --orange:#FF4800;  --orange-pastel:#FFCBB0;
+  /* one-offs used only by the homepage hero's flip-letter tags — fixed
+     chip colors, not part of the vivid/pastel card system above */
+  --magenta:#FF2E93;
+  --tag-lime:#C8F135; /* a different lime from --lime — matches the night --accent */
+  --orange-red:#FF5A1F;
+  --charcoal:#17140F; /* fixed dark text-on-bright-chip color */
+  --cream:#FFF1D6;
+}
+
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);
      font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
@@ -102,9 +129,9 @@ a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt))
       aspect-ratio:16/10;object-fit:cover;border-radius:22px 22px 0 0}
 .card__tag{align-self:flex-start;font-size:11px;font-weight:600;letter-spacing:.06em;
       text-transform:uppercase;padding:5px 10px;border-radius:999px;
-      background:var(--card-accent);color:var(--tag-ink,#FFF1D6)}
+      background:var(--card-accent);color:var(--tag-ink,var(--cream))}
 /* pastel pills are all light — dark text reads better across the board */
-:root[data-time="morning"] .card__tag,:root[data-time="afternoon"] .card__tag{color:#17140F}
+:root[data-time="morning"] .card__tag,:root[data-time="afternoon"] .card__tag{color:var(--charcoal)}
 .card__title{font-size:clamp(22px,3.2vw,28px);font-weight:600;letter-spacing:-.02em}
 .card__desc{font-size:14px;color:var(--muted);line-height:1.45}
 .card__arrow{margin-top:auto;padding-top:16px;display:inline-block;line-height:0;color:var(--card-accent);
