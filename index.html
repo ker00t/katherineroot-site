@@ -159,8 +159,41 @@
   .letter:hover .tag,
   .letter.is-active .tag{opacity:1;transform:translateX(-50%) translateY(0) scale(1) rotate(var(--tilt))}
 
-  .subtitle{text-align:center;margin:clamp(14px,3vw,20px) 0 0;
-         font-size:clamp(15px,2.2vw,20px);color:var(--muted);letter-spacing:.02em}
+  /* --- bio: the short subtitle, with a hover-revealed prompt that expands
+     into the long-winded version. Uses the grid 0fr->1fr trick so the
+     expand/collapse animates to auto height instead of jumping. --- */
+  .bio{text-align:center;margin:clamp(14px,3vw,20px) auto 0;max-width:640px;position:relative}
+  .bio__short{font-size:clamp(15px,2.2vw,20px);color:var(--muted);letter-spacing:.02em;margin:0;
+         transition:opacity .25s ease}
+  .bio.is-expanded .bio__short{display:none}
+
+  .bio__prompt{--tilt:-2deg;margin:10px auto 0;display:inline-flex;align-items:center;gap:5px;
+         padding:7px 16px;border-radius:999px;border:1px solid rgba(var(--surface-rgb),.2);
+         background:rgba(var(--surface-rgb),.04);color:var(--muted);font-family:inherit;
+         font-size:12px;font-weight:600;letter-spacing:.02em;cursor:pointer;
+         opacity:0;transform:translateY(6px) scale(.9) rotate(var(--tilt));pointer-events:none;
+         transition:opacity .3s var(--spring),transform .3s var(--spring),color .18s,border-color .18s}
+  .bio:hover .bio__prompt,.bio.is-touch-revealed .bio__prompt{
+         opacity:1;transform:translateY(0) scale(1) rotate(var(--tilt));pointer-events:auto}
+  .bio.is-expanded .bio__prompt{display:none}
+  .bio__prompt:hover,.bio__prompt:focus-visible{color:var(--accent);border-color:var(--accent);outline:none}
+  .bio__prompt svg{width:12px;height:12px;transition:transform .25s var(--spring)}
+  .bio__prompt:hover svg{transform:translateX(3px) rotate(90deg)}
+
+  .bio__long-wrap{display:grid;grid-template-rows:0fr;overflow:hidden;
+         transition:grid-template-rows .5s var(--spring)}
+  .bio.is-expanded .bio__long-wrap{grid-template-rows:1fr}
+  .bio__long{min-height:0;text-align:left;font-size:15px;line-height:1.7;color:var(--muted);
+         opacity:0;transition:opacity .3s ease}
+  .bio.is-expanded .bio__long{opacity:1;transition:opacity .4s ease .15s}
+  .bio__long p{margin:0 0 16px}
+  .bio__long strong{color:var(--ink);font-weight:600}
+  .bio__collapse{display:block;margin:4px auto 0;padding:7px 16px;border-radius:999px;
+         border:1px solid rgba(var(--surface-rgb),.2);background:transparent;color:var(--muted);
+         font-family:inherit;font-size:12px;font-weight:600;letter-spacing:.02em;cursor:pointer;
+         transition:color .18s,border-color .18s,transform .2s var(--spring)}
+  .bio__collapse:hover,.bio__collapse:focus-visible{color:var(--accent);border-color:var(--accent);
+         transform:translateY(-2px);outline:none}
 
   .hint{text-align:center;margin:0;font-size:13px;color:var(--muted);letter-spacing:.05em}
   .hint__tap{display:none}
@@ -323,6 +356,8 @@
     .site-footer__toggle:hover svg,.site-footer__toggle:focus-visible svg{transform:none}
     #time-toggle-icon.is-swapping{opacity:1;transform:none}
     .header{transition:none}
+    .bio__prompt,.bio__long-wrap,.bio__long,.bio__collapse{transition:none}
+    .bio__prompt:hover svg{transform:none}
   }
 </style>
 </head>
@@ -367,7 +402,22 @@
       </span>
   </h1>
 
-  <p class="subtitle">Product, AI, and Experience Design Expert</p>
+  <div class="bio" id="bio">
+    <p class="bio__short">Product, AI, and Experience Design Expert</p>
+    <button type="button" class="bio__prompt" id="bio-expand">
+      Give me the long-winded version
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </button>
+    <div class="bio__long-wrap">
+      <div class="bio__long">
+        <p>For over a decade, I've been championing product and UX design at Bay Area startups. I entered the world of product design early, receiving my bachelor's degree in Human-Computer Interaction, and have devoted my entire career to <strong>shaping how people engage with technology</strong> 🤖</p>
+        <p>I'm the type of <strong>design leader who always stays connected to the work</strong>, and even though my title says Director, I prefer to call myself an <strong>experience designer</strong> ✨ My role goes far beyond crafting screens or managing people — it's about orchestrating a journey for someone to take when they interact with my products. It's about creating cohesion, meaning, and delight across the whole experience, and while I love the creativity of designing beautiful, functional interfaces in Figma (cue the "oohs" and "ahhs"), my favorite part of what I do is <strong>often behind the scenes</strong> 😱</p>
+        <p>It's in designing seamless workflows that often go unnoticed, building systems that empower product teams to communicate, fostering cultures where people thrive, and <strong>making products people want to use</strong>. It's about bringing order to chaos, elegance to the everyday, and expression to what often goes unsaid.</p>
+        <p>And in the <strong>messy, complex, and intangible challenges of this field</strong>, I believe experience design has the power to make a true impact on the world 🌸</p>
+        <button type="button" class="bio__collapse" id="bio-collapse">Okay that's enough</button>
+      </div>
+    </div>
+  </div>
 
   <p class="hint" id="hint">
     <span class="hint__tap">(tap each letter)</span>
@@ -542,6 +592,36 @@
       });
     });
   }
+})();
+</script>
+<script>
+(function () {
+  // The "long-winded version" prompt reveals on hover — on touch devices
+  // there's no hover, so a tap on the short bio reveals it instead, and a
+  // tap anywhere else dismisses it (same fallback pattern as the flip-name).
+  var bio = document.getElementById('bio');
+  var expandBtn = document.getElementById('bio-expand');
+  var collapseBtn = document.getElementById('bio-collapse');
+  var short = bio.querySelector('.bio__short');
+  if (!bio || !expandBtn || !collapseBtn) return;
+
+  var noHover = window.matchMedia('(hover: none)').matches;
+  if (noHover) {
+    short.addEventListener('click', function () {
+      bio.classList.toggle('is-touch-revealed');
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('#bio')) bio.classList.remove('is-touch-revealed');
+    });
+  }
+
+  expandBtn.addEventListener('click', function () {
+    bio.classList.add('is-expanded');
+    bio.classList.remove('is-touch-revealed');
+  });
+  collapseBtn.addEventListener('click', function () {
+    bio.classList.remove('is-expanded');
+  });
 })();
 </script>
 </body>
