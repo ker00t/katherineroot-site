@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From Tab to Pocket | Katherine Root</title>
+<script src="/assets/theme-init.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+  <div class="back-link">
+    <a href="/manta/" aria-label="Back to Manta Cares">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    </a>
+  </div>
+
+  <div class="page-head">
+    <h1 class="page-head__title">From Tab to Pocket</h1>
+    <p class="page-head__intro">A deep dive into the platform shift underneath <a href="/manta/year-in-review/">The Year Manta Became a Companion</a>. For years, Manta was a website. But our user doesn't live on a laptop — she lives on her phone, often as her only device. Getting her from a browser tab into a native app sounds like an engineering project. It was mostly a design problem, and an unusually delicate one given who we were asking to make the leap.</p>
+  </div>
+
+  <article class="article" style="--card-accent:#FF0096">
+    <p class="article__meta">Case study · Manta Cares</p>
+
+    <h2>The Problem</h2>
+    <p>The strategic case for mobile was easy: notifications, widgets, a presence in her pocket, an app she opens like she opens everything else. The design case was harder, because the bridge from web to app is exactly where you lose people — and we were asking the least tech-confident audience imaginable to cross it.</p>
+    <p>Think about what we were actually requesting of Carol, our design persona from <a href="/manta/dashboard-redesign/">the dashboard case study</a>: she's on our website, on a laptop her daughter set up, and we need her to end up with our app installed on her phone and logged in. Every standard pattern for this quietly assumes a comfort she doesn't have. "Scan this QR code" assumes she knows what that means and can aim a camera at her own screen. "You'll be redirected" assumes she won't panic when the screen changes. The transition had to be designed for someone who finds each of those steps genuinely uncertain.</p>
+
+    <span class="article__eyebrow">Principle 1</span>
+    <h2>Design the Bridge, Not Just the Destination</h2>
+    <p>The handoff itself deserved real design attention, not a generic "Get the app" button. The centerpiece was a download modal, and the most important decision in it was a small one with a big rationale.</p>
+    <p>Standard practice is to make the QR code the hero. But for an older, less tech-confident user on a laptop, scanning a QR code is the hard path — it requires a second device, a camera app, and steady hands. Emailing herself a link she can simply tap on her phone is the easy path. So I designed the modal to lead with the email-link option and treat the QR code as the secondary route, inverting the usual hierarchy to match how our person actually behaves. Both routes point to a single, purpose-built app-download destination so the experience after the tap is consistent no matter how she got there.</p>
+    <p>Around the modal, we built app-promotion patterns into the web product — surfaces that invite the download at the right moments without nagging, tuned for an audience that needs encouragement, not pressure.</p>
+
+    <span class="article__eyebrow">Principle 2</span>
+    <h2>Don't Make the Returning User Start Over</h2>
+    <p>A subtle but important failure mode: treating everyone who arrives logged-out as a brand-new visitor. For a returning patient, being shoved back through a sign-up funnel she already completed is confusing and a little insulting — <em>I already did this.</em></p>
+    <p>So we put design effort into logged-out routing that distinguishes a returning user from a genuinely new one, and sends each to the right place — a returning user toward a familiar way back in, a new user toward a clean first-time setup. It's invisible when it works, which is the point. The same care showed up in the front door we'd already rebuilt: the login, sign-up, and reset-password pages on a real design system, and a simple, on-brand registration flow for the people who genuinely are new.</p>
+
+    <span class="article__eyebrow">Principle 3</span>
+    <h2>Ship, Watch, and Fix on the Real Device</h2>
+    <p>You cannot design a mobile experience for this audience from a simulator. The only way to get it right was to put it in real hands and watch.</p>
+    <p>So we ran the rollout as a learning loop: internal TestFlight builds, then inviting real testers, then a steady stream of usability fixes driven by watching people stumble, and finally shipping into both the App Store and the Google Play Store so no one was excluded by their choice of phone. We've kept iterating since, right through recent map UX fixes on mobile. Underpinning all of it, we instrumented end-to-end product analytics — and gave real thought to how to measure newer surfaces like home-screen widgets — so the "watch" half of the loop was grounded in evidence, not vibes.</p>
+
+    <h2>Conclusions</h2>
+    <p>The web-to-mobile transition succeeded because we treated the bridge as a first-class design surface and refused to assume our user shared our comfort with technology.</p>
+    <ul>
+      <li>We designed a <strong>download modal that leads with the easy path</strong> — a tappable emailed link — and demoted the QR code, with promotion patterns tuned for a gentle, non-nagging invitation.</li>
+      <li>We built <strong>logged-out routing</strong> so returning users never get treated like strangers.</li>
+      <li>We ran a <strong>ship-watch-fix loop</strong> on real devices and launched on both iOS and Android, backed by real analytics.</li>
+    </ul>
+    <p>This is one of three deep dives under the year-in-review, alongside <a href="/manta/dashboard-redesign/">the persona-driven dashboard redesign</a> and <a href="/manta/appointment-prep/">the appointment experience</a>.</p>
+  </article>
+
+  <nav class="article__nav" aria-label="More Manta case studies">
+    <p class="article__nav-label">More Manta case studies</p>
+    <div class="article__nav-links">
+      <a href="/manta/year-in-review/">The Year Manta Became a Companion →</a>
+      <a href="/manta/dashboard-redesign/">Redesigning the Dashboard Around One Person →</a>
+      <a href="/manta/appointment-prep/">The Eight-Minute Appointment →</a>
+      <a href="/manta/mobile-app/">In Your Pocket →</a>
+      <a href="/manta/brand-evolution/">Earning Trust on Sight →</a>
+    </div>
+  </nav>
+
+  <section class="say-hi" aria-label="Contact">
+    <h2 class="say-hi__title">Say hi sometime</h2>
+    <div class="say-hi__icons">
+      <a class="say-hi__icon say-hi__icon--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="--tilt:-2deg"><span aria-hidden="true">in</span></a>
+      <a class="say-hi__icon" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="--tilt:2deg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+      </a>
+      <a class="say-hi__icon" href="mailto:keroot@gmail.com" aria-label="Email" style="--tilt:-3deg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <img class="site-footer__glow-img is-night" src="/assets/glow-night.svg" alt="" aria-hidden="true">
+    <img class="site-footer__glow-img is-morning" src="/assets/glow-morning.svg" alt="" aria-hidden="true">
+    <img class="site-footer__glow-img is-afternoon" src="/assets/glow-afternoon.svg" alt="" aria-hidden="true">
+    <img class="site-footer__glow-img is-evening" src="/assets/glow-evening.svg" alt="" aria-hidden="true">
+    <button type="button" class="site-footer__toggle" id="time-toggle">
+      <span id="time-toggle-icon"></span>
+    </button>
+  </footer>
+
+  <script src="/assets/time-toggle.js"></script>
+</body>
+</html>
