@@ -4,54 +4,9 @@
    <style> block for anything page-specific on top of this.
    ============================================================ */
 
-:root{
-  /* night (also the no-JS fallback) */
-  --paper:#17140F;      /* dark field */
-  --ink:#FFF1D6;        /* cream type */
-  --muted:#9B9384;
-  --surface-rgb:255,241,214;  /* --ink as r,g,b — translucent borders/tints on dark bg */
-  --accent:#C8F135;     /* the pop color — bright enough to read on this dark paper */
-  --accent-ink:#17140F; /* text/icon color for content drawn ON TOP of --accent */
-  --dur: .5s;
-  --spring: cubic-bezier(.34,1.56,.64,1);
-}
-
-/* --- time of day: theme-init.js sets data-time on <html> before first paint ---
-   Each theme repicks --accent (and --accent-ink) for its own paper — a color
-   that pops on dark paper (lime) goes nearly invisible on a light one, so
-   morning/afternoon get their own darker accent instead of inheriting lime. */
-:root[data-time="morning"]{
-  --paper:#FFE49E;
-  --ink:#231B12;
-  --muted:#5C4A28;
-  --surface-rgb:35,27,18;
-  --accent:#AEB8E0;      /* pastel periwinkle */
-  --accent-ink:#17140F;
-}
-:root[data-time="afternoon"]{
-  --paper:#C8E5F5;
-  --ink:#142430;
-  --muted:#2D4552;
-  --surface-rgb:20,36,48;
-  --accent:#C3AFE0;      /* pastel lavender */
-  --accent-ink:#17140F;
-}
-:root[data-time="evening"]{
-  --paper:#4F294C;
-  --ink:#FFF1D6;
-  --muted:#C9A8C6;
-  --surface-rgb:255,241,214;
-  /* lime still pops fine on this dark plum — no accent override needed */
-}
-
-/* --- palette: the fixed accent colors hand-assigned per card/route/tag.
-   Unlike --accent above, these don't shift with time of day — a card's
-   --accent-vivid/--accent-pastel pair stays the same color in every theme,
-   only swapping WHICH of the two shows (vivid normally, pastel on
-   morning/afternoon). Named here once so every card/route/tag/stat
-   references a color instead of repeating hex values everywhere.
-   index.html is self-contained (doesn't load this file), so it keeps its
-   own copy of this exact block — update both if a value changes here. */
+/* --- palette: every fixed color on the site, named once. Used directly on
+   cards/routes/tags/stats, and by the theme accents below (which are the
+   only colors that shift by time of day — everything here doesn't). */
 :root{
   --blue:#0074AF;    --blue-pastel:#A8D6EF;
   --teal:#00C2A8;    --teal-pastel:#A8E8DD;
@@ -59,16 +14,54 @@
   --violet:#7B2FF7;  --violet-pastel:#D9BEFA;
   --purple:#A614FE;  --purple-pastel:#D9BEFA;
   --green:#80BD3E;   --green-pastel:#CBE8A8;
-  --lime:#BDF300;    --lime-pastel:#E9F7AD;
+  --lime:#C8F135;    --lime-pastel:#E9F7AD;
   --pink:#FF0096;    --pink-pastel:#FFB8DC;
   --orange:#FF4800;  --orange-pastel:#FFCBB0;
-  /* one-offs used only by the homepage hero's flip-letter tags — fixed
-     chip colors, not part of the vivid/pastel card system above */
   --magenta:#FF2E93;
-  --tag-lime:#C8F135; /* a different lime from --lime — matches the night --accent */
   --orange-red:#FF5A1F;
   --charcoal:#17140F; /* fixed dark text-on-bright-chip color */
-  --cream:#FFF1D6;
+  --cream:#FFF1D6;    /* fixed light text-on-dark-chip color */
+}
+
+:root{
+  /* night (also the no-JS fallback) */
+  --paper:#17140F;      /* dark field */
+  --ink:#FFF1D6;        /* cream type */
+  --muted:#9B9384;
+  --surface-rgb:255,241,214;  /* --ink as r,g,b — translucent borders/tints on dark bg */
+  --accent:var(--lime);      /* the pop color — bright enough to read on this dark paper */
+  --accent-ink:var(--charcoal); /* text/icon color for content drawn ON TOP of --accent */
+  --dur: .5s;
+  --spring: cubic-bezier(.34,1.56,.64,1);
+}
+
+/* --- time of day: theme-init.js sets data-time on <html> before first paint ---
+   Morning and afternoon share one accent (indigo, ~5.2–5.5:1 contrast against
+   both papers) instead of each picking their own — one light-theme accent,
+   not two. Lime pops fine on dark papers (night/evening) but disappears on
+   light ones, hence the swap. */
+:root[data-time="morning"]{
+  --paper:#FFE49E;
+  --ink:#231B12;
+  --muted:#5C4A28;
+  --surface-rgb:35,27,18;
+  --accent:var(--indigo);
+  --accent-ink:var(--cream);
+}
+:root[data-time="afternoon"]{
+  --paper:#C8E5F5;
+  --ink:#142430;
+  --muted:#2D4552;
+  --surface-rgb:20,36,48;
+  --accent:var(--indigo);
+  --accent-ink:var(--cream);
+}
+:root[data-time="evening"]{
+  --paper:#4F294C;
+  --ink:#FFF1D6;
+  --muted:#C9A8C6;
+  --surface-rgb:255,241,214;
+  /* lime still pops fine on this dark plum — no accent override needed */
 }
 
 *{box-sizing:border-box}
