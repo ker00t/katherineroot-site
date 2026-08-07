@@ -292,22 +292,29 @@
   .stat__label{display:block;font-size:14px;color:var(--muted);line-height:1.45;margin-top:8px}
 
   /* --- kind words: a rotating carousel of real LinkedIn recommendations.
-     One slide lives in the DOM at a time; JS swaps its text and crossfades
-     rather than animating a track, since the quotes vary a lot in length. */
-  .kind-words{max-width:720px;margin:0 auto;padding:0 clamp(20px,5vw,48px) clamp(64px,10vw,112px);text-align:center}
+     Matches the Figma "Kind Words" mock: a 3-up peek carousel — the active
+     card centered and full-strength, the prev/next cards peeking in at the
+     viewport edges at reduced opacity. Every card is a fixed height (280px,
+     per Figma) regardless of quote length, so the row never jumps as it
+     rotates; --surface-rgb is used instead of Figma's literal morning-only
+     colors so it still works across all four themes. */
+  .kind-words{margin:0 auto;padding:0 0 clamp(64px,10vw,112px);text-align:center;overflow:hidden}
   .kind-words__title{font-size:clamp(32px,5.5vw,56px);font-weight:600;letter-spacing:-.03em;
          margin:0 0 clamp(24px,5vw,40px)}
-  .kind-words__card{border-radius:22px;padding:clamp(32px,6vw,48px) clamp(24px,5vw,40px);
+  .kind-words__row{display:flex;justify-content:center;align-items:stretch;gap:24px;
+         width:100vw;margin-left:calc(50% - 50vw)}
+  .kind-words__card{--kw-opacity:1;flex:0 0 auto;width:min(620px,86vw);height:280px;
+         border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:24px;
+         align-items:center;justify-content:center;overflow:hidden;text-align:center;
          border:1px solid rgba(var(--surface-rgb),.14);background:rgba(var(--surface-rgb),.03);
-         min-height:200px;display:flex;flex-direction:column;justify-content:center}
+         opacity:var(--kw-opacity);transition:opacity .4s ease}
   :root[data-time="morning"] .kind-words__card,:root[data-time="afternoon"] .kind-words__card{
-         background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.55)}
-  .kind-words__quote{font-size:clamp(17px,2.4vw,20px);line-height:1.6;color:var(--ink);margin:0 0 20px;
-         transition:opacity .25s ease}
-  .kind-words__cite{font-style:normal;transition:opacity .25s ease}
-  .kind-words__quote.is-fading,.kind-words__cite.is-fading{opacity:0}
-  .kind-words__name{display:block;font-weight:600;font-size:15px;color:var(--ink)}
-  .kind-words__role{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+         background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.6)}
+  .kind-words__card.is-peek{--kw-opacity:.35}
+  .kind-words__quote{font-size:20px;line-height:26px;color:var(--muted);margin:0;font-weight:400}
+  .kind-words__cite{font-style:normal;display:flex;flex-direction:column;gap:4px}
+  .kind-words__name{font-weight:600;font-size:16px;color:var(--ink)}
+  .kind-words__role{font-size:14px;color:var(--muted)}
   .kind-words__controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:24px}
   .kind-words__arrow{width:36px;height:36px;border-radius:50%;border:1px solid rgba(var(--surface-rgb),.2);
          background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;
@@ -318,6 +325,15 @@
   .kind-words__dot{width:6px;height:6px;border-radius:50%;background:rgba(var(--surface-rgb),.25);border:none;
          padding:0;cursor:pointer;transition:background .2s,transform .2s var(--spring)}
   .kind-words__dot.is-active{background:var(--accent);transform:scale(1.3)}
+
+  /* below the row's own min-width-per-card breakpoint, three 620px cards
+     don't fit — drop the peek cards and show just the active one, still
+     at the fixed 280px height, inset to the normal page gutter. */
+  @media (max-width:900px){
+    .kind-words__row{width:auto;margin-left:0;padding:0 clamp(20px,5vw,48px)}
+    .kind-words__card.is-peek{display:none}
+    .kind-words__card{width:100%}
+  }
 
   /* --- say hi: contact icons --- */
   .say-hi{max-width:1080px;margin:0 auto;padding:clamp(24px,5vw,48px) clamp(20px,5vw,48px) 0;
@@ -406,7 +422,7 @@
     .header{transition:none}
     .bio__prompt,.bio__long-wrap,.bio__long,.bio__collapse{transition:none}
     .bio__prompt:hover svg{transform:none}
-    .kind-words__quote,.kind-words__cite,.kind-words__arrow,.kind-words__dot{transition:none}
+    .kind-words__card,.kind-words__arrow,.kind-words__dot{transition:none}
   }
 </style>
 </head>
@@ -577,12 +593,28 @@
        trimmed to one verbatim, contiguous sentence each — not paraphrased. -->
   <section class="kind-words" aria-label="Kind words from colleagues">
     <h2 class="kind-words__title">Kind Words</h2>
-    <div class="kind-words__card">
-      <blockquote class="kind-words__quote" id="kw-quote"></blockquote>
-      <cite class="kind-words__cite" id="kw-cite">
-        <span class="kind-words__name" id="kw-name"></span>
-        <span class="kind-words__role" id="kw-role"></span>
-      </cite>
+    <div class="kind-words__row">
+      <div class="kind-words__card is-peek" id="kw-card-prev" aria-hidden="true">
+        <blockquote class="kind-words__quote" id="kw-quote-prev"></blockquote>
+        <cite class="kind-words__cite">
+          <span class="kind-words__name" id="kw-name-prev"></span>
+          <span class="kind-words__role" id="kw-role-prev"></span>
+        </cite>
+      </div>
+      <div class="kind-words__card" id="kw-card-current">
+        <blockquote class="kind-words__quote" id="kw-quote-current"></blockquote>
+        <cite class="kind-words__cite">
+          <span class="kind-words__name" id="kw-name-current"></span>
+          <span class="kind-words__role" id="kw-role-current"></span>
+        </cite>
+      </div>
+      <div class="kind-words__card is-peek" id="kw-card-next" aria-hidden="true">
+        <blockquote class="kind-words__quote" id="kw-quote-next"></blockquote>
+        <cite class="kind-words__cite">
+          <span class="kind-words__name" id="kw-name-next"></span>
+          <span class="kind-words__role" id="kw-role-next"></span>
+        </cite>
+      </div>
     </div>
     <div class="kind-words__controls">
       <button type="button" class="kind-words__arrow" id="kw-prev" aria-label="Previous recommendation">
@@ -710,22 +742,28 @@
   var recs = [
     { quote: `She’s just all-around great to work with: a creative but sensible voice during ideation, a doer who’s ready to roll up her sleeves wherever needed, and someone willing to make decisions and cut through the endless “what ifs.”`, name: 'Elisabeth Boonin', role: 'Serial Confounder' },
     { quote: `She will be a true asset to any team, valued for her keen eye for design, sense of humor, and ability to see the big picture.`, name: 'Erin Landis', role: 'Strategic Advisor to Scholarly Societies & Publishers' },
-    { quote: `Katherine is everything you’d hope for in a design manager — supportive, thoughtful, and a true advocate for her team.`, name: 'Giada Sun', role: 'Product Designer, Mighty Networks' },
-    { quote: `Katherine is driven, hardworking, curious, and fun-spirited. She brings the kind of positivity that teams thrive on.`, name: 'Christopher Edlin', role: 'Manager, Support Account Team, Ping Identity' },
-    { quote: `Katherine is that rare combination of natural leader, top-notch designer, and reliable teammate — the kind of person you jump at the chance to work with.`, name: 'Mike Beverley', role: 'VP of Software Engineering, AoPS' },
+    { quote: `Katherine is everything you’d hope for in a design manager — supportive, thoughtful, and a true advocate for her team.`, name: 'Giada Sun', role: 'Product Designer @ Mighty Networks' },
+    { quote: `Katherine is driven, hardworking, curious, and fun-spirited. She brings the kind of positivity that teams thrive on.`, name: 'Christopher Edlin', role: 'Manager, Support Account Team @ Ping Identity' },
+    { quote: `Katherine is that rare combination of natural leader, top-notch designer, and reliable teammate — the kind of person you jump at the chance to work with.`, name: 'Mike Beverley', role: 'VP of Software Engineering @ AoPS' },
     { quote: `Because of Katherine, I learned a lot about what makes a great design lead truly outstanding.`, name: 'Bruno Ribeiro', role: 'Applied AI & Mobile App Engineer' },
     { quote: `She struck a perfect balance of giving me the freedom to run with projects, making them my own, and helping guide the project with thought provoking questions and discussions.`, name: 'John Welch', role: 'Product Manager' }
   ];
 
-  var quoteEl = document.getElementById('kw-quote');
-  var citeEl = document.getElementById('kw-cite');
-  var nameEl = document.getElementById('kw-name');
-  var roleEl = document.getElementById('kw-role');
+  // Three slots — prev (peek), current (active), next (peek) — mirroring
+  // the Figma mock's 3-up layout instead of one card at a time.
+  var slots = ['prev', 'current', 'next'].map(function (key) {
+    return {
+      card: document.getElementById('kw-card-' + key),
+      quote: document.getElementById('kw-quote-' + key),
+      name: document.getElementById('kw-name-' + key),
+      role: document.getElementById('kw-role-' + key)
+    };
+  });
   var dotsWrap = document.getElementById('kw-dots');
   var prevBtn = document.getElementById('kw-prev');
   var nextBtn = document.getElementById('kw-next');
   var section = document.querySelector('.kind-words');
-  if (!quoteEl || !dotsWrap) return;
+  if (!slots[1].quote || !dotsWrap) return;
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var idx = 0;
@@ -741,9 +779,13 @@
   });
 
   function paint() {
-    quoteEl.textContent = recs[idx].quote;
-    nameEl.textContent = recs[idx].name;
-    roleEl.textContent = recs[idx].role;
+    var offsets = [-1, 0, 1];
+    slots.forEach(function (slot, i) {
+      var rec = recs[(idx + offsets[i] + recs.length) % recs.length];
+      slot.quote.textContent = rec.quote;
+      slot.name.textContent = rec.name;
+      slot.role.textContent = rec.role;
+    });
     Array.prototype.forEach.call(dotsWrap.children, function (d, i) {
       d.classList.toggle('is-active', i === idx);
     });
@@ -752,12 +794,10 @@
   function show(i) {
     idx = (i + recs.length) % recs.length;
     if (reduce) { paint(); return; }
-    quoteEl.classList.add('is-fading');
-    citeEl.classList.add('is-fading');
+    slots.forEach(function (slot) { slot.card.style.opacity = '0'; });
     setTimeout(function () {
       paint();
-      quoteEl.classList.remove('is-fading');
-      citeEl.classList.remove('is-fading');
+      slots.forEach(function (slot) { slot.card.style.opacity = ''; });
     }, 250);
   }
 
