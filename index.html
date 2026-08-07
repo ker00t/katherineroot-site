@@ -813,12 +813,15 @@
     card.role.textContent = rec.role;
   }
 
-  function positionCard(card, animate) {
-    if (!animate) card.el.classList.add('kw-no-transition');
-    var step = (cards[1].el.offsetWidth || 620) + GAP;
-    var opacity = card.slot === 0 ? 1 : (Math.abs(card.slot) === 1 ? PEEK_OPACITY : 0);
-    card.el.style.transform = 'translateX(calc(-50% + ' + (card.slot * step) + 'px))';
-    card.el.style.opacity = opacity;
+  function stepPx() {
+    return (cards[1].el.offsetWidth || 620) + GAP;
+  }
+
+  function targetOpacity(slot) {
+    return slot === 0 ? 1 : (Math.abs(slot) === 1 ? PEEK_OPACITY : 0);
+  }
+
+  function applyA11y(card) {
     var isPeek = Math.abs(card.slot) === 1;
     card.el.classList.toggle('is-peek', isPeek);
     if (isPeek) {
@@ -830,10 +833,38 @@
       card.el.removeAttribute('tabindex');
       card.el.removeAttribute('aria-label');
     }
+  }
+
+  function positionCard(card, animate) {
+    if (!animate) card.el.classList.add('kw-no-transition');
+    card.el.style.transform = 'translateX(calc(-50% + ' + (card.slot * stepPx()) + 'px))';
+    card.el.style.opacity = targetOpacity(card.slot);
+    applyA11y(card);
     if (!animate) {
       void card.el.offsetWidth;
       card.el.classList.remove('kw-no-transition');
     }
+  }
+
+  // A recycled card has slid fully off-screen and gone invisible — rather
+  // than have it pop straight into its new peek slot, snap it there at
+  // opacity 0 (imperceptible, since it's already invisible) and then let
+  // it fade up to its resting opacity. It's genuinely new to the visible
+  // set at that point, so a fade-on reads better than a hard cut.
+  function recycleCard(card, direction) {
+    card.slot = direction;
+    card.dataIndex = activeIndex + direction;
+    paintCard(card);
+    applyA11y(card);
+    if (reduce) { positionCard(card, false); return; }
+    card.el.classList.add('kw-no-transition');
+    card.el.style.transform = 'translateX(calc(-50% + ' + (card.slot * stepPx()) + 'px))';
+    card.el.style.opacity = 0;
+    void card.el.offsetWidth;
+    card.el.classList.remove('kw-no-transition');
+    requestAnimationFrame(function () {
+      card.el.style.opacity = targetOpacity(card.slot);
+    });
   }
 
   function updateDots() {
@@ -855,12 +886,7 @@
     setTimeout(function () {
       var recycled = null;
       cards.forEach(function (card) { if (Math.abs(card.slot) >= 2) recycled = card; });
-      if (recycled) {
-        recycled.slot = direction;
-        recycled.dataIndex = activeIndex + direction;
-        paintCard(recycled);
-        positionCard(recycled, false);
-      }
+      if (recycled) recycleCard(recycled, direction);
       busy = false;
     }, animate ? 460 : 0);
   }
