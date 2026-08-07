@@ -297,34 +297,20 @@
      viewport edges at reduced opacity. Every card is a fixed height (280px,
      per Figma) regardless of quote length, so the row never jumps as it
      rotates; --surface-rgb is used instead of Figma's literal morning-only
-     colors so it still works across all four themes.
-
-     The card boxes themselves never move — only the text inside slides.
-     Advancing exits the old text to one side and brings the new text in
-     from the other (see .kind-words__content below), which reads as the
-     whole filmstrip sliding without the cost/complexity of an actual
-     multi-card track. Peek cards are real buttons: clicking one calls the
-     same show() as the arrows, sliding that card into the center. */
+     colors so it still works across all four themes. */
   .kind-words{margin:0 auto;padding:0 0 clamp(64px,10vw,112px);text-align:center;overflow:hidden}
   .kind-words__title{font-size:clamp(32px,5.5vw,56px);font-weight:600;letter-spacing:-.03em;
          margin:0 0 clamp(24px,5vw,40px)}
   .kind-words__row{display:flex;justify-content:center;align-items:stretch;gap:24px;
          width:100vw;margin-left:calc(50% - 50vw)}
   .kind-words__card{--kw-opacity:1;flex:0 0 auto;width:min(620px,86vw);height:280px;
-         border-radius:22px;padding:24px;display:flex;align-items:center;justify-content:center;
-         overflow:hidden;text-align:center;font:inherit;margin:0;
+         border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:24px;
+         align-items:center;justify-content:center;overflow:hidden;text-align:center;
          border:1px solid rgba(var(--surface-rgb),.14);background:rgba(var(--surface-rgb),.03);
-         opacity:var(--kw-opacity);transition:opacity .3s ease,background .3s,border-color .3s}
+         opacity:var(--kw-opacity);transition:opacity .4s ease}
   :root[data-time="morning"] .kind-words__card,:root[data-time="afternoon"] .kind-words__card{
          background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.6)}
-  .kind-words__card.is-peek{--kw-opacity:.35;cursor:pointer}
-  .kind-words__card.is-peek:hover,.kind-words__card.is-peek:focus-visible{--kw-opacity:.6}
-  .kind-words__card.is-peek:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  .kind-words__content{display:flex;flex-direction:column;gap:24px;align-items:center;width:100%;
-         transition:transform .38s var(--spring),opacity .3s ease}
-  .kind-words__content.kw-no-transition{transition:none}
-  .kind-words__content.kw-shift-left{transform:translateX(-28px);opacity:0}
-  .kind-words__content.kw-shift-right{transform:translateX(28px);opacity:0}
+  .kind-words__card.is-peek{--kw-opacity:.35}
   .kind-words__quote{font-size:20px;line-height:26px;color:var(--muted);margin:0;font-weight:400}
   .kind-words__cite{font-style:normal;display:flex;flex-direction:column;gap:4px}
   .kind-words__name{font-weight:600;font-size:16px;color:var(--ink)}
@@ -436,7 +422,7 @@
     .header{transition:none}
     .bio__prompt,.bio__long-wrap,.bio__long,.bio__collapse{transition:none}
     .bio__prompt:hover svg{transform:none}
-    .kind-words__card,.kind-words__content,.kind-words__arrow,.kind-words__dot{transition:none}
+    .kind-words__card,.kind-words__arrow,.kind-words__dot{transition:none}
   }
 </style>
 </head>
@@ -608,33 +594,27 @@
   <section class="kind-words" aria-label="Kind words from colleagues">
     <h2 class="kind-words__title">Kind Words</h2>
     <div class="kind-words__row">
-      <button type="button" class="kind-words__card is-peek" id="kw-card-prev" aria-label="Show previous recommendation">
-        <div class="kind-words__content" id="kw-content-prev">
-          <blockquote class="kind-words__quote" id="kw-quote-prev"></blockquote>
-          <cite class="kind-words__cite">
-            <span class="kind-words__name" id="kw-name-prev"></span>
-            <span class="kind-words__role" id="kw-role-prev"></span>
-          </cite>
-        </div>
-      </button>
-      <div class="kind-words__card" id="kw-card-current">
-        <div class="kind-words__content" id="kw-content-current">
-          <blockquote class="kind-words__quote" id="kw-quote-current"></blockquote>
-          <cite class="kind-words__cite">
-            <span class="kind-words__name" id="kw-name-current"></span>
-            <span class="kind-words__role" id="kw-role-current"></span>
-          </cite>
-        </div>
+      <div class="kind-words__card is-peek" id="kw-card-prev" aria-hidden="true">
+        <blockquote class="kind-words__quote" id="kw-quote-prev"></blockquote>
+        <cite class="kind-words__cite">
+          <span class="kind-words__name" id="kw-name-prev"></span>
+          <span class="kind-words__role" id="kw-role-prev"></span>
+        </cite>
       </div>
-      <button type="button" class="kind-words__card is-peek" id="kw-card-next" aria-label="Show next recommendation">
-        <div class="kind-words__content" id="kw-content-next">
-          <blockquote class="kind-words__quote" id="kw-quote-next"></blockquote>
-          <cite class="kind-words__cite">
-            <span class="kind-words__name" id="kw-name-next"></span>
-            <span class="kind-words__role" id="kw-role-next"></span>
-          </cite>
-        </div>
-      </button>
+      <div class="kind-words__card" id="kw-card-current">
+        <blockquote class="kind-words__quote" id="kw-quote-current"></blockquote>
+        <cite class="kind-words__cite">
+          <span class="kind-words__name" id="kw-name-current"></span>
+          <span class="kind-words__role" id="kw-role-current"></span>
+        </cite>
+      </div>
+      <div class="kind-words__card is-peek" id="kw-card-next" aria-hidden="true">
+        <blockquote class="kind-words__quote" id="kw-quote-next"></blockquote>
+        <cite class="kind-words__cite">
+          <span class="kind-words__name" id="kw-name-next"></span>
+          <span class="kind-words__role" id="kw-role-next"></span>
+        </cite>
+      </div>
     </div>
     <div class="kind-words__controls">
       <button type="button" class="kind-words__arrow" id="kw-prev" aria-label="Previous recommendation">
@@ -774,7 +754,6 @@
   var slots = ['prev', 'current', 'next'].map(function (key) {
     return {
       card: document.getElementById('kw-card-' + key),
-      content: document.getElementById('kw-content-' + key),
       quote: document.getElementById('kw-quote-' + key),
       name: document.getElementById('kw-name-' + key),
       role: document.getElementById('kw-role-' + key)
@@ -783,14 +762,11 @@
   var dotsWrap = document.getElementById('kw-dots');
   var prevBtn = document.getElementById('kw-prev');
   var nextBtn = document.getElementById('kw-next');
-  var prevCard = document.getElementById('kw-card-prev');
-  var nextCard = document.getElementById('kw-card-next');
   var section = document.querySelector('.kind-words');
   if (!slots[1].quote || !dotsWrap) return;
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var idx = 0;
-  var busy = false;
   var timer;
 
   recs.forEach(function (_, i) {
@@ -798,12 +774,7 @@
     dot.type = 'button';
     dot.className = 'kind-words__dot' + (i === 0 ? ' is-active' : '');
     dot.setAttribute('aria-label', 'Show recommendation ' + (i + 1) + ' of ' + recs.length);
-    dot.addEventListener('click', function () {
-      stopAuto();
-      var forward = (i - idx + recs.length) % recs.length;
-      var backward = (idx - i + recs.length) % recs.length;
-      show(i, forward <= backward ? 1 : -1);
-    });
+    dot.addEventListener('click', function () { stopAuto(); show(i); });
     dotsWrap.appendChild(dot);
   });
 
@@ -820,48 +791,25 @@
     });
   }
 
-  // direction 1 = advancing (content exits left, new content enters from
-  // the right); -1 = going back (exits right, enters from the left). The
-  // card boxes stay put — only the text inside slides — so this reads as
-  // the filmstrip moving without needing a wider multi-card track.
-  function show(i, direction) {
+  function show(i) {
     idx = (i + recs.length) % recs.length;
     if (reduce) { paint(); return; }
-    if (busy) return;
-    busy = true;
-    var dir = direction || 1;
-    var outClass = dir === 1 ? 'kw-shift-left' : 'kw-shift-right';
-    var inClass = dir === 1 ? 'kw-shift-right' : 'kw-shift-left';
-    slots.forEach(function (slot) { slot.content.classList.add(outClass); });
+    slots.forEach(function (slot) { slot.card.style.opacity = '0'; });
     setTimeout(function () {
       paint();
-      slots.forEach(function (slot) {
-        slot.content.classList.add('kw-no-transition');
-        slot.content.classList.remove(outClass);
-        slot.content.classList.add(inClass);
-      });
-      // force layout so the instant jump to the "incoming" position is
-      // registered before we re-enable transitions and animate it away
-      void slots[1].content.offsetWidth;
-      slots.forEach(function (slot) { slot.content.classList.remove('kw-no-transition'); });
-      requestAnimationFrame(function () {
-        slots.forEach(function (slot) { slot.content.classList.remove(inClass); });
-      });
-      setTimeout(function () { busy = false; }, 380);
-    }, 320);
+      slots.forEach(function (slot) { slot.card.style.opacity = ''; });
+    }, 250);
   }
 
   function startAuto() {
     if (reduce) return;
     stopAuto();
-    timer = setInterval(function () { show(idx + 1, 1); }, 6000);
+    timer = setInterval(function () { show(idx + 1); }, 6000);
   }
   function stopAuto() { clearInterval(timer); }
 
-  prevBtn.addEventListener('click', function () { stopAuto(); show(idx - 1, -1); });
-  nextBtn.addEventListener('click', function () { stopAuto(); show(idx + 1, 1); });
-  prevCard.addEventListener('click', function () { stopAuto(); show(idx - 1, -1); });
-  nextCard.addEventListener('click', function () { stopAuto(); show(idx + 1, 1); });
+  prevBtn.addEventListener('click', function () { stopAuto(); show(idx - 1); });
+  nextBtn.addEventListener('click', function () { stopAuto(); show(idx + 1); });
   section.addEventListener('mouseenter', stopAuto);
   section.addEventListener('mouseleave', startAuto);
 
