@@ -184,7 +184,8 @@
   /* --- bio: the short subtitle, with a hover-revealed prompt that expands
      into the long-winded version. Uses the grid 0fr->1fr trick so the
      expand/collapse animates to auto height instead of jumping. --- */
-  .bio{text-align:center;margin:clamp(14px,3vw,20px) auto 0;max-width:640px;position:relative}
+  .bio{text-align:center;margin:clamp(14px,3vw,20px) auto 0;max-width:640px;position:relative;
+       padding:0 clamp(20px,5vw,48px)}
   .bio__short{font-size:clamp(15px,2.2vw,20px);color:var(--muted);letter-spacing:.02em;margin:0;
          transition:opacity .25s ease}
   .bio.is-expanded .bio__short{display:none}
