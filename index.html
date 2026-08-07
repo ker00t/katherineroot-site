@@ -297,20 +297,32 @@
      viewport edges at reduced opacity. Every card is a fixed height (280px,
      per Figma) regardless of quote length, so the row never jumps as it
      rotates; --surface-rgb is used instead of Figma's literal morning-only
-     colors so it still works across all four themes. */
+     colors so it still works across all four themes.
+
+     Real sliding track, not a crossfade: exactly 3 card elements sit
+     absolutely positioned in the row, each carrying a "slot" (-1/0/+1 =
+     peek-left/center/peek-right). Advancing animates every card's own
+     transform + opacity straight to its new slot — actual left/right
+     movement, no fading of text content. Once a card slides fully past
+     the edge (|slot| >= 2) it's invisible, so JS repaints it with the
+     next recommendation and snaps it (no transition) to the slot it'll
+     slide in from next time — a 3-element circular buffer standing in
+     for a full-length track. */
   .kind-words{margin:0 auto;padding:0 0 clamp(64px,10vw,112px);text-align:center;overflow:hidden}
   .kind-words__title{font-size:clamp(32px,5.5vw,56px);font-weight:600;letter-spacing:-.03em;
          margin:0 0 clamp(24px,5vw,40px)}
-  .kind-words__row{display:flex;justify-content:center;align-items:stretch;gap:24px;
-         width:100vw;margin-left:calc(50% - 50vw)}
-  .kind-words__card{--kw-opacity:1;flex:0 0 auto;width:min(620px,86vw);height:280px;
+  .kind-words__row{position:relative;height:280px;width:100vw;margin-left:calc(50% - 50vw)}
+  .kind-words__card{position:absolute;top:0;left:50%;width:min(620px,86vw);height:280px;
          border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:24px;
          align-items:center;justify-content:center;overflow:hidden;text-align:center;
-         border:1px solid rgba(var(--surface-rgb),.14);background:rgba(var(--surface-rgb),.03);
-         opacity:var(--kw-opacity);transition:opacity .4s ease}
+         font:inherit;margin:0;border:1px solid rgba(var(--surface-rgb),.14);
+         background:rgba(var(--surface-rgb),.03);
+         transition:transform .45s var(--spring),opacity .45s var(--spring),background .3s,border-color .3s}
+  .kind-words__card.kw-no-transition{transition:background .3s,border-color .3s}
   :root[data-time="morning"] .kind-words__card,:root[data-time="afternoon"] .kind-words__card{
          background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.6)}
-  .kind-words__card.is-peek{--kw-opacity:.35}
+  .kind-words__card.is-peek{cursor:pointer}
+  .kind-words__card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .kind-words__quote{font-size:20px;line-height:26px;color:var(--muted);margin:0;font-weight:400}
   .kind-words__cite{font-style:normal;display:flex;flex-direction:column;gap:4px}
   .kind-words__name{font-weight:600;font-size:16px;color:var(--ink)}
@@ -326,11 +338,12 @@
          padding:0;cursor:pointer;transition:background .2s,transform .2s var(--spring)}
   .kind-words__dot.is-active{background:var(--accent);transform:scale(1.3)}
 
-  /* below the row's own min-width-per-card breakpoint, three 620px cards
-     don't fit — drop the peek cards and show just the active one, still
-     at the fixed 280px height, inset to the normal page gutter. */
+  /* below this breakpoint three 620px cards don't fit — drop the peek
+     cards and show just the active one, still at the fixed 280px
+     height, inset to the normal page gutter. JS positioning still
+     applies (slot 0 = centered), this just hides the off-center ones. */
   @media (max-width:900px){
-    .kind-words__row{width:auto;margin-left:0;padding:0 clamp(20px,5vw,48px)}
+    .kind-words__row{width:auto;margin-left:0;padding:0 clamp(20px,5vw,48px);overflow:hidden}
     .kind-words__card.is-peek{display:none}
     .kind-words__card{width:100%}
   }
@@ -594,7 +607,7 @@
   <section class="kind-words" aria-label="Kind words from colleagues">
     <h2 class="kind-words__title">Kind Words</h2>
     <div class="kind-words__row">
-      <div class="kind-words__card is-peek" id="kw-card-prev" aria-hidden="true">
+      <div class="kind-words__card" id="kw-card-prev">
         <blockquote class="kind-words__quote" id="kw-quote-prev"></blockquote>
         <cite class="kind-words__cite">
           <span class="kind-words__name" id="kw-name-prev"></span>
@@ -608,7 +621,7 @@
           <span class="kind-words__role" id="kw-role-current"></span>
         </cite>
       </div>
-      <div class="kind-words__card is-peek" id="kw-card-next" aria-hidden="true">
+      <div class="kind-words__card" id="kw-card-next">
         <blockquote class="kind-words__quote" id="kw-quote-next"></blockquote>
         <cite class="kind-words__cite">
           <span class="kind-words__name" id="kw-name-next"></span>
@@ -749,24 +762,34 @@
     { quote: `She struck a perfect balance of giving me the freedom to run with projects, making them my own, and helping guide the project with thought provoking questions and discussions.`, name: 'John Welch', role: 'Product Manager' }
   ];
 
-  // Three slots — prev (peek), current (active), next (peek) — mirroring
-  // the Figma mock's 3-up layout instead of one card at a time.
-  var slots = ['prev', 'current', 'next'].map(function (key) {
+  // Three real card elements, each carrying a "slot" (-1/0/+1 = peek-left/
+  // center/peek-right) that drives its position and opacity. Advancing
+  // shifts every card's slot by one and animates straight there — actual
+  // movement, not a text crossfade. A card that lands 2+ slots out is
+  // off-screen, so it gets repainted with the next recommendation and
+  // snapped (no transition) to the slot it re-enters from — a 3-element
+  // circular buffer standing in for a full track of 7 cards.
+  var cards = ['prev', 'current', 'next'].map(function (key) {
     return {
-      card: document.getElementById('kw-card-' + key),
+      el: document.getElementById('kw-card-' + key),
       quote: document.getElementById('kw-quote-' + key),
       name: document.getElementById('kw-name-' + key),
-      role: document.getElementById('kw-role-' + key)
+      role: document.getElementById('kw-role-' + key),
+      slot: 0,
+      dataIndex: 0
     };
   });
   var dotsWrap = document.getElementById('kw-dots');
   var prevBtn = document.getElementById('kw-prev');
   var nextBtn = document.getElementById('kw-next');
   var section = document.querySelector('.kind-words');
-  if (!slots[1].quote || !dotsWrap) return;
+  if (!cards[1].quote || !dotsWrap) return;
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var idx = 0;
+  var PEEK_OPACITY = 0.35;
+  var GAP = 24;
+  var activeIndex = 0;
+  var busy = false;
   var timer;
 
   recs.forEach(function (_, i) {
@@ -774,46 +797,111 @@
     dot.type = 'button';
     dot.className = 'kind-words__dot' + (i === 0 ? ' is-active' : '');
     dot.setAttribute('aria-label', 'Show recommendation ' + (i + 1) + ' of ' + recs.length);
-    dot.addEventListener('click', function () { stopAuto(); show(i); });
+    dot.addEventListener('click', function () {
+      stopAuto();
+      var forward = (i - activeIndex + recs.length) % recs.length;
+      var backward = (activeIndex - i + recs.length) % recs.length;
+      advanceSteps(forward <= backward ? 1 : -1, Math.min(forward, backward));
+    });
     dotsWrap.appendChild(dot);
   });
 
-  function paint() {
-    var offsets = [-1, 0, 1];
-    slots.forEach(function (slot, i) {
-      var rec = recs[(idx + offsets[i] + recs.length) % recs.length];
-      slot.quote.textContent = rec.quote;
-      slot.name.textContent = rec.name;
-      slot.role.textContent = rec.role;
-    });
+  function paintCard(card) {
+    var rec = recs[((card.dataIndex % recs.length) + recs.length) % recs.length];
+    card.quote.textContent = rec.quote;
+    card.name.textContent = rec.name;
+    card.role.textContent = rec.role;
+  }
+
+  function positionCard(card, animate) {
+    if (!animate) card.el.classList.add('kw-no-transition');
+    var step = (cards[1].el.offsetWidth || 620) + GAP;
+    var opacity = card.slot === 0 ? 1 : (Math.abs(card.slot) === 1 ? PEEK_OPACITY : 0);
+    card.el.style.transform = 'translateX(calc(-50% + ' + (card.slot * step) + 'px))';
+    card.el.style.opacity = opacity;
+    var isPeek = Math.abs(card.slot) === 1;
+    card.el.classList.toggle('is-peek', isPeek);
+    if (isPeek) {
+      card.el.setAttribute('role', 'button');
+      card.el.setAttribute('tabindex', '0');
+      card.el.setAttribute('aria-label', card.slot === -1 ? 'Show previous recommendation' : 'Show next recommendation');
+    } else {
+      card.el.removeAttribute('role');
+      card.el.removeAttribute('tabindex');
+      card.el.removeAttribute('aria-label');
+    }
+    if (!animate) {
+      void card.el.offsetWidth;
+      card.el.classList.remove('kw-no-transition');
+    }
+  }
+
+  function updateDots() {
     Array.prototype.forEach.call(dotsWrap.children, function (d, i) {
-      d.classList.toggle('is-active', i === idx);
+      d.classList.toggle('is-active', i === activeIndex);
     });
   }
 
-  function show(i) {
-    idx = (i + recs.length) % recs.length;
-    if (reduce) { paint(); return; }
-    slots.forEach(function (slot) { slot.card.style.opacity = '0'; });
+  function advance(direction) {
+    if (busy) return;
+    busy = true;
+    var animate = !reduce;
+    cards.forEach(function (card) {
+      card.slot -= direction;
+      positionCard(card, animate);
+    });
+    activeIndex = (activeIndex + direction + recs.length) % recs.length;
+    updateDots();
     setTimeout(function () {
-      paint();
-      slots.forEach(function (slot) { slot.card.style.opacity = ''; });
-    }, 250);
+      var recycled = null;
+      cards.forEach(function (card) { if (Math.abs(card.slot) >= 2) recycled = card; });
+      if (recycled) {
+        recycled.slot = direction;
+        recycled.dataIndex = activeIndex + direction;
+        paintCard(recycled);
+        positionCard(recycled, false);
+      }
+      busy = false;
+    }, animate ? 460 : 0);
   }
+
+  function advanceSteps(direction, steps) {
+    if (steps <= 0) return;
+    advance(direction);
+    if (steps > 1) setTimeout(function () { advanceSteps(direction, steps - 1); }, reduce ? 0 : 480);
+  }
+
+  cards.forEach(function (card) {
+    card.el.addEventListener('click', function () {
+      if (card.slot === -1) { stopAuto(); advance(-1); }
+      else if (card.slot === 1) { stopAuto(); advance(1); }
+    });
+    card.el.addEventListener('keydown', function (e) {
+      if ((e.key === 'Enter' || e.key === ' ') && Math.abs(card.slot) === 1) {
+        e.preventDefault();
+        stopAuto();
+        advance(card.slot);
+      }
+    });
+  });
 
   function startAuto() {
     if (reduce) return;
     stopAuto();
-    timer = setInterval(function () { show(idx + 1); }, 6000);
+    timer = setInterval(function () { advance(1); }, 6000);
   }
   function stopAuto() { clearInterval(timer); }
 
-  prevBtn.addEventListener('click', function () { stopAuto(); show(idx - 1); });
-  nextBtn.addEventListener('click', function () { stopAuto(); show(idx + 1); });
+  prevBtn.addEventListener('click', function () { stopAuto(); advance(-1); });
+  nextBtn.addEventListener('click', function () { stopAuto(); advance(1); });
   section.addEventListener('mouseenter', stopAuto);
   section.addEventListener('mouseleave', startAuto);
 
-  paint();
+  cards[0].slot = -1; cards[0].dataIndex = -1;
+  cards[1].slot = 0;  cards[1].dataIndex = 0;
+  cards[2].slot = 1;  cards[2].dataIndex = 1;
+  cards.forEach(function (card) { paintCard(card); positionCard(card, false); });
+  updateDots();
   startAuto();
 })();
 </script>
