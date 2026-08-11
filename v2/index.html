@@ -104,21 +104,27 @@
   /* --- companies: 5-logo row, new SVG logo set from Figma (replaces the
      old raster set), in the new order (Simply Hired, Launch, Manta,
      Mighty, Copper). On hover: same tilt-on-hover language as the rest
-     of the site (own --tilt per company), the mark crossfades from its
-     white cutout to the real "color" variant, and a white rounded card
-     fades in behind it — a die-cut sticker look. --- */
+     of the site (own --tilt per company), the mark crossfades+pops from
+     its white cutout to the real "color" variant, with a white die-cut
+     "sticker" outline that hugs the color mark's own silhouette (a
+     stack of offset drop-shadows follows the art's alpha edge, unlike a
+     box-shadow which would just be a rectangle) instead of a plain
+     rounded card behind it. --- */
   .companies__row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
            gap:clamp(28px,5vw,67px);row-gap:56px}
   .company{--tilt:-2deg;position:relative;transition:transform .3s var(--spring)}
   .company:hover,.company:focus-within{transform:translateY(-6px) rotate(var(--tilt))}
-  .company__badge{position:relative;display:flex;align-items:center;justify-content:center;
-           padding:18px;border-radius:20px;background:transparent;
-           transition:background .25s ease}
-  .company:hover .company__badge,.company:focus-within .company__badge{background:#fff}
-  .company__logo{display:block;object-fit:contain;transition:opacity .25s ease}
-  .company__logo--color{position:absolute;inset:18px;opacity:0}
-  .company:hover .company__logo--white,.company:focus-within .company__logo--white{opacity:0}
-  .company:hover .company__logo--color,.company:focus-within .company__logo--color{opacity:1}
+  .company__badge{position:relative;display:flex;align-items:center;justify-content:center;padding:18px}
+  .company__logo{display:block;object-fit:contain;transition:opacity .45s var(--spring)}
+  .company__logo--color{position:absolute;inset:18px;opacity:0;transform:scale(.88);
+           transition:opacity .45s var(--spring) .05s,transform .45s var(--spring) .05s;
+           filter:
+             drop-shadow(4px 0 0 #fff) drop-shadow(-4px 0 0 #fff)
+             drop-shadow(0 4px 0 #fff) drop-shadow(0 -4px 0 #fff)
+             drop-shadow(2.8px 2.8px 0 #fff) drop-shadow(-2.8px 2.8px 0 #fff)
+             drop-shadow(2.8px -2.8px 0 #fff) drop-shadow(-2.8px -2.8px 0 #fff)}
+  .company:hover .company__logo--white,.company:focus-within .company__logo--white{opacity:0;transition-delay:0s}
+  .company:hover .company__logo--color,.company:focus-within .company__logo--color{opacity:1;transform:scale(1)}
   .company__logo--simply{height:clamp(64px,9vw,106px);width:auto}
   .company__logo--launch{width:clamp(120px,17vw,242px);height:auto}
   .company__logo--manta{width:clamp(70px,10vw,140px);height:clamp(70px,10vw,140px)}
@@ -129,7 +135,7 @@
      live cards (matching the real site's "coming soon" cards) get a muted
      tag and no arrow/link. --- */
   .cards{display:flex;gap:25px;flex-wrap:wrap;justify-content:center;max-width:1280px}
-  .card{--tilt:-2deg;position:relative;background:rgba(255,255,255,.1);border-radius:22px;width:min(620px,100%);
+  .card{--tilt:-2deg;position:relative;z-index:0;background:rgba(255,255,255,.1);border-radius:22px;width:min(620px,100%);
         min-height:280px;padding:34px;text-align:left;display:flex;flex-direction:column;gap:16px;
         text-decoration:none;color:#fff;transition:transform .3s var(--spring)}
   a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
@@ -147,19 +153,22 @@
      size, offsets, rotations, stagger) onto every case-study card.
      Placeholder images (the 3 existing phone screenshots) on every card
      for now, not yet matched per case study. Desktop/mouse only, same as
-     the original. --- */
+     the original. Negative z-index so the phones paint behind the
+     card's own (translucent) background instead of on top of it — they
+     slide out from behind the card, not in front. "Coming soon" cards
+     get no hover effect at all (:not(.card--soon) scope below). --- */
   .card__fan-img{position:absolute;top:0;width:110px;height:224px;display:block;
          pointer-events:none;opacity:0;transform-origin:center center;
          transform:translate(-50%,-50%) rotate(0deg) scale(.3);
          transition:transform .4s var(--spring),opacity .3s ease}
   .card--fan-left .card__fan-img{left:0}
   .card--fan-right .card__fan-img{left:100%}
-  .card__fan-img.fan-1{z-index:1}
-  .card__fan-img.fan-3{z-index:2}
-  .card__fan-img.fan-2{z-index:3}
+  .card__fan-img.fan-1{z-index:-3}
+  .card__fan-img.fan-3{z-index:-2}
+  .card__fan-img.fan-2{z-index:-1}
   @media (hover:hover){
-    .card:hover .card__fan-img,
-    .card:focus-within .card__fan-img{opacity:1}
+    .card:not(.card--soon):hover .card__fan-img,
+    .card:not(.card--soon):focus-within .card__fan-img{opacity:1}
     .card--fan-right:hover .fan-1,.card--fan-right:focus-within .fan-1{
           transform:translate(calc(-117px - 50%),calc(-41px - 50%)) rotate(16.8deg) scale(1);transition-delay:0s}
     .card--fan-right:hover .fan-3,.card--fan-right:focus-within .fan-3{
@@ -216,11 +225,11 @@
   .say-hi__icons{display:flex;gap:18px;justify-content:center}
   .say-hi__icon{--tilt:-1deg;width:82px;height:82px;border-radius:16px;border:2px solid #fff;
         display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;
-        transition:transform .3s var(--spring),background .2s}
+        transition:transform .3s var(--spring),background .25s ease,color .2s ease,border-color .25s ease}
   .say-hi__icon:hover,.say-hi__icon:focus-visible{transform:translateY(-6px) rotate(var(--tilt));
-        background:rgba(255,255,255,.15);outline:none}
+        background:var(--v2-cta);color:#000;border-color:var(--v2-cta);outline:none}
   .say-hi__icon svg{width:32px;height:32px}
-  .say-hi__icon--linkedin{font-size:28px;font-weight:700;letter-spacing:-.02em}
+  .say-hi__icon--linkedin{font-size:32px;font-weight:700;letter-spacing:-.02em}
 
   /* --- footer: gradient close, giant repeated name, 3 stacked links, then
      the same social icons as say-hi. No opaque base of its own —
@@ -328,10 +337,7 @@
         <span class="card__desc">For years the experience of downloading the Mighty Networks app was crusty and abandoned, forever deemed a P2 not worth updating. Here I explore the value of creating a great first impression, and the role design plays in selling your brand successfully.</span>
         <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
-      <div class="card card--soon card--fan-right" style="--tilt:2deg">
-        <img class="card__fan-img fan-1" src="/assets/hover-phone-1.png" alt="" aria-hidden="true">
-        <img class="card__fan-img fan-2" src="/assets/hover-phone-2.png" alt="" aria-hidden="true">
-        <img class="card__fan-img fan-3" src="/assets/hover-phone-3.png" alt="" aria-hidden="true">
+      <div class="card card--soon" style="--tilt:2deg">
         <span class="card__tag">COMING SOON</span>
         <span class="card__title">Manta's Brand Identity</span>
         <span class="card__desc">Defining an ICP for Manta Cares, and merging two very different business strategies into a product cancer patients actually needed.</span>
@@ -370,18 +376,12 @@
   <section class="section" id="leadership">
     <h2 class="section__title">That empathy also allows me to build thriving teams, systems, and cultures.</h2>
     <div class="cards">
-      <div class="card card--soon card--fan-left" style="--tilt:-2deg">
-        <img class="card__fan-img fan-1" src="/assets/hover-phone-1.png" alt="" aria-hidden="true">
-        <img class="card__fan-img fan-2" src="/assets/hover-phone-2.png" alt="" aria-hidden="true">
-        <img class="card__fan-img fan-3" src="/assets/hover-phone-3.png" alt="" aria-hidden="true">
+      <div class="card card--soon" style="--tilt:-2deg">
         <span class="card__tag">COMING SOON</span>
         <span class="card__title">Building Remote Culture</span>
         <span class="card__desc">Scaling the design team at Mighty from 2 members to 10, all while navigating the new waters of working remotely &mdash; and building a collaborative, creative environment online.</span>
       </div>
-      <div class="card card--soon card--fan-right" style="--tilt:3deg">
-        <img class="card__fan-img fan-1" src="/assets/hover-phone-1.png" alt="" aria-hidden="true">
-        <img class="card__fan-img fan-2" src="/assets/hover-phone-2.png" alt="" aria-hidden="true">
-        <img class="card__fan-img fan-3" src="/assets/hover-phone-3.png" alt="" aria-hidden="true">
+      <div class="card card--soon" style="--tilt:3deg">
         <span class="card__tag">COMING SOON</span>
         <span class="card__title">Make Mighty Cool</span>
         <span class="card__desc">How do you build a product organization that not only understands the value of design, but actively contributes to delightful interactions? An initiative to get full org buy-in on the power of design details.</span>
@@ -478,10 +478,11 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
       </a>
     </div>
+    <a class="cta" href="#footer" style="--tilt:3deg">Is this the end? <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
   <!-- ============ footer ============ -->
-  <footer class="site-footer">
+  <footer class="site-footer" id="footer">
     <div class="site-footer__heading">
       <p class="site-footer__name">Katherine Root</p>
       <p class="site-footer__tag">Product, AI, and Experience Design Expert</p>
@@ -610,6 +611,14 @@
   row.addEventListener('scroll', function () {
     clearTimeout(settleTimer);
     settleTimer = setTimeout(settle, 120);
+  });
+  // 'scrollend' fires the instant native scrolling actually stops (including
+  // for programmatic smooth scrolls), so the clone->real wrap-correction
+  // lands immediately instead of waiting out the fallback timers above —
+  // that wait is what was reading as a "pause" at the loop boundary.
+  row.addEventListener('scrollend', function () {
+    clearTimeout(settleTimer);
+    settle();
   });
 
   cards.forEach(function (el, i) {
