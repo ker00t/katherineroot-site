@@ -52,14 +52,15 @@
            padding:clamp(48px,8vw,80px) clamp(20px,6vw,88px);text-align:center}
   .section__title{font-size:clamp(32px,6vw,80px);font-weight:600;letter-spacing:-.03em;
            line-height:1.1;margin:0;max-width:1340px}
+  .section__title--regular{font-weight:400}
 
-  .cta{--tilt:-2deg;display:inline-flex;align-items:center;gap:16px;
-       background:var(--v2-cta);color:#000;font-size:clamp(17px,2.2vw,24px);font-weight:400;
-       padding:clamp(16px,2.4vw,24px) clamp(28px,4vw,40px);border-radius:70px;
+  .cta{--tilt:-2deg;display:inline-flex;align-items:center;gap:10px;
+       background:var(--v2-cta);color:#000;font-size:clamp(14px,1.4vw,16px);font-weight:400;
+       padding:clamp(12px,1.6vw,16px) clamp(20px,2.6vw,32px);border-radius:70px;
        text-decoration:none;white-space:nowrap;
        transition:transform .3s var(--spring)}
   .cta:hover,.cta:focus-visible{transform:translateY(-4px) rotate(var(--tilt));outline:none}
-  .cta svg{width:20px;height:20px;flex:none}
+  .cta svg{width:16px;height:16px;flex:none}
 
   /* reusable down/right chevron — same glyph as the current site's
      .route__arrow, just rotated per context instead of a separate asset */
@@ -96,44 +97,93 @@
 
   /* --- companies: 5-logo row, each with a real per-logo hover state (badge
      + colorful mark + caption + connector arrow + name) — see the Figma
-     company-hover1..5 frames. Not the fan-hover phone component from the
-     live site; this is its own thing. --- */
+     company-hover1..5 frames. Each company's badge/caption/connector/name
+     fans out to its own bespoke position and rotation (not a uniform
+     stack) — offsets below are lifted directly from the Figma frames,
+     scaled down to fit the row's on-page size. --- */
   .companies__row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
            gap:clamp(28px,5vw,67px);row-gap:56px}
   .company{position:relative;display:flex;align-items:center;justify-content:center;
            padding:24px}
-  .company__logo{height:clamp(38px,5.5vw,60px);width:auto;display:block;object-fit:contain;
-           transition:opacity .3s var(--spring)}
-  .company__logo--manta,.company__logo--copper{
-           height:clamp(46px,6.5vw,72px);width:clamp(46px,6.5vw,72px);object-fit:cover}
-  .company__logo--manta{object-position:bottom}
+  .company__logo{display:block;object-fit:contain;transition:opacity .3s var(--spring)}
+  .company__logo--launch{height:clamp(40px,5.6vw,68px);width:auto}
+  .company__logo--simply{height:clamp(41px,5.8vw,70px);width:auto}
+  .company__logo--copper{width:clamp(25px,3.5vw,42px);height:clamp(26px,3.6vw,44px);object-fit:cover}
+  .company__logo--mighty{width:clamp(44px,6.2vw,75px);height:auto}
+  .company__logo--manta{width:clamp(27px,3.8vw,47px);height:clamp(26px,3.7vw,44px);
+           object-fit:cover;object-position:bottom}
   @media (hover:hover){.company:hover .company__logo{opacity:.3}}
   .company.is-active .company__logo{opacity:.3}
 
-  .company__pop{position:absolute;left:50%;top:50%;z-index:5;
-           display:flex;flex-direction:column;align-items:center;gap:6px;
-           pointer-events:none;opacity:0;
-           transform:translate(-50%,-50%) scale(.4);
+  .company__piece{position:absolute;left:50%;top:50%;z-index:5;pointer-events:none;opacity:0;
+           transform:translate(-50%,-50%) scale(.3);
            transition:opacity .35s var(--spring),transform .45s var(--spring)}
-  @media (hover:hover){.company:hover .company__pop{opacity:1;transform:translate(-50%,-50%) scale(1)}}
-  .company.is-active .company__pop{opacity:1;transform:translate(-50%,-50%) scale(1)}
-  .company__caption{color:#fff;font-size:14px;line-height:1.4;max-width:190px;margin:0;order:-2}
-  .company__connector{width:18px;height:auto;flex:none}
+  @media (hover:hover){.company:hover .company__piece{opacity:1}}
+  .company.is-active .company__piece{opacity:1}
+  .company__caption{color:#fff;font-size:14px;line-height:1.4;width:190px;margin:0}
+  .company__connector{width:22px;height:auto}
   .company__badge{display:flex;align-items:center;justify-content:center;
            background:#fff;box-shadow:0 10px 28px rgba(0,0,0,.18)}
-  .company__badge img{width:66%;height:66%;object-fit:contain}
+  .company__badge img{object-fit:contain}
   .company__name{color:#fff;font-weight:600;font-size:15px;margin:0;white-space:nowrap}
 
-  .company__pop--launch .company__badge{width:132px;height:96px;border-radius:70px;transform:rotate(-8deg)}
-  .company__pop--launch .company__badge img{width:78%;height:78%}
-  .company__pop--simply .company__badge{width:110px;height:110px;border-radius:50%;transform:rotate(-4deg)}
-  .company__pop--copper .company__badge{width:118px;height:118px;border-radius:50%;
-           background:none;box-shadow:none;transform:rotate(4deg)}
-  .company__pop--copper .company__badge img{width:100%;height:100%}
-  .company__pop--mighty .company__badge{width:150px;height:78px;border-radius:60px;transform:rotate(3deg)}
-  .company__pop--mighty .company__badge img{width:80%;height:80%}
-  .company__pop--manta .company__badge{width:110px;height:110px;border-radius:50%}
-  .company__pop--manta .company__badge img{width:60%;height:60%;object-fit:cover;object-position:left}
+  /* Launch Design */
+  .company__badge--launch{width:132px;height:96px;border-radius:70px}
+  .company__badge--launch img{width:78%;height:78%}
+  @media (hover:hover){.company:hover .company__badge--launch{transform:translate(calc(0px - 50%),calc(-13px - 50%)) rotate(-8.16deg) scale(1)}
+    .company:hover .company__caption--launch{transform:translate(calc(74px - 50%),calc(116px - 50%)) rotate(17.19deg) scale(1)}
+    .company:hover .company__connector--launch{transform:translate(calc(77px - 50%),calc(82px - 50%)) rotate(145.05deg) scale(1)}}
+  .company.is-active .company__badge--launch{transform:translate(calc(0px - 50%),calc(-13px - 50%)) rotate(-8.16deg) scale(1)}
+  .company.is-active .company__caption--launch{transform:translate(calc(74px - 50%),calc(116px - 50%)) rotate(17.19deg) scale(1)}
+  .company.is-active .company__connector--launch{transform:translate(calc(77px - 50%),calc(82px - 50%)) rotate(145.05deg) scale(1)}
+
+  /* Simply Hired */
+  .company__badge--simply{width:112px;height:104px;border-radius:52px}
+  .company__badge--simply img{width:66%;height:66%}
+  @media (hover:hover){.company:hover .company__badge--simply{transform:translate(calc(-1px - 50%),calc(9px - 50%)) rotate(-3.44deg) scale(1)}
+    .company:hover .company__caption--simply{transform:translate(calc(75px - 50%),calc(-94px - 50%)) rotate(-8.34deg) scale(1)}
+    .company:hover .company__connector--simply{transform:translate(calc(65px - 50%),calc(-67px - 50%)) rotate(0deg) scale(1)}
+    .company:hover .company__name--simply{transform:translate(calc(0px - 50%),calc(99px - 50%)) rotate(0deg) scale(1)}}
+  .company.is-active .company__badge--simply{transform:translate(calc(-1px - 50%),calc(9px - 50%)) rotate(-3.44deg) scale(1)}
+  .company.is-active .company__caption--simply{transform:translate(calc(75px - 50%),calc(-94px - 50%)) rotate(-8.34deg) scale(1)}
+  .company.is-active .company__connector--simply{transform:translate(calc(65px - 50%),calc(-67px - 50%)) rotate(0deg) scale(1)}
+  .company.is-active .company__name--simply{transform:translate(calc(0px - 50%),calc(99px - 50%)) rotate(0deg) scale(1)}
+
+  /* Copper CRM — badge asset is a self-contained coral circle, no white bg */
+  .company__badge--copper{width:118px;height:118px;border-radius:50%;background:none;box-shadow:none}
+  .company__badge--copper img{width:100%;height:100%}
+  @media (hover:hover){.company:hover .company__badge--copper{transform:translate(calc(-17px - 50%),calc(-14px - 50%)) rotate(4deg) scale(1)}
+    .company:hover .company__caption--copper{transform:translate(calc(-15px - 50%),calc(-129px - 50%)) rotate(-3.7deg) scale(1)}
+    .company:hover .company__connector--copper{transform:translate(calc(45px - 50%),calc(-75px - 50%)) rotate(-118.94deg) scaleY(-1) scale(1)}
+    .company:hover .company__name--copper{transform:translate(calc(-13px - 50%),calc(87px - 50%)) rotate(0deg) scale(1)}}
+  .company.is-active .company__badge--copper{transform:translate(calc(-17px - 50%),calc(-14px - 50%)) rotate(4deg) scale(1)}
+  .company.is-active .company__caption--copper{transform:translate(calc(-15px - 50%),calc(-129px - 50%)) rotate(-3.7deg) scale(1)}
+  .company.is-active .company__connector--copper{transform:translate(calc(45px - 50%),calc(-75px - 50%)) rotate(-118.94deg) scaleY(-1) scale(1)}
+  .company.is-active .company__name--copper{transform:translate(calc(-13px - 50%),calc(87px - 50%)) rotate(0deg) scale(1)}
+
+  /* Mighty Networks */
+  .company__badge--mighty{width:150px;height:78px;border-radius:60px}
+  .company__badge--mighty img{width:80%;height:80%}
+  @media (hover:hover){.company:hover .company__badge--mighty{transform:translate(calc(0px - 50%),calc(7px - 50%)) rotate(3.19deg) scale(1)}
+    .company:hover .company__caption--mighty{transform:translate(calc(6px - 50%),calc(-94px - 50%)) rotate(0deg) scale(1)}
+    .company:hover .company__connector--mighty{transform:translate(calc(-98px - 50%),calc(-40px - 50%)) rotate(0deg) scale(1)}
+    .company:hover .company__name--mighty{transform:translate(calc(-2px - 50%),calc(67px - 50%)) rotate(0deg) scale(1)}}
+  .company.is-active .company__badge--mighty{transform:translate(calc(0px - 50%),calc(7px - 50%)) rotate(3.19deg) scale(1)}
+  .company.is-active .company__caption--mighty{transform:translate(calc(6px - 50%),calc(-94px - 50%)) rotate(0deg) scale(1)}
+  .company.is-active .company__connector--mighty{transform:translate(calc(-98px - 50%),calc(-40px - 50%)) rotate(0deg) scale(1)}
+  .company.is-active .company__name--mighty{transform:translate(calc(-2px - 50%),calc(67px - 50%)) rotate(0deg) scale(1)}
+
+  /* Manta Cares */
+  .company__badge--manta{width:112px;height:115px;border-radius:50%}
+  .company__badge--manta img{width:60%;height:60%;object-fit:cover;object-position:left}
+  @media (hover:hover){.company:hover .company__badge--manta{transform:translate(calc(0px - 50%),calc(-2px - 50%)) rotate(0deg) scale(1)}
+    .company:hover .company__caption--manta{transform:translate(calc(-8px - 50%),calc(162px - 50%)) rotate(14.5deg) scale(1)}
+    .company:hover .company__connector--manta{transform:translate(calc(72px - 50%),calc(84px - 50%)) rotate(0deg) scale(1)}
+    .company:hover .company__name--manta{transform:translate(calc(1px - 50%),calc(77px - 50%)) rotate(0deg) scale(1)}}
+  .company.is-active .company__badge--manta{transform:translate(calc(0px - 50%),calc(-2px - 50%)) rotate(0deg) scale(1)}
+  .company.is-active .company__caption--manta{transform:translate(calc(-8px - 50%),calc(162px - 50%)) rotate(14.5deg) scale(1)}
+  .company.is-active .company__connector--manta{transform:translate(calc(72px - 50%),calc(84px - 50%)) rotate(0deg) scale(1)}
+  .company.is-active .company__name--manta{transform:translate(calc(1px - 50%),calc(77px - 50%)) rotate(0deg) scale(1)}
 
   /* --- case-study cards: strategy / people / leadership sections. Not-yet-
      live cards (matching the real site's "coming soon" cards) get a muted
@@ -155,7 +205,7 @@
   /* --- screens: the same 3 phone mockups used by the live site's company-
      hover fan, shown large and static here. --- */
   .screens__row{display:flex;gap:clamp(14px,3vw,30px);justify-content:center;flex-wrap:wrap}
-  .screens__row img{height:clamp(220px,38vw,505px);width:auto;border-radius:14px;
+  .screens__row img{height:clamp(140px,30vh,380px);width:auto;border-radius:14px;
         box-shadow:0 20px 50px rgba(0,0,0,.25)}
 
   /* --- testimonials: the live Kind Words carousel, re-skinned to white
@@ -200,21 +250,23 @@
   .say-hi__icon svg{width:32px;height:32px}
   .say-hi__icon--linkedin{font-size:28px;font-weight:700;letter-spacing:-.02em}
 
-  /* --- footer: gradient close, giant repeated name, 3 stacked links. --- */
-  .site-footer{background:linear-gradient(180deg,#f455a7 0%,var(--v2-cta) 100%);
+  /* --- footer: gradient close, giant repeated name, 3 stacked links. Base
+     magenta fill with a transparent-lime-to-solid-lime fade layered on
+     top, matching the Figma gradient (rgba(189,243,0,0) -> #bdf300). --- */
+  .site-footer{background:#f455a7 linear-gradient(180deg,rgba(189,243,0,0) 0%,var(--v2-cta) 100%);
         animation:none;padding:clamp(64px,10vw,120px) 24px clamp(48px,8vw,80px);
         display:flex;flex-direction:column;align-items:center;gap:40px;text-align:center}
   .site-footer__name{font-size:clamp(48px,11vw,150px);font-weight:600;letter-spacing:-.04em;margin:0}
   .site-footer__tag{font-size:clamp(15px,1.8vw,22px);margin:0;opacity:.9}
   .site-footer__links{display:flex;flex-direction:column;gap:6px}
-  .site-footer__links a{font-size:clamp(28px,4.5vw,56px);font-weight:600;letter-spacing:-.03em;
+  .site-footer__links a{--tilt:-2deg;font-size:clamp(28px,4.5vw,56px);font-weight:600;letter-spacing:-.03em;
         text-decoration:none;transition:transform .25s var(--spring)}
-  .site-footer__links a:hover,.site-footer__links a:focus-visible{transform:translateY(-3px);outline:none}
+  .site-footer__links a:hover,.site-footer__links a:focus-visible{transform:translateY(-3px) rotate(var(--tilt));outline:none}
 
   @media (prefers-reduced-motion: reduce){
     body{animation:none;background-color:#f455a7}
     .letter,.glyph,.tag,.cta,.card,.kind-words__card,.kind-words__arrow,.kind-words__dot,
-    .say-hi__icon,.company__pop,.company__logo,.site-footer__links a{transition:none !important}
+    .say-hi__icon,.company__piece,.company__logo,.site-footer__links a{transition:none !important}
     .letter:hover .glyph,.letter.is-active .glyph{transform:none;color:#fff}
   }
 </style>
@@ -253,48 +305,38 @@
     <h2 class="section__title">I've been designing for consumer obsessed startups for 15 years.</h2>
     <div class="companies__row">
       <div class="company" tabindex="0">
-        <img class="company__logo" src="assets/logos/launch-design.png" alt="Launch Design">
-        <div class="company__pop company__pop--launch">
-          <p class="company__caption">I started at this small UX firm straight out of undergrad.</p>
-          <img class="company__connector" src="assets/logos/arrow-launch-design.svg" alt="">
-          <div class="company__badge"><img src="assets/logos/launch-design-color.png" alt=""></div>
-        </div>
+        <img class="company__logo company__logo--launch" src="assets/logos/launch-design.png" alt="Launch Design">
+        <p class="company__piece company__caption company__caption--launch">I started at this small UX firm straight out of undergrad.</p>
+        <img class="company__piece company__connector company__connector--launch" src="assets/logos/arrow-launch-design.svg" alt="">
+        <div class="company__piece company__badge company__badge--launch"><img src="assets/logos/launch-design-color.png" alt=""></div>
       </div>
       <div class="company" tabindex="0">
-        <img class="company__logo" src="assets/logos/simply-hired.png" alt="Simply Hired">
-        <div class="company__pop company__pop--simply">
-          <p class="company__caption">I grew a lot in this role, learning a lot about how companies operate.</p>
-          <img class="company__connector" src="assets/logos/arrow-simply-hired.svg" alt="">
-          <div class="company__badge"><img src="assets/logos/simply-hired-color.png" alt=""></div>
-          <p class="company__name">Simply Hired</p>
-        </div>
+        <img class="company__logo company__logo--simply" src="assets/logos/simply-hired.png" alt="Simply Hired">
+        <p class="company__piece company__caption company__caption--simply">I grew a lot in this role, learning a lot about how companies operate.</p>
+        <img class="company__piece company__connector company__connector--simply" src="assets/logos/arrow-simply-hired.svg" alt="">
+        <div class="company__piece company__badge company__badge--simply"><img src="assets/logos/simply-hired-color.png" alt=""></div>
+        <p class="company__piece company__name company__name--simply">Simply Hired</p>
       </div>
       <div class="company" tabindex="0">
-        <img class="company__logo" src="assets/logos/copper-crm.png" alt="Copper CRM">
-        <div class="company__pop company__pop--copper">
-          <p class="company__caption">I was part of the founding design team here when it was still called &ldquo;Prosperworks&rdquo;</p>
-          <img class="company__connector" src="assets/logos/arrow-copper-crm.svg" alt="">
-          <div class="company__badge"><img src="assets/logos/copper-crm-badge.png" alt=""></div>
-          <p class="company__name">Copper CRM</p>
-        </div>
+        <img class="company__logo company__logo--copper" src="assets/logos/copper-crm.png" alt="Copper CRM">
+        <p class="company__piece company__caption company__caption--copper">I was part of the founding design team here when it was still called &ldquo;Prosperworks&rdquo;</p>
+        <img class="company__piece company__connector company__connector--copper" src="assets/logos/arrow-copper-crm.svg" alt="">
+        <div class="company__piece company__badge company__badge--copper"><img src="assets/logos/copper-crm-badge.png" alt=""></div>
+        <p class="company__piece company__name company__name--copper">Copper CRM</p>
       </div>
       <div class="company" tabindex="0">
-        <img class="company__logo" src="assets/logos/mighty-networks.png" alt="Mighty Networks">
-        <div class="company__pop company__pop--mighty">
-          <p class="company__caption">I spent 10 YEARS building this product and team &mdash; I know it like the back of my hand.</p>
-          <img class="company__connector" src="assets/logos/arrow-mighty-networks.svg" alt="">
-          <div class="company__badge"><img src="assets/logos/mighty-networks-color.png" alt=""></div>
-          <p class="company__name">Mighty Networks</p>
-        </div>
+        <img class="company__logo company__logo--mighty" src="assets/logos/mighty-networks.png" alt="Mighty Networks">
+        <p class="company__piece company__caption company__caption--mighty">I spent 10 YEARS building this product and team &mdash; I know it like the back of my hand.</p>
+        <img class="company__piece company__connector company__connector--mighty" src="assets/logos/arrow-mighty-networks.svg" alt="">
+        <div class="company__piece company__badge company__badge--mighty"><img src="assets/logos/mighty-networks-color.png" alt=""></div>
+        <p class="company__piece company__name company__name--mighty">Mighty Networks</p>
       </div>
       <div class="company" tabindex="0">
         <img class="company__logo company__logo--manta" src="assets/logos/manta-cares.png" alt="Manta Cares">
-        <div class="company__pop company__pop--manta">
-          <p class="company__caption">My latest role, founding designer, creating an app to help cancer patients navigate their diagnosis.</p>
-          <img class="company__connector" src="assets/logos/arrow-manta-cares.svg" alt="">
-          <div class="company__badge"><img src="assets/logos/manta-cares-dark.png" alt=""></div>
-          <p class="company__name">Manta Cares</p>
-        </div>
+        <p class="company__piece company__caption company__caption--manta">My latest role, founding designer, creating an app to help cancer patients navigate their diagnosis.</p>
+        <img class="company__piece company__connector company__connector--manta" src="assets/logos/arrow-manta-cares.svg" alt="">
+        <div class="company__piece company__badge company__badge--manta"><img src="assets/logos/manta-cares-dark.png" alt=""></div>
+        <p class="company__piece company__name company__name--manta">Manta Cares</p>
       </div>
     </div>
     <a class="cta" href="#strategy">What do you do best <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
@@ -365,7 +407,7 @@
       <img src="/assets/hover-phone-3.png" alt="Optimistic Entrepreneur app screen">
       <img src="/assets/hover-phone-2.png" alt="Body Soul Collective app screen">
     </div>
-    <a class="cta" href="#testimonials">I don't trust you <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+    <a class="cta" href="#testimonials">SO PRETTY <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
   <!-- ============ testimonials ============ -->
@@ -410,7 +452,7 @@
 
   <!-- ============ tldr ============ -->
   <section class="section" id="tldr">
-    <h2 class="section__title">The TLDR? I do design because I love it, and I bring that passion to all of the work that I do.</h2>
+    <h2 class="section__title">The TLDR? <span class="section__title--regular">I do design because I love it, and I bring that passion to all of the work that I do.</span></h2>
     <a class="cta" href="#say-hi">How do I reach out <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
@@ -433,9 +475,9 @@
     <p class="site-footer__name">Katherine Root</p>
     <p class="site-footer__tag">Product, AI, and Experience Design Expert</p>
     <div class="site-footer__links">
-      <a href="https://static1.squarespace.com/static/649378526c54e630f4b17c1a/t/6a56af8dda4aaa7c4e2ef8d4/1784065933655/KatherineRootResume_2026.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
-      <a href="#strategy">Case Studies</a>
-      <a href="/#work">Side Projects</a>
+      <a href="https://static1.squarespace.com/static/649378526c54e630f4b17c1a/t/6a56af8dda4aaa7c4e2ef8d4/1784065933655/KatherineRootResume_2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">Resume</a>
+      <a href="#strategy" style="--tilt:2deg">Case Studies</a>
+      <a href="/#work" style="--tilt:-2deg">Side Projects</a>
     </div>
   </footer>
 
