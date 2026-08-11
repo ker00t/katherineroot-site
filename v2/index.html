@@ -101,20 +101,29 @@
   .letter.is-active .tag{opacity:1;transform:translateX(-50%) translateY(0) scale(1) rotate(var(--tilt))}
   .hero__sub{font-size:clamp(17px,2vw,24px);max-width:1000px;margin:0}
 
-  /* --- companies: 5-logo row. Hover interaction removed — starting over
-     on that (was previously a per-logo fan-out popup); this is now just a
-     plain static row. --- */
+  /* --- companies: 5-logo row, new SVG logo set from Figma (replaces the
+     old raster set), in the new order (Simply Hired, Launch, Manta,
+     Mighty, Copper). On hover: same tilt-on-hover language as the rest
+     of the site (own --tilt per company), the mark crossfades from its
+     white cutout to the real "color" variant, and a white rounded card
+     fades in behind it — a die-cut sticker look. --- */
   .companies__row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
            gap:clamp(28px,5vw,67px);row-gap:56px}
-  .company{position:relative;display:flex;align-items:center;justify-content:center;
-           padding:24px}
-  .company__logo{display:block;object-fit:contain}
-  .company__logo--launch{height:clamp(64px,9vw,110px);width:auto}
-  .company__logo--simply{height:clamp(66px,9.2vw,112px);width:auto}
-  .company__logo--copper{width:clamp(40px,5.6vw,68px);height:clamp(42px,5.8vw,71px);object-fit:cover}
-  .company__logo--mighty{width:clamp(70px,10vw,124px);height:auto}
-  .company__logo--manta{width:clamp(44px,6.2vw,76px);height:clamp(42px,5.9vw,73px);
-           object-fit:cover;object-position:bottom}
+  .company{--tilt:-2deg;position:relative;transition:transform .3s var(--spring)}
+  .company:hover,.company:focus-within{transform:translateY(-6px) rotate(var(--tilt))}
+  .company__badge{position:relative;display:flex;align-items:center;justify-content:center;
+           padding:18px;border-radius:20px;background:transparent;
+           transition:background .25s ease}
+  .company:hover .company__badge,.company:focus-within .company__badge{background:#fff}
+  .company__logo{display:block;object-fit:contain;transition:opacity .25s ease}
+  .company__logo--color{position:absolute;inset:18px;opacity:0}
+  .company:hover .company__logo--white,.company:focus-within .company__logo--white{opacity:0}
+  .company:hover .company__logo--color,.company:focus-within .company__logo--color{opacity:1}
+  .company__logo--simply{height:clamp(64px,9vw,106px);width:auto}
+  .company__logo--launch{width:clamp(120px,17vw,242px);height:auto}
+  .company__logo--manta{width:clamp(70px,10vw,140px);height:clamp(70px,10vw,140px)}
+  .company__logo--mighty{width:clamp(110px,15.5vw,221px);height:auto}
+  .company__logo--copper{width:clamp(70px,10vw,140px);height:clamp(70px,10vw,140px)}
 
   /* --- case-study cards: strategy / people / leadership sections. Not-yet-
      live cards (matching the real site's "coming soon" cards) get a muted
@@ -233,7 +242,7 @@
     html{scroll-behavior:auto}
     body{animation:none;background-color:#f455a7}
     .card__fan-img{display:none}
-    .letter,.glyph,.tag,.cta,.card,
+    .letter,.glyph,.tag,.cta,.card,.company,.company__badge,.company__logo,
     .say-hi__icon,.site-footer__links a{transition:none !important}
     .letter:hover .glyph,.letter.is-active .glyph{transform:none;color:#fff}
   }
@@ -272,20 +281,35 @@
   <section class="section" id="companies">
     <h2 class="section__title">I've been designing for consumer obsessed startups for 15 years.</h2>
     <div class="companies__row">
-      <div class="company">
-        <img class="company__logo company__logo--launch" src="assets/logos/launch-design.png" alt="Launch Design">
+      <div class="company" style="--tilt:-3deg" tabindex="0">
+        <div class="company__badge">
+          <img class="company__logo company__logo--simply company__logo--white" src="assets/logos/simply-hired-white.svg" alt="Simply Hired">
+          <img class="company__logo company__logo--simply company__logo--color" src="assets/logos/simply-hired-color.svg" alt="" aria-hidden="true">
+        </div>
       </div>
-      <div class="company">
-        <img class="company__logo company__logo--simply" src="assets/logos/simply-hired.png" alt="Simply Hired">
+      <div class="company" style="--tilt:2deg" tabindex="0">
+        <div class="company__badge">
+          <img class="company__logo company__logo--launch company__logo--white" src="assets/logos/launch-white.svg" alt="Launch Design">
+          <img class="company__logo company__logo--launch company__logo--color" src="assets/logos/launch-color.svg" alt="" aria-hidden="true">
+        </div>
       </div>
-      <div class="company">
-        <img class="company__logo company__logo--copper" src="assets/logos/copper-crm.png" alt="Copper CRM">
+      <div class="company" style="--tilt:-2deg" tabindex="0">
+        <div class="company__badge">
+          <img class="company__logo company__logo--manta company__logo--white" src="assets/logos/manta-white.svg" alt="Manta Cares">
+          <img class="company__logo company__logo--manta company__logo--color" src="assets/logos/manta-color.svg" alt="" aria-hidden="true">
+        </div>
       </div>
-      <div class="company">
-        <img class="company__logo company__logo--mighty" src="assets/logos/mighty-networks.png" alt="Mighty Networks">
+      <div class="company" style="--tilt:3deg" tabindex="0">
+        <div class="company__badge">
+          <img class="company__logo company__logo--mighty company__logo--white" src="assets/logos/mighty-white.svg" alt="Mighty Networks">
+          <img class="company__logo company__logo--mighty company__logo--color" src="assets/logos/mighty-color.svg" alt="" aria-hidden="true">
+        </div>
       </div>
-      <div class="company">
-        <img class="company__logo company__logo--manta" src="assets/logos/manta-cares.png" alt="Manta Cares">
+      <div class="company" style="--tilt:-4deg" tabindex="0">
+        <div class="company__badge">
+          <img class="company__logo company__logo--copper company__logo--white" src="assets/logos/copper-white.svg" alt="Copper CRM">
+          <img class="company__logo company__logo--copper company__logo--color" src="assets/logos/copper-color.svg" alt="" aria-hidden="true">
+        </div>
       </div>
     </div>
     <a class="cta" href="#strategy" style="--tilt:2deg">Wow cool <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
@@ -551,8 +575,21 @@
     var elRect = el.getBoundingClientRect();
     return (elRect.left - rowRect.left) + row.scrollLeft + elRect.width / 2;
   }
+  var settleTimer;
   function scrollToIndex(i, smooth) {
+    // guard against a stale/out-of-range index (e.g. autoplay ticking again
+    // before wrap-correction has landed) rather than reading off the end
+    // of the cards array
+    if (i < 0) i = 0;
+    if (i > cards.length - 1) i = cards.length - 1;
     row.scrollTo({ left: cardCenter(cards[i]) - row.clientWidth / 2, behavior: smooth ? 'smooth' : 'auto' });
+    if (smooth) {
+      // native 'scroll' events don't fire reliably for every programmatic
+      // smooth-scroll in every environment, so back the debounced listener
+      // below with a fixed-delay fallback that guarantees settle() runs
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(settle, 450);
+    }
   }
   scrollToIndex(current, false);
 
@@ -570,7 +607,6 @@
     if (current === 0) { current = cards.length - 2; scrollToIndex(current, false); }
     else if (current === cards.length - 1) { current = 1; scrollToIndex(current, false); }
   }
-  var settleTimer;
   row.addEventListener('scroll', function () {
     clearTimeout(settleTimer);
     settleTimer = setTimeout(settle, 120);
