@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Katherine Root | Experience Designer (v2 preview)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&display=swap" rel="stylesheet">
+<style>
+  /* --- v2 preview: a from-scratch homepage following the Figma "portfolio"
+     (v2) mock — 10 full-bleed sections in one scrolling story, closing on a
+     gradient footer. Self-contained like the current root index.html (own
+     style/script, no site.css). No time-of-day theming here: per the Figma
+     annotation on the hero, the background instead slowly cycles through a
+     curated set of bright hues, always paired with the fixed neon-green CTA
+     color. Kept: the hero letter-flip and every tilt-hover interaction from
+     the current site — reused verbatim where the component is identical
+     (letter-flip, Kind Words carousel, say-hi icons). */
+  :root{
+    --magenta:#FF2E93; --blue:#0074AF; --indigo:#1B45E8;
+    --violet:#7B2FF7; --purple:#A614FE; --charcoal:#17140F; --cream:#FFF1D6;
+    --v2-cta:#bdf300;
+    --accent:var(--v2-cta);
+    --spring: cubic-bezier(.34,1.56,.64,1);
+    --lift: -8px;
+    --dur: .5s;
+  }
+  *{box-sizing:border-box}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+           overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  body{margin:0;color:#fff;font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+       -webkit-font-smoothing:antialiased;background:#f455a7;
+       animation:bgCycle 42s ease-in-out infinite}
+  @keyframes bgCycle{
+    0%,14%{background-color:#f455a7}
+    30%{background-color:var(--blue)}
+    46%{background-color:var(--indigo)}
+    62%{background-color:var(--violet)}
+    78%{background-color:var(--purple)}
+    100%{background-color:#f455a7}
+  }
+  a{color:inherit}
+  img{max-width:100%}
+
+  /* --- section shell: every section fills the viewport (annotation on the
+     "companies" frame — applies site-wide, not just there), full-bleed,
+     stacked in one story with a CTA at the bottom that scrolls to the next. */
+  html{scroll-behavior:smooth}
+  .section{min-height:100vh;display:flex;flex-direction:column;align-items:center;
+           justify-content:center;gap:clamp(40px,7vw,80px);
+           padding:clamp(48px,8vw,80px) clamp(20px,6vw,88px);text-align:center}
+  .section__title{font-size:clamp(32px,6vw,80px);font-weight:600;letter-spacing:-.03em;
+           line-height:1.1;margin:0;max-width:1340px}
+
+  .cta{--tilt:-2deg;display:inline-flex;align-items:center;gap:16px;
+       background:var(--v2-cta);color:#000;font-size:clamp(17px,2.2vw,24px);font-weight:400;
+       padding:clamp(16px,2.4vw,24px) clamp(28px,4vw,40px);border-radius:70px;
+       text-decoration:none;white-space:nowrap;
+       transition:transform .3s var(--spring)}
+  .cta:hover,.cta:focus-visible{transform:translateY(-4px) rotate(var(--tilt));outline:none}
+  .cta svg{width:20px;height:20px;flex:none}
+
+  /* reusable down/right chevron — same glyph as the current site's
+     .route__arrow, just rotated per context instead of a separate asset */
+  .chev{transform:rotate(90deg)}
+
+  /* --- hero: name/tags/letter-flip lifted verbatim from the current site's
+     index.html (.letter/.glyph/.tag), just recolored for white-on-bright. --- */
+  .hero{gap:clamp(28px,5vw,48px)}
+  .hero__lead{font-size:clamp(17px,2vw,24px);margin:0}
+  .name{display:flex;flex-wrap:wrap;justify-content:center;row-gap:.05em;
+        perspective:800px;column-gap:clamp(8px,2vw,28px)}
+  .word{display:flex}
+  .letter{position:relative;display:inline-block;cursor:default;-webkit-tap-highlight-color:transparent}
+  @keyframes letterBounce{
+    0%,100%{transform:translateY(0)}
+    30%{transform:translateY(-10px)}
+    55%{transform:translateY(3px)}
+    75%{transform:translateY(-2px)}
+  }
+  .letter.is-bouncing{animation:letterBounce .5s var(--spring)}
+  .glyph{display:inline-block;color:#fff;
+         font-size:clamp(52px,13vw,180px);line-height:1;font-weight:600;letter-spacing:-.03em;
+         transition:transform var(--dur) var(--spring),color var(--dur)}
+  .letter:hover .glyph,
+  .letter.is-active .glyph{transform:translateY(var(--lift)) rotateY(180deg) scale(1.12);color:var(--accent)}
+  .tag{--tilt:-3deg;position:absolute;left:50%;top:-42px;white-space:nowrap;
+       font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;
+       opacity:0;pointer-events:none;
+       transform:translateX(-50%) translateY(10px) scale(.75) rotate(var(--tilt));
+       transition:opacity .34s var(--spring),transform .34s var(--spring)}
+  .letter:hover .tag,
+  .letter.is-active .tag{opacity:1;transform:translateX(-50%) translateY(0) scale(1) rotate(var(--tilt))}
+  .hero__sub{font-size:clamp(17px,2vw,24px);max-width:1000px;margin:0}
+
+  /* --- companies: 5-logo row, each with a real per-logo hover state (badge
+     + colorful mark + caption + connector arrow + name) — see the Figma
+     company-hover1..5 frames. Not the fan-hover phone component from the
+     live site; this is its own thing. --- */
+  .companies__row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+           gap:clamp(28px,5vw,67px);row-gap:56px}
+  .company{position:relative;display:flex;align-items:center;justify-content:center;
+           padding:24px}
+  .company__logo{height:clamp(38px,5.5vw,60px);width:auto;display:block;object-fit:contain;
+           transition:opacity .3s var(--spring)}
+  .company__logo--manta,.company__logo--copper{
+           height:clamp(46px,6.5vw,72px);width:clamp(46px,6.5vw,72px);object-fit:cover}
+  .company__logo--manta{object-position:bottom}
+  @media (hover:hover){.company:hover .company__logo{opacity:.3}}
+  .company.is-active .company__logo{opacity:.3}
+
+  .company__pop{position:absolute;left:50%;top:50%;z-index:5;
+           display:flex;flex-direction:column;align-items:center;gap:6px;
+           pointer-events:none;opacity:0;
+           transform:translate(-50%,-50%) scale(.4);
+           transition:opacity .35s var(--spring),transform .45s var(--spring)}
+  @media (hover:hover){.company:hover .company__pop{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+  .company.is-active .company__pop{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  .company__caption{color:#fff;font-size:14px;line-height:1.4;max-width:190px;margin:0;order:-2}
+  .company__connector{width:18px;height:auto;flex:none}
+  .company__badge{display:flex;align-items:center;justify-content:center;
+           background:#fff;box-shadow:0 10px 28px rgba(0,0,0,.18)}
+  .company__badge img{width:66%;height:66%;object-fit:contain}
+  .company__name{color:#fff;font-weight:600;font-size:15px;margin:0;white-space:nowrap}
+
+  .company__pop--launch .company__badge{width:132px;height:96px;border-radius:70px;transform:rotate(-8deg)}
+  .company__pop--launch .company__badge img{width:78%;height:78%}
+  .company__pop--simply .company__badge{width:110px;height:110px;border-radius:50%;transform:rotate(-4deg)}
+  .company__pop--copper .company__badge{width:118px;height:118px;border-radius:50%;
+           background:none;box-shadow:none;transform:rotate(4deg)}
+  .company__pop--copper .company__badge img{width:100%;height:100%}
+  .company__pop--mighty .company__badge{width:150px;height:78px;border-radius:60px;transform:rotate(3deg)}
+  .company__pop--mighty .company__badge img{width:80%;height:80%}
+  .company__pop--manta .company__badge{width:110px;height:110px;border-radius:50%}
+  .company__pop--manta .company__badge img{width:60%;height:60%;object-fit:cover;object-position:left}
+
+  /* --- case-study cards: strategy / people / leadership sections. Not-yet-
+     live cards (matching the real site's "coming soon" cards) get a muted
+     tag and no arrow/link. --- */
+  .cards{display:flex;gap:25px;flex-wrap:wrap;justify-content:center;max-width:1280px}
+  .card{--tilt:-2deg;background:rgba(255,255,255,.1);border-radius:22px;width:min(620px,100%);
+        min-height:280px;padding:34px;text-align:left;display:flex;flex-direction:column;gap:16px;
+        text-decoration:none;color:#fff;transition:transform .3s var(--spring)}
+  a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
+  .card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:14px;font-weight:600;
+        padding:5px 14px;border-radius:100px}
+  .card--soon .card__tag{background:rgba(255,255,255,.35);color:#fff}
+  .card__title{font-size:clamp(22px,2.6vw,32px);font-weight:600;margin:0}
+  .card__desc{font-size:17px;line-height:1.5;margin:0;opacity:.9}
+  .card--soon .card__desc{opacity:.65}
+  .card__arrow{margin-top:auto;line-height:0}
+  .card__arrow svg{width:26px;height:26px}
+
+  /* --- screens: the same 3 phone mockups used by the live site's company-
+     hover fan, shown large and static here. --- */
+  .screens__row{display:flex;gap:clamp(14px,3vw,30px);justify-content:center;flex-wrap:wrap}
+  .screens__row img{height:clamp(220px,38vw,505px);width:auto;border-radius:14px;
+        box-shadow:0 20px 50px rgba(0,0,0,.25)}
+
+  /* --- testimonials: the live Kind Words carousel, re-skinned to white
+     cards + opacity-.5 peek on this bright background. --- */
+  .kind-words{width:100%;max-width:1440px}
+  .kind-words__row{position:relative;height:280px;width:100vw;margin-left:calc(50% - 50vw);overflow:hidden}
+  .kind-words__card{position:absolute;top:0;left:50%;width:min(620px,86vw);height:280px;
+        transform:translateX(-50%);border-radius:22px;background:#fff;color:#000;
+        padding:24px;display:flex;flex-direction:column;justify-content:center;gap:24px;
+        text-align:center;transition:transform .5s var(--spring),opacity .4s ease}
+  .kind-words__card.kw-no-transition{transition:none}
+  .kind-words__card.is-peek{cursor:pointer}
+  .kind-words__card:focus-visible{outline:2px solid var(--v2-cta);outline-offset:2px}
+  .kind-words__quote{font-size:20px;line-height:29px;margin:0;font-weight:400}
+  .kind-words__cite{font-style:normal;display:flex;flex-direction:column;gap:4px}
+  .kind-words__name{font-weight:600;font-size:16px;color:#f455a7}
+  .kind-words__role{font-size:14px;color:rgba(0,0,0,.6)}
+  .kind-words__controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:24px}
+  .kind-words__arrow{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.4);
+        background:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;
+        transition:color .18s,border-color .18s,transform .2s var(--spring)}
+  .kind-words__arrow:hover,.kind-words__arrow:focus-visible{color:var(--v2-cta);border-color:var(--v2-cta);outline:none}
+  .kind-words__arrow svg{width:16px;height:16px}
+  .kind-words__dots{display:flex;gap:6px}
+  .kind-words__dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.35);border:none;
+        padding:0;cursor:pointer;transition:transform .2s var(--spring),background .2s}
+  .kind-words__dot.is-active{background:var(--v2-cta);transform:scale(1.3)}
+  @media (max-width:700px){
+    .kind-words__row{width:auto;margin-left:0;padding:0 20px;overflow:hidden}
+    .kind-words__card.is-peek{display:none}
+    .kind-words__card{width:100%}
+  }
+
+  /* --- say hi: same 3 contact icons as the live site, re-skinned to
+     circular white-bordered chips. --- */
+  .say-hi__icons{display:flex;gap:18px;justify-content:center}
+  .say-hi__icon{--tilt:-1deg;width:82px;height:82px;border-radius:16px;border:2px solid #fff;
+        display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;
+        transition:transform .25s var(--spring),background .2s}
+  .say-hi__icon:hover,.say-hi__icon:focus-visible{transform:translateY(-6px) rotate(var(--tilt));
+        background:rgba(255,255,255,.15);outline:none}
+  .say-hi__icon svg{width:32px;height:32px}
+  .say-hi__icon--linkedin{font-size:28px;font-weight:700;letter-spacing:-.02em}
+
+  /* --- footer: gradient close, giant repeated name, 3 stacked links. --- */
+  .site-footer{background:linear-gradient(180deg,#f455a7 0%,var(--v2-cta) 100%);
+        animation:none;padding:clamp(64px,10vw,120px) 24px clamp(48px,8vw,80px);
+        display:flex;flex-direction:column;align-items:center;gap:40px;text-align:center}
+  .site-footer__name{font-size:clamp(48px,11vw,150px);font-weight:600;letter-spacing:-.04em;margin:0}
+  .site-footer__tag{font-size:clamp(15px,1.8vw,22px);margin:0;opacity:.9}
+  .site-footer__links{display:flex;flex-direction:column;gap:6px}
+  .site-footer__links a{font-size:clamp(28px,4.5vw,56px);font-weight:600;letter-spacing:-.03em;
+        text-decoration:none;transition:transform .25s var(--spring)}
+  .site-footer__links a:hover,.site-footer__links a:focus-visible{transform:translateY(-3px);outline:none}
+
+  @media (prefers-reduced-motion: reduce){
+    body{animation:none;background-color:#f455a7}
+    .letter,.glyph,.tag,.cta,.card,.kind-words__card,.kind-words__arrow,.kind-words__dot,
+    .say-hi__icon,.company__pop,.company__logo,.site-footer__links a{transition:none !important}
+    .letter:hover .glyph,.letter.is-active .glyph{transform:none;color:#fff}
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ hero ============ -->
+  <section class="section hero" id="hero">
+    <p class="hero__lead">Hi there! My name is</p>
+    <h1 class="name" id="name">
+      <span class="sr-only">Katherine Root</span>
+      <span class="word" aria-hidden="true">
+        <span class="letter"><span class="glyph">K</span><span class="tag" style="background:var(--magenta);color:var(--cream);--tilt:-4deg">15 years of design</span></span>
+        <span class="letter"><span class="glyph">a</span><span class="tag" style="background:#C8F135;color:var(--charcoal);--tilt:5deg">UX / UI / HCI</span></span>
+        <span class="letter"><span class="glyph">t</span><span class="tag" style="background:var(--indigo);color:var(--cream);--tilt:-7deg">startup expert</span></span>
+        <span class="letter"><span class="glyph">h</span><span class="tag" style="background:#FF5A1F;color:var(--cream);--tilt:3deg">engineering whisperer</span></span>
+        <span class="letter"><span class="glyph">e</span><span class="tag" style="background:#00C2A8;color:var(--cream);--tilt:-2deg">currently vibe coding</span></span>
+        <span class="letter"><span class="glyph">r</span><span class="tag" style="background:var(--violet);color:var(--cream);--tilt:6deg">co-founder?!</span></span>
+        <span class="letter"><span class="glyph">i</span><span class="tag" style="background:var(--magenta);color:var(--cream);--tilt:-5deg">NJ native</span></span>
+        <span class="letter"><span class="glyph">n</span><span class="tag" style="background:#C8F135;color:var(--charcoal);--tilt:2deg">sci-fi lover</span></span>
+        <span class="letter"><span class="glyph">e</span><span class="tag" style="background:var(--indigo);color:var(--cream);--tilt:-6deg">boy mom</span></span>
+      </span>
+      <span class="word" aria-hidden="true">
+        <span class="letter"><span class="glyph">R</span><span class="tag" style="background:#FF5A1F;color:var(--cream);--tilt:4deg">forza ferrari</span></span>
+        <span class="letter"><span class="glyph">o</span><span class="tag" style="background:var(--cream);color:var(--charcoal);--tilt:-3deg">I voted! 🗳️</span></span>
+        <span class="letter"><span class="glyph">o</span><span class="tag" style="background:var(--magenta);color:var(--cream);--tilt:6deg">skis &gt; snowboards</span></span>
+        <span class="letter"><span class="glyph">t</span><span class="tag" style="background:#00C2A8;color:var(--cream);--tilt:-5deg">say hi 👋</span></span>
+      </span>
+    </h1>
+    <p class="hero__sub">I'm a Product, AI, and Experience Design Expert</p>
+    <a class="cta" href="#companies">Tell me more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- ============ companies ============ -->
+  <section class="section" id="companies">
+    <h2 class="section__title">I've been designing for consumer obsessed startups for 15 years.</h2>
+    <div class="companies__row">
+      <div class="company" tabindex="0">
+        <img class="company__logo" src="assets/logos/launch-design.png" alt="Launch Design">
+        <div class="company__pop company__pop--launch">
+          <p class="company__caption">I started at this small UX firm straight out of undergrad.</p>
+          <img class="company__connector" src="assets/logos/arrow-launch-design.svg" alt="">
+          <div class="company__badge"><img src="assets/logos/launch-design-color.png" alt=""></div>
+        </div>
+      </div>
+      <div class="company" tabindex="0">
+        <img class="company__logo" src="assets/logos/simply-hired.png" alt="Simply Hired">
+        <div class="company__pop company__pop--simply">
+          <p class="company__caption">I grew a lot in this role, learning a lot about how companies operate.</p>
+          <img class="company__connector" src="assets/logos/arrow-simply-hired.svg" alt="">
+          <div class="company__badge"><img src="assets/logos/simply-hired-color.png" alt=""></div>
+          <p class="company__name">Simply Hired</p>
+        </div>
+      </div>
+      <div class="company" tabindex="0">
+        <img class="company__logo" src="assets/logos/copper-crm.png" alt="Copper CRM">
+        <div class="company__pop company__pop--copper">
+          <p class="company__caption">I was part of the founding design team here when it was still called &ldquo;Prosperworks&rdquo;</p>
+          <img class="company__connector" src="assets/logos/arrow-copper-crm.svg" alt="">
+          <div class="company__badge"><img src="assets/logos/copper-crm-badge.png" alt=""></div>
+          <p class="company__name">Copper CRM</p>
+        </div>
+      </div>
+      <div class="company" tabindex="0">
+        <img class="company__logo" src="assets/logos/mighty-networks.png" alt="Mighty Networks">
+        <div class="company__pop company__pop--mighty">
+          <p class="company__caption">I spent 10 YEARS building this product and team &mdash; I know it like the back of my hand.</p>
+          <img class="company__connector" src="assets/logos/arrow-mighty-networks.svg" alt="">
+          <div class="company__badge"><img src="assets/logos/mighty-networks-color.png" alt=""></div>
+          <p class="company__name">Mighty Networks</p>
+        </div>
+      </div>
+      <div class="company" tabindex="0">
+        <img class="company__logo company__logo--manta" src="assets/logos/manta-cares.png" alt="Manta Cares">
+        <div class="company__pop company__pop--manta">
+          <p class="company__caption">My latest role, founding designer, creating an app to help cancer patients navigate their diagnosis.</p>
+          <img class="company__connector" src="assets/logos/arrow-manta-cares.svg" alt="">
+          <div class="company__badge"><img src="assets/logos/manta-cares-dark.png" alt=""></div>
+          <p class="company__name">Manta Cares</p>
+        </div>
+      </div>
+    </div>
+    <a class="cta" href="#strategy">What do you do best <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- ============ strategy ============ -->
+  <section class="section" id="strategy">
+    <h2 class="section__title">I combine design strategy and business acumen to help companies win.</h2>
+    <div class="cards">
+      <a class="card" href="https://www.katherineroot.com/case-studies-fae" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">
+        <span class="card__tag">CASE STUDY</span>
+        <span class="card__title">First App Experience</span>
+        <span class="card__desc">For years the experience of downloading the Mighty Networks app was crusty and abandoned, forever deemed a P2 not worth updating. Here I explore the value of creating a great first impression, and the role design plays in selling your brand successfully.</span>
+        <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+      <div class="card card--soon" style="--tilt:2deg">
+        <span class="card__tag">COMING SOON</span>
+        <span class="card__title">Manta's Struggle: Maps vs AI</span>
+        <span class="card__desc">A look at two competing ways to help someone navigate a cancer diagnosis &mdash; still being written up.</span>
+      </div>
+    </div>
+    <a class="cta" href="#people">Who do you design for <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- ============ people ============ -->
+  <section class="section" id="people">
+    <h2 class="section__title">People are at the core of what I do, with empathy and understanding.</h2>
+    <div class="cards">
+      <a class="card" href="https://www.katherineroot.com/case-studies-people-magic" target="_blank" rel="noopener noreferrer" style="--tilt:-3deg">
+        <span class="card__tag">CASE STUDY</span>
+        <span class="card__title">Unlocking People Magic</span>
+        <span class="card__desc">As a B2B2C company, Mighty Networks has to balance catering not just to Hosts, but to their members. If you build for the members, the Hosts will follow &mdash; so how do you make that experience truly magical?</span>
+        <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+      <a class="card" href="/manta/appointment-prep/" style="--tilt:2deg">
+        <span class="card__tag">CASE STUDY</span>
+        <span class="card__title">Designing for the Hardest Moment of Someone's Life</span>
+        <span class="card__desc">Ask our users to name the hardest moment in their cancer journey and many describe the same scene: a rushed visit with an oncologist and a blur of words they don't understand. This is how we designed for that moment.</span>
+        <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+    </div>
+    <a class="cta" href="#leadership">What else can you do <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- ============ leadership ============ -->
+  <section class="section" id="leadership">
+    <h2 class="section__title">That empathy also allows me to build thriving teams, systems, and cultures.</h2>
+    <div class="cards">
+      <div class="card card--soon" style="--tilt:-2deg">
+        <span class="card__tag">COMING SOON</span>
+        <span class="card__title">Building Remote Culture</span>
+        <span class="card__desc">Scaling the design team at Mighty from 2 members to 10, all while navigating the new waters of working remotely &mdash; and building a collaborative, creative environment online.</span>
+      </div>
+      <div class="card card--soon" style="--tilt:3deg">
+        <span class="card__tag">COMING SOON</span>
+        <span class="card__title">Make Mighty Cool</span>
+        <span class="card__desc">How do you build a product organization that not only understands the value of design, but actively contributes to delightful interactions? An initiative to get full org buy-in on the power of design details.</span>
+      </div>
+    </div>
+    <a class="cta" href="#screens">Show me some screens <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- ============ screens ============ -->
+  <section class="section" id="screens">
+    <h2 class="section__title">Oh and I make things look pretty ✨</h2>
+    <div class="screens__row">
+      <img src="/assets/hover-phone-1.png" alt="LiveWell app screen">
+      <img src="/assets/hover-phone-3.png" alt="Optimistic Entrepreneur app screen">
+      <img src="/assets/hover-phone-2.png" alt="Body Soul Collective app screen">
+    </div>
+    <a class="cta" href="#testimonials">I don't trust you <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- ============ testimonials ============ -->
+  <section class="section" id="testimonials">
+    <h2 class="section__title">Don't want to take my word for it? Hear from my co-workers.</h2>
+    <div class="kind-words">
+      <div class="kind-words__row">
+        <div class="kind-words__card" id="kw-card-prev">
+          <blockquote class="kind-words__quote" id="kw-quote-prev"></blockquote>
+          <cite class="kind-words__cite">
+            <span class="kind-words__name" id="kw-name-prev"></span>
+            <span class="kind-words__role" id="kw-role-prev"></span>
+          </cite>
+        </div>
+        <div class="kind-words__card" id="kw-card-current">
+          <blockquote class="kind-words__quote" id="kw-quote-current"></blockquote>
+          <cite class="kind-words__cite">
+            <span class="kind-words__name" id="kw-name-current"></span>
+            <span class="kind-words__role" id="kw-role-current"></span>
+          </cite>
+        </div>
+        <div class="kind-words__card" id="kw-card-next">
+          <blockquote class="kind-words__quote" id="kw-quote-next"></blockquote>
+          <cite class="kind-words__cite">
+            <span class="kind-words__name" id="kw-name-next"></span>
+            <span class="kind-words__role" id="kw-role-next"></span>
+          </cite>
+        </div>
+      </div>
+      <div class="kind-words__controls">
+        <button type="button" class="kind-words__arrow" id="kw-prev" aria-label="Previous recommendation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="kind-words__dots" id="kw-dots"></div>
+        <button type="button" class="kind-words__arrow" id="kw-next" aria-label="Next recommendation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+    <a class="cta" href="#tldr">Gimme the TLDR <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- ============ tldr ============ -->
+  <section class="section" id="tldr">
+    <h2 class="section__title">The TLDR? I do design because I love it, and I bring that passion to all of the work that I do.</h2>
+    <a class="cta" href="#say-hi">How do I reach out <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- ============ say hi ============ -->
+  <section class="section" id="say-hi">
+    <h2 class="section__title">Feel free to say hi some time. I'd love to chat 👋</h2>
+    <div class="say-hi__icons">
+      <a class="say-hi__icon say-hi__icon--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="--tilt:-2deg"><span aria-hidden="true">in</span></a>
+      <a class="say-hi__icon" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="--tilt:2deg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+      </a>
+      <a class="say-hi__icon" href="mailto:keroot@gmail.com" aria-label="Email" style="--tilt:-3deg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ footer ============ -->
+  <footer class="site-footer">
+    <p class="site-footer__name">Katherine Root</p>
+    <p class="site-footer__tag">Product, AI, and Experience Design Expert</p>
+    <div class="site-footer__links">
+      <a href="https://static1.squarespace.com/static/649378526c54e630f4b17c1a/t/6a56af8dda4aaa7c4e2ef8d4/1784065933655/KatherineRootResume_2026.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+      <a href="#strategy">Case Studies</a>
+      <a href="/#work">Side Projects</a>
+    </div>
+  </footer>
+
+<script>
+// --- hero letter-flip: same interaction as the live site (hover flips a
+// letter and shows its tag; touch taps one letter active at a time;
+// reduced-motion keeps the name static) ---
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var noHover = window.matchMedia('(hover: none)').matches;
+  if (reduce) return;
+
+  if (noHover) {
+    var letters = Array.prototype.slice.call(document.querySelectorAll('.letter'));
+    letters.forEach(function (letter) {
+      letter.addEventListener('click', function () {
+        var wasActive = letter.classList.contains('is-active');
+        letters.forEach(function (l) { l.classList.remove('is-active'); });
+        if (!wasActive) letter.classList.add('is-active');
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.name')) {
+        letters.forEach(function (l) { l.classList.remove('is-active'); });
+      }
+    });
+  } else {
+    Array.prototype.slice.call(document.querySelectorAll('.letter')).forEach(function (letter) {
+      letter.addEventListener('click', function () {
+        letter.classList.remove('is-bouncing');
+        void letter.offsetWidth;
+        letter.classList.add('is-bouncing');
+      });
+      letter.addEventListener('animationend', function () {
+        letter.classList.remove('is-bouncing');
+      });
+    });
+  }
+})();
+</script>
+<script>
+// --- company logos: touch/no-hover tap-to-reveal, mirroring the hero
+// letters' touch fallback (tap toggles the same overlay :hover shows) ---
+(function () {
+  var noHover = window.matchMedia('(hover: none)').matches;
+  if (!noHover) return;
+  var companies = Array.prototype.slice.call(document.querySelectorAll('.company'));
+  companies.forEach(function (company) {
+    company.addEventListener('click', function () {
+      var wasActive = company.classList.contains('is-active');
+      companies.forEach(function (c) { c.classList.remove('is-active'); });
+      if (!wasActive) company.classList.add('is-active');
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.company')) {
+      companies.forEach(function (c) { c.classList.remove('is-active'); });
+    }
+  });
+})();
+</script>
+<script>
+// --- Kind Words carousel: same real recommendation data + circular-buffer
+// sliding-track logic as the live site's index.html ---
+(function () {
+  var recs = [
+    { quote: `She’s just all-around great to work with: a creative but sensible voice during ideation, a doer who’s ready to roll up her sleeves wherever needed, and someone willing to make decisions and cut through the endless “what ifs.”`, name: 'Elisabeth Boonin', role: 'Serial Confounder' },
+    { quote: `She will be a true asset to any team, valued for her keen eye for design, sense of humor, and ability to see the big picture.`, name: 'Erin Landis', role: 'Strategic Advisor to Scholarly Societies & Publishers' },
+    { quote: `Katherine is everything you’d hope for in a design manager — supportive, thoughtful, and a true advocate for her team.`, name: 'Giada Sun', role: 'Product Designer @ Mighty Networks' },
+    { quote: `Katherine is driven, hardworking, curious, and fun-spirited. She brings the kind of positivity that teams thrive on.`, name: 'Christopher Edlin', role: 'Manager, Support Account Team @ Ping Identity' },
+    { quote: `Katherine is that rare combination of natural leader, top-notch designer, and reliable teammate — the kind of person you jump at the chance to work with.`, name: 'Mike Beverley', role: 'VP of Software Engineering @ AoPS' },
+    { quote: `Because of Katherine, I learned a lot about what makes a great design lead truly outstanding.`, name: 'Bruno Ribeiro', role: 'Applied AI & Mobile App Engineer' },
+    { quote: `She struck a perfect balance of giving me the freedom to run with projects, making them my own, and helping guide the project with thought provoking questions and discussions.`, name: 'John Welch', role: 'Product Manager' }
+  ];
+
+  var cards = ['prev', 'current', 'next'].map(function (key) {
+    return {
+      el: document.getElementById('kw-card-' + key),
+      quote: document.getElementById('kw-quote-' + key),
+      name: document.getElementById('kw-name-' + key),
+      role: document.getElementById('kw-role-' + key),
+      slot: 0,
+      dataIndex: 0
+    };
+  });
+  var dotsWrap = document.getElementById('kw-dots');
+  var prevBtn = document.getElementById('kw-prev');
+  var nextBtn = document.getElementById('kw-next');
+  var section = document.querySelector('.kind-words');
+  if (!cards[1].quote || !dotsWrap) return;
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var PEEK_OPACITY = 0.35;
+  var GAP = 24;
+  var activeIndex = 0;
+  var busy = false;
+  var timer;
+
+  recs.forEach(function (_, i) {
+    var dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'kind-words__dot' + (i === 0 ? ' is-active' : '');
+    dot.setAttribute('aria-label', 'Show recommendation ' + (i + 1) + ' of ' + recs.length);
+    dot.addEventListener('click', function () {
+      stopAuto();
+      var forward = (i - activeIndex + recs.length) % recs.length;
+      var backward = (activeIndex - i + recs.length) % recs.length;
+      advanceSteps(forward <= backward ? 1 : -1, Math.min(forward, backward));
+    });
+    dotsWrap.appendChild(dot);
+  });
+
+  function paintCard(card) {
+    var rec = recs[((card.dataIndex % recs.length) + recs.length) % recs.length];
+    card.quote.textContent = rec.quote;
+    card.name.textContent = rec.name;
+    card.role.textContent = rec.role;
+  }
+
+  function stepPx() {
+    return (cards[1].el.offsetWidth || 620) + GAP;
+  }
+
+  function targetOpacity(slot) {
+    return slot === 0 ? 1 : (Math.abs(slot) === 1 ? PEEK_OPACITY : 0);
+  }
+
+  function applyA11y(card) {
+    var isPeek = Math.abs(card.slot) === 1;
+    card.el.classList.toggle('is-peek', isPeek);
+    if (isPeek) {
+      card.el.setAttribute('role', 'button');
+      card.el.setAttribute('tabindex', '0');
+      card.el.setAttribute('aria-label', card.slot === -1 ? 'Show previous recommendation' : 'Show next recommendation');
+    } else {
+      card.el.removeAttribute('role');
+      card.el.removeAttribute('tabindex');
+      card.el.removeAttribute('aria-label');
+    }
+  }
+
+  function positionCard(card, animate) {
+    if (!animate) card.el.classList.add('kw-no-transition');
+    card.el.style.transform = 'translateX(calc(-50% + ' + (card.slot * stepPx()) + 'px))';
+    card.el.style.opacity = targetOpacity(card.slot);
+    applyA11y(card);
+    if (!animate) {
+      void card.el.offsetWidth;
+      card.el.classList.remove('kw-no-transition');
+    }
+  }
+
+  function recycleCard(card, direction) {
+    card.slot = direction;
+    card.dataIndex = activeIndex + direction;
+    paintCard(card);
+    applyA11y(card);
+    if (reduce) { positionCard(card, false); return; }
+    card.el.classList.add('kw-no-transition');
+    card.el.style.transform = 'translateX(calc(-50% + ' + (card.slot * stepPx()) + 'px))';
+    card.el.style.opacity = 0;
+    void card.el.offsetWidth;
+    card.el.classList.remove('kw-no-transition');
+    requestAnimationFrame(function () {
+      card.el.style.opacity = targetOpacity(card.slot);
+    });
+  }
+
+  function updateDots() {
+    Array.prototype.forEach.call(dotsWrap.children, function (d, i) {
+      d.classList.toggle('is-active', i === activeIndex);
+    });
+  }
+
+  function advance(direction) {
+    if (busy) return;
+    busy = true;
+    var animate = !reduce;
+    cards.forEach(function (card) {
+      card.slot -= direction;
+      positionCard(card, animate);
+    });
+    activeIndex = (activeIndex + direction + recs.length) % recs.length;
+    updateDots();
+    setTimeout(function () {
+      cards.forEach(function (card) {
+        if (Math.abs(card.slot) >= 2) recycleCard(card, direction);
+      });
+      busy = false;
+    }, reduce ? 0 : 500);
+  }
+
+  function advanceSteps(direction, steps) {
+    if (steps <= 0) { advance(direction); return; }
+    var count = 0;
+    function step() {
+      advance(direction);
+      count++;
+      if (count <= steps) setTimeout(step, 520);
+    }
+    step();
+  }
+
+  function startAuto() {
+    stopAuto();
+    timer = setInterval(function () { advance(1); }, 6000);
+  }
+  function stopAuto() {
+    if (timer) clearInterval(timer);
+  }
+
+  cards.forEach(function (card, i) {
+    card.dataIndex = i - 1;
+    paintCard(card);
+    card.slot = i - 1;
+    positionCard(card, false);
+    card.el.addEventListener('click', function () {
+      if (card.slot === 0) return;
+      stopAuto();
+      advance(card.slot);
+    });
+    card.el.addEventListener('keydown', function (e) {
+      if ((e.key === 'Enter' || e.key === ' ') && card.slot !== 0) {
+        e.preventDefault();
+        stopAuto();
+        advance(card.slot);
+      }
+    });
+  });
+
+  prevBtn.addEventListener('click', function () { stopAuto(); advance(-1); });
+  nextBtn.addEventListener('click', function () { stopAuto(); advance(1); });
+
+  if (!reduce) {
+    startAuto();
+    section.addEventListener('mouseenter', stopAuto);
+    section.addEventListener('mouseleave', startAuto);
+    section.addEventListener('focusin', stopAuto);
+    section.addEventListener('focusout', function (e) {
+      if (!section.contains(e.relatedTarget)) startAuto();
+    });
+  }
+})();
+</script>
+</body>
+</html>
