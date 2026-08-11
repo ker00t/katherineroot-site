@@ -30,6 +30,10 @@
   *{box-sizing:border-box}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
            overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  /* html's own background is what shows in the mobile rubber-band overscroll
+     area beyond the document edges — set to the footer's solid green so
+     pulling up past the bottom shows green, not the page's rotating hue. */
+  html{background:var(--v2-cta)}
   body{margin:0;color:#fff;font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
        -webkit-font-smoothing:antialiased;background:#f455a7;
        animation:bgCycle 200s ease-in-out infinite}
@@ -116,7 +120,7 @@
      live cards (matching the real site's "coming soon" cards) get a muted
      tag and no arrow/link. --- */
   .cards{display:flex;gap:25px;flex-wrap:wrap;justify-content:center;max-width:1280px}
-  .card{--tilt:-2deg;background:rgba(255,255,255,.1);border-radius:22px;width:min(620px,100%);
+  .card{--tilt:-2deg;position:relative;background:rgba(255,255,255,.1);border-radius:22px;width:min(620px,100%);
         min-height:280px;padding:34px;text-align:left;display:flex;flex-direction:column;gap:16px;
         text-decoration:none;color:#fff;transition:transform .3s var(--spring)}
   a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
@@ -129,6 +133,38 @@
   .card__arrow{margin-top:auto;line-height:0}
   .card__arrow svg{width:26px;height:26px}
 
+  /* --- card fan-hover: same pop-from-the-corner phone fan as the live
+     site's company-hover on Manta/Mighty, ported verbatim (same image
+     size, offsets, rotations, stagger) onto every case-study card.
+     Placeholder images (the 3 existing phone screenshots) on every card
+     for now, not yet matched per case study. Desktop/mouse only, same as
+     the original. --- */
+  .card__fan-img{position:absolute;top:0;width:110px;height:224px;display:block;
+         pointer-events:none;opacity:0;transform-origin:center center;
+         transform:translate(-50%,-50%) rotate(0deg) scale(.3);
+         transition:transform .4s var(--spring),opacity .3s ease}
+  .card--fan-left .card__fan-img{left:0}
+  .card--fan-right .card__fan-img{left:100%}
+  .card__fan-img.fan-1{z-index:1}
+  .card__fan-img.fan-3{z-index:2}
+  .card__fan-img.fan-2{z-index:3}
+  @media (hover:hover){
+    .card:hover .card__fan-img,
+    .card:focus-within .card__fan-img{opacity:1}
+    .card--fan-right:hover .fan-1,.card--fan-right:focus-within .fan-1{
+          transform:translate(calc(-117px - 50%),calc(-41px - 50%)) rotate(16.8deg) scale(1);transition-delay:0s}
+    .card--fan-right:hover .fan-3,.card--fan-right:focus-within .fan-3{
+          transform:translate(calc(47px - 50%),calc(58px - 50%)) rotate(49.4deg) scale(1);transition-delay:.05s}
+    .card--fan-right:hover .fan-2,.card--fan-right:focus-within .fan-2{
+          transform:translate(calc(-4px - 50%),calc(-34px - 50%)) rotate(30.1deg) scale(1);transition-delay:.1s}
+    .card--fan-left:hover .fan-1,.card--fan-left:focus-within .fan-1{
+          transform:translate(calc(-43px - 50%),calc(61px - 50%)) rotate(-67.4deg) scale(1);transition-delay:0s}
+    .card--fan-left:hover .fan-3,.card--fan-left:focus-within .fan-3{
+          transform:translate(calc(116px - 50%),calc(-21px - 50%)) rotate(7.6deg) scale(1);transition-delay:.05s}
+    .card--fan-left:hover .fan-2,.card--fan-left:focus-within .fan-2{
+          transform:translate(calc(10px - 50%),calc(-15px - 50%)) rotate(-30.2deg) scale(1);transition-delay:.1s}
+  }
+
   /* --- screens: the same 3 phone mockups used by the live site's company-
      hover fan, shown large and static here. --- */
   .screens__row{display:flex;gap:clamp(14px,3vw,30px);justify-content:center;flex-wrap:wrap}
@@ -138,20 +174,24 @@
   /* --- testimonials: a native horizontal scroll-snap gallery, full-bleed
      to the viewport edge. Every card is real markup up front (no JS-driven
      circular buffer/recycling), so adjacent cards are already loaded and
-     visible the instant you scroll to them — no arrows, no dots, just
-     drag/swipe/trackpad scroll. --- */
+     visible instantly — no arrows, no dots. Auto-advances every 5s and
+     loops continuously (seamless via cloned lead/trail cards), click a
+     side card to center it, and click-drag (mouse) or swipe (touch) to
+     move it along — see the script below. --- */
   .kind-words{width:100%}
-  .kind-words__row{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x proximity;
+  .kind-words__row{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;
         width:100vw;margin-left:calc(50% - 50vw);
         padding:0 calc(50% - min(310px,43vw)) 20px;
         scroll-padding-inline:calc(50% - min(310px,43vw));
-        -webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.4) transparent}
+        -webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.4) transparent;
+        cursor:grab}
+  .kind-words__row.is-dragging{cursor:grabbing;scroll-snap-type:none;user-select:none;-webkit-user-select:none}
   .kind-words__row::-webkit-scrollbar{height:6px}
   .kind-words__row::-webkit-scrollbar-thumb{background:rgba(255,255,255,.4);border-radius:99px}
   .kind-words__card{scroll-snap-align:center;flex:0 0 min(620px,86vw);min-height:280px;
         border-radius:22px;background:#fff;color:#000;margin:0;
         padding:24px;display:flex;flex-direction:column;justify-content:center;gap:24px;
-        text-align:center}
+        text-align:center;cursor:pointer}
   .kind-words__card:focus-visible{outline:2px solid var(--v2-cta);outline-offset:2px}
   .kind-words__quote{font-size:20px;line-height:29px;margin:0;font-weight:400}
   .kind-words__cite{font-style:normal;display:flex;flex-direction:column;gap:4px}
@@ -173,14 +213,15 @@
   .say-hi__icon svg{width:32px;height:32px}
   .say-hi__icon--linkedin{font-size:28px;font-weight:700;letter-spacing:-.02em}
 
-  /* --- footer: gradient close, giant repeated name, 3 stacked links. No
-     opaque base of its own — genuinely transparent at the top so the
-     page's animated background shows through and fades into solid lime
-     at the bottom, matching the Figma gradient (rgba(189,243,0,0) ->
-     #bdf300). --- */
+  /* --- footer: gradient close, giant repeated name, 3 stacked links, then
+     the same social icons as say-hi. No opaque base of its own —
+     genuinely transparent at the top so the page's animated background
+     shows through and fades into solid lime at the bottom, matching the
+     Figma gradient (rgba(189,243,0,0) -> #bdf300). --- */
   .site-footer{background:linear-gradient(180deg,rgba(189,243,0,0) 0%,var(--v2-cta) 100%);
         padding:clamp(64px,10vw,120px) 24px clamp(48px,8vw,80px);
         display:flex;flex-direction:column;align-items:center;gap:40px;text-align:center}
+  .site-footer__heading{display:flex;flex-direction:column;gap:6px}
   .site-footer__name{font-size:clamp(48px,11vw,150px);font-weight:600;letter-spacing:-.04em;margin:0}
   .site-footer__tag{font-size:clamp(15px,1.8vw,22px);margin:0;opacity:.9}
   .site-footer__links{display:flex;flex-direction:column;gap:6px}
@@ -191,6 +232,7 @@
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto}
     body{animation:none;background-color:#f455a7}
+    .card__fan-img{display:none}
     .letter,.glyph,.tag,.cta,.card,
     .say-hi__icon,.site-footer__links a{transition:none !important}
     .letter:hover .glyph,.letter.is-active .glyph{transform:none;color:#fff}
@@ -246,58 +288,76 @@
         <img class="company__logo company__logo--manta" src="assets/logos/manta-cares.png" alt="Manta Cares">
       </div>
     </div>
-    <a class="cta" href="#strategy" style="--tilt:2deg">What do you do best <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+    <a class="cta" href="#strategy" style="--tilt:2deg">Wow cool <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
   <!-- ============ strategy ============ -->
   <section class="section" id="strategy">
-    <h2 class="section__title">I combine design strategy and business acumen to help companies win.</h2>
+    <h2 class="section__title">I combine design strategy with business acumen to help companies win.</h2>
     <div class="cards">
-      <a class="card" href="https://www.katherineroot.com/case-studies-fae" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">
+      <a class="card card--fan-left" href="https://www.katherineroot.com/case-studies-fae" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">
+        <img class="card__fan-img fan-1" src="/assets/hover-phone-1.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-2" src="/assets/hover-phone-2.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-3" src="/assets/hover-phone-3.png" alt="" aria-hidden="true">
         <span class="card__tag">CASE STUDY</span>
         <span class="card__title">First App Experience</span>
         <span class="card__desc">For years the experience of downloading the Mighty Networks app was crusty and abandoned, forever deemed a P2 not worth updating. Here I explore the value of creating a great first impression, and the role design plays in selling your brand successfully.</span>
         <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
-      <div class="card card--soon" style="--tilt:2deg">
+      <div class="card card--soon card--fan-right" style="--tilt:2deg">
+        <img class="card__fan-img fan-1" src="/assets/hover-phone-1.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-2" src="/assets/hover-phone-2.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-3" src="/assets/hover-phone-3.png" alt="" aria-hidden="true">
         <span class="card__tag">COMING SOON</span>
-        <span class="card__title">Manta's Struggle: Maps vs AI</span>
-        <span class="card__desc">A look at two competing ways to help someone navigate a cancer diagnosis &mdash; still being written up.</span>
+        <span class="card__title">Manta's Brand Identity</span>
+        <span class="card__desc">Defining an ICP for Manta Cares, and merging two very different business strategies into a product cancer patients actually needed.</span>
       </div>
     </div>
-    <a class="cta" href="#people" style="--tilt:-4deg">Who do you design for <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+    <a class="cta" href="#people" style="--tilt:-4deg">Uh huh <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
   <!-- ============ people ============ -->
   <section class="section" id="people">
-    <h2 class="section__title">People are at the core of what I do, with empathy and understanding.</h2>
+    <h2 class="section__title">My work is grounded in empathy and understanding. It's just who I am.</h2>
     <div class="cards">
-      <a class="card" href="https://www.katherineroot.com/case-studies-people-magic" target="_blank" rel="noopener noreferrer" style="--tilt:-3deg">
+      <a class="card card--fan-left" href="https://www.katherineroot.com/case-studies-people-magic" target="_blank" rel="noopener noreferrer" style="--tilt:-3deg">
+        <img class="card__fan-img fan-1" src="/assets/hover-phone-1.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-2" src="/assets/hover-phone-2.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-3" src="/assets/hover-phone-3.png" alt="" aria-hidden="true">
         <span class="card__tag">CASE STUDY</span>
         <span class="card__title">Unlocking People Magic</span>
         <span class="card__desc">As a B2B2C company, Mighty Networks has to balance catering not just to Hosts, but to their members. If you build for the members, the Hosts will follow &mdash; so how do you make that experience truly magical?</span>
         <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
-      <a class="card" href="/manta/appointment-prep/" style="--tilt:2deg">
+      <a class="card card--fan-right" href="/manta/appointment-prep/" style="--tilt:2deg">
+        <img class="card__fan-img fan-1" src="/assets/hover-phone-1.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-2" src="/assets/hover-phone-2.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-3" src="/assets/hover-phone-3.png" alt="" aria-hidden="true">
         <span class="card__tag">CASE STUDY</span>
         <span class="card__title">Designing for the Hardest Moment of Someone's Life</span>
         <span class="card__desc">Ask our users to name the hardest moment in their cancer journey and many describe the same scene: a rushed visit with an oncologist and a blur of words they don't understand. This is how we designed for that moment.</span>
         <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
     </div>
-    <a class="cta" href="#leadership" style="--tilt:3deg">What else can you do <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+    <a class="cta" href="#leadership" style="--tilt:3deg">Interesting <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
   <!-- ============ leadership ============ -->
   <section class="section" id="leadership">
     <h2 class="section__title">That empathy also allows me to build thriving teams, systems, and cultures.</h2>
     <div class="cards">
-      <div class="card card--soon" style="--tilt:-2deg">
+      <div class="card card--soon card--fan-left" style="--tilt:-2deg">
+        <img class="card__fan-img fan-1" src="/assets/hover-phone-1.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-2" src="/assets/hover-phone-2.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-3" src="/assets/hover-phone-3.png" alt="" aria-hidden="true">
         <span class="card__tag">COMING SOON</span>
         <span class="card__title">Building Remote Culture</span>
         <span class="card__desc">Scaling the design team at Mighty from 2 members to 10, all while navigating the new waters of working remotely &mdash; and building a collaborative, creative environment online.</span>
       </div>
-      <div class="card card--soon" style="--tilt:3deg">
+      <div class="card card--soon card--fan-right" style="--tilt:3deg">
+        <img class="card__fan-img fan-1" src="/assets/hover-phone-1.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-2" src="/assets/hover-phone-2.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-3" src="/assets/hover-phone-3.png" alt="" aria-hidden="true">
         <span class="card__tag">COMING SOON</span>
         <span class="card__title">Make Mighty Cool</span>
         <span class="card__desc">How do you build a product organization that not only understands the value of design, but actively contributes to delightful interactions? An initiative to get full org buy-in on the power of design details.</span>
@@ -321,7 +381,7 @@
   <section class="section" id="testimonials">
     <h2 class="section__title">Don't want to take my word for it? Hear from my co-workers.</h2>
     <div class="kind-words">
-      <div class="kind-words__row" role="region" aria-label="Kind words from co-workers" tabindex="0">
+      <div class="kind-words__row" id="kw-row" role="region" aria-label="Kind words from co-workers" tabindex="0">
         <blockquote class="kind-words__card">
           <p class="kind-words__quote">She's just all-around great to work with: a creative but sensible voice during ideation, a doer who's ready to roll up her sleeves wherever needed, and someone willing to make decisions and cut through the endless &ldquo;what ifs.&rdquo;</p>
           <cite class="kind-words__cite">
@@ -378,13 +438,13 @@
 
   <!-- ============ tldr ============ -->
   <section class="section" id="tldr">
-    <h2 class="section__title">The TLDR? <span class="section__title--regular">I do design because I love it, and I bring that passion to all of the work that I do.</span></h2>
+    <h2 class="section__title">The TLDR?<br/><span class="section__title--regular">I do design because I love it, and I bring that passion to all of the work that I do.</span></h2>
     <a class="cta" href="#say-hi" style="--tilt:2deg">How do I reach out <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
   <!-- ============ say hi ============ -->
   <section class="section" id="say-hi">
-    <h2 class="section__title">Feel free to say hi some time. I'd love to chat 👋</h2>
+    <h2 class="section__title">Feel free to say hi some time.<br/>I'd love to chat 👋</h2>
     <div class="say-hi__icons">
       <a class="say-hi__icon say-hi__icon--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="--tilt:-2deg"><span aria-hidden="true">in</span></a>
       <a class="say-hi__icon" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="--tilt:2deg">
@@ -398,12 +458,23 @@
 
   <!-- ============ footer ============ -->
   <footer class="site-footer">
-    <p class="site-footer__name">Katherine Root</p>
-    <p class="site-footer__tag">Product, AI, and Experience Design Expert</p>
+    <div class="site-footer__heading">
+      <p class="site-footer__name">Katherine Root</p>
+      <p class="site-footer__tag">Product, AI, and Experience Design Expert</p>
+    </div>
     <div class="site-footer__links">
       <a href="https://static1.squarespace.com/static/649378526c54e630f4b17c1a/t/6a56af8dda4aaa7c4e2ef8d4/1784065933655/KatherineRootResume_2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">Resume</a>
       <a href="#strategy" style="--tilt:3deg">Case Studies</a>
       <a href="/#work" style="--tilt:-4deg">Side Projects</a>
+    </div>
+    <div class="say-hi__icons">
+      <a class="say-hi__icon say-hi__icon--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="--tilt:-2deg"><span aria-hidden="true">in</span></a>
+      <a class="say-hi__icon" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="--tilt:2deg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+      </a>
+      <a class="say-hi__icon" href="mailto:keroot@gmail.com" aria-label="Email" style="--tilt:-3deg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+      </a>
     </div>
   </footer>
 
@@ -445,24 +516,129 @@
 })();
 </script>
 <script>
-// --- company logos: touch/no-hover tap-to-reveal, mirroring the hero
-// letters' touch fallback (tap toggles the same overlay :hover shows) ---
+// --- Kind Words gallery: native scroll-snap track made into a continuous,
+// self-driving carousel. Real cards 1..7 are bracketed with a clone of the
+// last card up front and a clone of the first at the end, so scrolling past
+// either edge lands on a visually-identical clone; once scrolling settles
+// there we snap instantly (no transition) to the real equivalent, so the
+// loop never shows a visible jump. Auto-advances every 5s, clicking any
+// off-center card centers it, and dragging (mouse) or swiping (touch) moves
+// the track — CSS scroll-snap handles the settle in both cases. ---
 (function () {
-  var noHover = window.matchMedia('(hover: none)').matches;
-  if (!noHover) return;
-  var companies = Array.prototype.slice.call(document.querySelectorAll('.company'));
-  companies.forEach(function (company) {
-    company.addEventListener('click', function () {
-      var wasActive = company.classList.contains('is-active');
-      companies.forEach(function (c) { c.classList.remove('is-active'); });
-      if (!wasActive) company.classList.add('is-active');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var row = document.getElementById('kw-row');
+  if (!row) return;
+  var realCards = Array.prototype.slice.call(row.querySelectorAll('.kind-words__card'));
+  if (realCards.length < 2) return;
+
+  var firstClone = realCards[0].cloneNode(true);
+  var lastClone = realCards[realCards.length - 1].cloneNode(true);
+  firstClone.setAttribute('aria-hidden', 'true');
+  lastClone.setAttribute('aria-hidden', 'true');
+  firstClone.setAttribute('tabindex', '-1');
+  lastClone.setAttribute('tabindex', '-1');
+  row.insertBefore(lastClone, row.firstChild);
+  row.appendChild(firstClone);
+
+  var cards = Array.prototype.slice.call(row.children);
+  var current = 1; // index of the real first card, after the prepended clone
+
+  function cardCenter(el) {
+    // offsetLeft is unreliable here (no positioned ancestor to anchor to),
+    // so measure via getBoundingClientRect relative to the row's own
+    // scrollable content instead — correct regardless of offsetParent.
+    var rowRect = row.getBoundingClientRect();
+    var elRect = el.getBoundingClientRect();
+    return (elRect.left - rowRect.left) + row.scrollLeft + elRect.width / 2;
+  }
+  function scrollToIndex(i, smooth) {
+    row.scrollTo({ left: cardCenter(cards[i]) - row.clientWidth / 2, behavior: smooth ? 'smooth' : 'auto' });
+  }
+  scrollToIndex(current, false);
+
+  function nearestIndex() {
+    var center = row.scrollLeft + row.clientWidth / 2;
+    var closest = 0, closestDist = Infinity;
+    cards.forEach(function (el, i) {
+      var d = Math.abs(cardCenter(el) - center);
+      if (d < closestDist) { closestDist = d; closest = i; }
+    });
+    return closest;
+  }
+  function settle() {
+    current = nearestIndex();
+    if (current === 0) { current = cards.length - 2; scrollToIndex(current, false); }
+    else if (current === cards.length - 1) { current = 1; scrollToIndex(current, false); }
+  }
+  var settleTimer;
+  row.addEventListener('scroll', function () {
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(settle, 120);
+  });
+
+  cards.forEach(function (el, i) {
+    el.addEventListener('click', function () {
+      if (dragged) return;
+      stopAuto();
+      current = i;
+      scrollToIndex(i, !reduce);
+      startAuto();
     });
   });
-  document.addEventListener('click', function (e) {
-    if (!e.target.closest('.company')) {
-      companies.forEach(function (c) { c.classList.remove('is-active'); });
-    }
+
+  // click-and-drag for mouse; touch keeps native swipe scrolling untouched
+  var isDown = false, dragged = false, startX = 0, startScroll = 0;
+  row.addEventListener('pointerdown', function (e) {
+    if (e.pointerType !== 'mouse') return;
+    isDown = true;
+    dragged = false;
+    startX = e.clientX;
+    startScroll = row.scrollLeft;
+    row.classList.add('is-dragging');
+    row.setPointerCapture(e.pointerId);
+    stopAuto();
   });
+  row.addEventListener('pointermove', function (e) {
+    if (!isDown) return;
+    var dx = e.clientX - startX;
+    if (Math.abs(dx) > 4) dragged = true;
+    row.scrollLeft = startScroll - dx;
+  });
+  function endDrag() {
+    if (!isDown) return;
+    isDown = false;
+    row.classList.remove('is-dragging');
+    clearTimeout(settleTimer);
+    setTimeout(function () {
+      settle();
+      scrollToIndex(current, !reduce);
+      setTimeout(function () { dragged = false; }, 0);
+      startAuto();
+    }, 30);
+  }
+  row.addEventListener('pointerup', endDrag);
+  row.addEventListener('pointercancel', endDrag);
+
+  var timer;
+  function startAuto() {
+    if (reduce) return;
+    stopAuto();
+    timer = setInterval(function () {
+      current += 1;
+      scrollToIndex(current, true);
+    }, 5000);
+  }
+  function stopAuto() { if (timer) clearInterval(timer); }
+
+  row.addEventListener('mouseenter', stopAuto);
+  row.addEventListener('mouseleave', function () { if (!isDown) startAuto(); });
+  row.addEventListener('focusin', stopAuto);
+  row.addEventListener('focusout', function (e) {
+    if (!row.contains(e.relatedTarget)) startAuto();
+  });
+  window.addEventListener('resize', function () { scrollToIndex(current, false); });
+
+  if (!reduce) startAuto();
 })();
 </script>
 </body>
