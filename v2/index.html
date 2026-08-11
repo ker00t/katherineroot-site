@@ -39,10 +39,10 @@
        animation:bgCycle 200s ease-in-out infinite}
   @keyframes bgCycle{
     0%,6%{background-color:#f455a7}
-    20%,26%{background-color:var(--blue)}
-    40%,46%{background-color:var(--indigo)}
+    20%,26%{background-color:#E81BBC}
+    40%,46%{background-color:var(--purple)}
     60%,66%{background-color:var(--violet)}
-    80%,86%{background-color:var(--purple)}
+    80%,86%{background-color:var(--blue)}
     100%{background-color:#f455a7}
   }
   a{color:inherit}
@@ -190,23 +190,20 @@
         box-shadow:0 20px 50px rgba(0,0,0,.25)}
 
   /* --- testimonials: a native horizontal scroll-snap gallery, full-bleed
-     to the viewport edge. Every card is real markup up front (no JS-driven
-     circular buffer/recycling), so adjacent cards are already loaded and
-     visible instantly — no arrows, no dots. Auto-advances every 5s and
-     loops continuously (seamless via cloned lead/trail cards), click a
-     side card to center it, and click-drag (mouse) or swipe (touch) to
-     move it along — see the script below. --- */
+     to the viewport edge. Built on Embla Carousel's "loop" example
+     (embla-carousel.com/docs/examples/predefined#loop) via CDN — real
+     infinite looping is native to Embla (loop:true), so there's no
+     hand-rolled clone-node/scrollend machinery here anymore. Autoplay
+     is the official Embla Autoplay plugin (5s delay, pauses on
+     hover/focus, doesn't die after one interaction). Dragging is
+     Embla's built-in pointer drag; clicking an off-center slide calls
+     emblaApi.scrollTo() on it. --- */
   .kind-words{width:100%}
-  .kind-words__row{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;
-        width:100vw;margin-left:calc(50% - 50vw);
-        padding:0 calc(50% - min(310px,43vw)) 20px;
-        scroll-padding-inline:calc(50% - min(310px,43vw));
-        -webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.4) transparent;
-        cursor:grab}
-  .kind-words__row.is-dragging{cursor:grabbing;scroll-snap-type:none;user-select:none;-webkit-user-select:none}
-  .kind-words__row::-webkit-scrollbar{height:6px}
-  .kind-words__row::-webkit-scrollbar-thumb{background:rgba(255,255,255,.4);border-radius:99px}
-  .kind-words__card{scroll-snap-align:center;flex:0 0 min(620px,86vw);min-height:280px;
+  .embla{width:100vw;margin-left:calc(50% - 50vw);cursor:grab}
+  .embla:active{cursor:grabbing}
+  .embla__viewport{overflow:hidden;padding-bottom:20px}
+  .embla__container{display:flex;gap:24px;touch-action:pan-y pinch-zoom}
+  .kind-words__card{flex:0 0 min(620px,86vw);min-width:0;min-height:280px;
         border-radius:22px;background:#fff;color:#000;margin:0;
         padding:24px;display:flex;flex-direction:column;justify-content:center;gap:24px;
         text-align:center;cursor:pointer}
@@ -216,7 +213,7 @@
   .kind-words__name{font-weight:600;font-size:16px;color:#f455a7}
   .kind-words__role{font-size:14px;color:rgba(0,0,0,.6)}
   @media (max-width:700px){
-    .kind-words__row{padding-inline:20px;scroll-padding-inline:20px}
+    .embla__viewport{padding-inline:20px}
     .kind-words__card{flex-basis:100%}
   }
 
@@ -405,56 +402,60 @@
   <section class="section" id="testimonials">
     <h2 class="section__title">Don't want to take my word for it? Hear from my co-workers.</h2>
     <div class="kind-words">
-      <div class="kind-words__row" id="kw-row" role="region" aria-label="Kind words from co-workers" tabindex="0">
-        <blockquote class="kind-words__card">
-          <p class="kind-words__quote">She's just all-around great to work with: a creative but sensible voice during ideation, a doer who's ready to roll up her sleeves wherever needed, and someone willing to make decisions and cut through the endless &ldquo;what ifs.&rdquo;</p>
-          <cite class="kind-words__cite">
-            <span class="kind-words__name">Elisabeth Boonin</span>
-            <span class="kind-words__role">Serial Confounder</span>
-          </cite>
-        </blockquote>
-        <blockquote class="kind-words__card">
-          <p class="kind-words__quote">She will be a true asset to any team, valued for her keen eye for design, sense of humor, and ability to see the big picture.</p>
-          <cite class="kind-words__cite">
-            <span class="kind-words__name">Erin Landis</span>
-            <span class="kind-words__role">Strategic Advisor to Scholarly Societies &amp; Publishers</span>
-          </cite>
-        </blockquote>
-        <blockquote class="kind-words__card">
-          <p class="kind-words__quote">Katherine is everything you'd hope for in a design manager &mdash; supportive, thoughtful, and a true advocate for her team.</p>
-          <cite class="kind-words__cite">
-            <span class="kind-words__name">Giada Sun</span>
-            <span class="kind-words__role">Product Designer @ Mighty Networks</span>
-          </cite>
-        </blockquote>
-        <blockquote class="kind-words__card">
-          <p class="kind-words__quote">Katherine is driven, hardworking, curious, and fun-spirited. She brings the kind of positivity that teams thrive on.</p>
-          <cite class="kind-words__cite">
-            <span class="kind-words__name">Christopher Edlin</span>
-            <span class="kind-words__role">Manager, Support Account Team @ Ping Identity</span>
-          </cite>
-        </blockquote>
-        <blockquote class="kind-words__card">
-          <p class="kind-words__quote">Katherine is that rare combination of natural leader, top-notch designer, and reliable teammate &mdash; the kind of person you jump at the chance to work with.</p>
-          <cite class="kind-words__cite">
-            <span class="kind-words__name">Mike Beverley</span>
-            <span class="kind-words__role">VP of Software Engineering @ AoPS</span>
-          </cite>
-        </blockquote>
-        <blockquote class="kind-words__card">
-          <p class="kind-words__quote">Because of Katherine, I learned a lot about what makes a great design lead truly outstanding.</p>
-          <cite class="kind-words__cite">
-            <span class="kind-words__name">Bruno Ribeiro</span>
-            <span class="kind-words__role">Applied AI &amp; Mobile App Engineer</span>
-          </cite>
-        </blockquote>
-        <blockquote class="kind-words__card">
-          <p class="kind-words__quote">She struck a perfect balance of giving me the freedom to run with projects, making them my own, and helping guide the project with thought provoking questions and discussions.</p>
-          <cite class="kind-words__cite">
-            <span class="kind-words__name">John Welch</span>
-            <span class="kind-words__role">Product Manager</span>
-          </cite>
-        </blockquote>
+      <div class="embla" role="region" aria-label="Kind words from co-workers">
+        <div class="embla__viewport" id="kw-viewport">
+          <div class="embla__container">
+            <blockquote class="embla__slide kind-words__card" tabindex="0">
+              <p class="kind-words__quote">She's just all-around great to work with: a creative but sensible voice during ideation, a doer who's ready to roll up her sleeves wherever needed, and someone willing to make decisions and cut through the endless &ldquo;what ifs.&rdquo;</p>
+              <cite class="kind-words__cite">
+                <span class="kind-words__name">Elisabeth Boonin</span>
+                <span class="kind-words__role">Serial Confounder</span>
+              </cite>
+            </blockquote>
+            <blockquote class="embla__slide kind-words__card" tabindex="0">
+              <p class="kind-words__quote">She will be a true asset to any team, valued for her keen eye for design, sense of humor, and ability to see the big picture.</p>
+              <cite class="kind-words__cite">
+                <span class="kind-words__name">Erin Landis</span>
+                <span class="kind-words__role">Strategic Advisor to Scholarly Societies &amp; Publishers</span>
+              </cite>
+            </blockquote>
+            <blockquote class="embla__slide kind-words__card" tabindex="0">
+              <p class="kind-words__quote">Katherine is everything you'd hope for in a design manager &mdash; supportive, thoughtful, and a true advocate for her team.</p>
+              <cite class="kind-words__cite">
+                <span class="kind-words__name">Giada Sun</span>
+                <span class="kind-words__role">Product Designer @ Mighty Networks</span>
+              </cite>
+            </blockquote>
+            <blockquote class="embla__slide kind-words__card" tabindex="0">
+              <p class="kind-words__quote">Katherine is driven, hardworking, curious, and fun-spirited. She brings the kind of positivity that teams thrive on.</p>
+              <cite class="kind-words__cite">
+                <span class="kind-words__name">Christopher Edlin</span>
+                <span class="kind-words__role">Manager, Support Account Team @ Ping Identity</span>
+              </cite>
+            </blockquote>
+            <blockquote class="embla__slide kind-words__card" tabindex="0">
+              <p class="kind-words__quote">Katherine is that rare combination of natural leader, top-notch designer, and reliable teammate &mdash; the kind of person you jump at the chance to work with.</p>
+              <cite class="kind-words__cite">
+                <span class="kind-words__name">Mike Beverley</span>
+                <span class="kind-words__role">VP of Software Engineering @ AoPS</span>
+              </cite>
+            </blockquote>
+            <blockquote class="embla__slide kind-words__card" tabindex="0">
+              <p class="kind-words__quote">Because of Katherine, I learned a lot about what makes a great design lead truly outstanding.</p>
+              <cite class="kind-words__cite">
+                <span class="kind-words__name">Bruno Ribeiro</span>
+                <span class="kind-words__role">Applied AI &amp; Mobile App Engineer</span>
+              </cite>
+            </blockquote>
+            <blockquote class="embla__slide kind-words__card" tabindex="0">
+              <p class="kind-words__quote">She struck a perfect balance of giving me the freedom to run with projects, making them my own, and helping guide the project with thought provoking questions and discussions.</p>
+              <cite class="kind-words__cite">
+                <span class="kind-words__name">John Welch</span>
+                <span class="kind-words__role">Product Manager</span>
+              </cite>
+            </blockquote>
+          </div>
+        </div>
       </div>
     </div>
     <a class="cta" href="#tldr" style="--tilt:-3deg">Gimme the TLDR <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
@@ -540,150 +541,46 @@
   }
 })();
 </script>
+<script src="https://unpkg.com/embla-carousel/embla-carousel.umd.js"></script>
+<script src="https://unpkg.com/embla-carousel-autoplay/embla-carousel-autoplay.umd.js"></script>
 <script>
-// --- Kind Words gallery: native scroll-snap track made into a continuous,
-// self-driving carousel. Real cards 1..7 are bracketed with a clone of the
-// last card up front and a clone of the first at the end, so scrolling past
-// either edge lands on a visually-identical clone; once scrolling settles
-// there we snap instantly (no transition) to the real equivalent, so the
-// loop never shows a visible jump. Auto-advances every 5s, clicking any
-// off-center card centers it, and dragging (mouse) or swiping (touch) moves
-// the track — CSS scroll-snap handles the settle in both cases. ---
+// --- Kind Words gallery: Embla Carousel's "loop" example
+// (embla-carousel.com/docs/examples/predefined#loop), via CDN. loop:true
+// gives real infinite looping natively — no clone nodes or scroll-position
+// math needed. Autoplay is the official Embla plugin (5s, pauses on
+// hover/focus, resumes after — doesn't die after one interaction).
+// Dragging is Embla's built-in pointer drag; clicking an off-center slide
+// centers it via scrollTo(). ---
 (function () {
+  var viewport = document.getElementById('kw-viewport');
+  if (!viewport || !window.EmblaCarousel) return;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var row = document.getElementById('kw-row');
-  if (!row) return;
-  var realCards = Array.prototype.slice.call(row.querySelectorAll('.kind-words__card'));
-  if (realCards.length < 2) return;
 
-  var firstClone = realCards[0].cloneNode(true);
-  var lastClone = realCards[realCards.length - 1].cloneNode(true);
-  firstClone.setAttribute('aria-hidden', 'true');
-  lastClone.setAttribute('aria-hidden', 'true');
-  firstClone.setAttribute('tabindex', '-1');
-  lastClone.setAttribute('tabindex', '-1');
-  row.insertBefore(lastClone, row.firstChild);
-  row.appendChild(firstClone);
+  var autoplay = window.EmblaCarouselAutoplay && EmblaCarouselAutoplay({
+    delay: 5000,
+    stopOnInteraction: false,
+    stopOnMouseEnter: true,
+    stopOnFocusIn: true
+  });
 
-  var cards = Array.prototype.slice.call(row.children);
-  var current = 1; // index of the real first card, after the prepended clone
+  var emblaApi = EmblaCarousel(viewport, {
+    loop: true,
+    align: 'center'
+  }, autoplay ? [autoplay] : []);
 
-  function cardCenter(el) {
-    // offsetLeft is unreliable here (no positioned ancestor to anchor to),
-    // so measure via getBoundingClientRect relative to the row's own
-    // scrollable content instead — correct regardless of offsetParent.
-    var rowRect = row.getBoundingClientRect();
-    var elRect = el.getBoundingClientRect();
-    return (elRect.left - rowRect.left) + row.scrollLeft + elRect.width / 2;
-  }
-  var settleTimer;
-  function scrollToIndex(i, smooth) {
-    // guard against a stale/out-of-range index (e.g. autoplay ticking again
-    // before wrap-correction has landed) rather than reading off the end
-    // of the cards array
-    if (i < 0) i = 0;
-    if (i > cards.length - 1) i = cards.length - 1;
-    row.scrollTo({ left: cardCenter(cards[i]) - row.clientWidth / 2, behavior: smooth ? 'smooth' : 'auto' });
-    if (smooth) {
-      // native 'scroll' events don't fire reliably for every programmatic
-      // smooth-scroll in every environment, so back the debounced listener
-      // below with a fixed-delay fallback that guarantees settle() runs
-      clearTimeout(settleTimer);
-      settleTimer = setTimeout(settle, 450);
-    }
-  }
-  scrollToIndex(current, false);
+  if (reduce && autoplay) autoplay.stop();
 
-  function nearestIndex() {
-    var center = row.scrollLeft + row.clientWidth / 2;
-    var closest = 0, closestDist = Infinity;
-    cards.forEach(function (el, i) {
-      var d = Math.abs(cardCenter(el) - center);
-      if (d < closestDist) { closestDist = d; closest = i; }
+  emblaApi.slideNodes().forEach(function (slide, index) {
+    slide.addEventListener('click', function () {
+      if (index !== emblaApi.selectedScrollSnap()) emblaApi.scrollTo(index);
     });
-    return closest;
-  }
-  function settle() {
-    current = nearestIndex();
-    if (current === 0) { current = cards.length - 2; scrollToIndex(current, false); }
-    else if (current === cards.length - 1) { current = 1; scrollToIndex(current, false); }
-  }
-  row.addEventListener('scroll', function () {
-    clearTimeout(settleTimer);
-    settleTimer = setTimeout(settle, 120);
-  });
-  // 'scrollend' fires the instant native scrolling actually stops (including
-  // for programmatic smooth scrolls), so the clone->real wrap-correction
-  // lands immediately instead of waiting out the fallback timers above —
-  // that wait is what was reading as a "pause" at the loop boundary.
-  row.addEventListener('scrollend', function () {
-    clearTimeout(settleTimer);
-    settle();
-  });
-
-  cards.forEach(function (el, i) {
-    el.addEventListener('click', function () {
-      if (dragged) return;
-      stopAuto();
-      current = i;
-      scrollToIndex(i, !reduce);
-      startAuto();
+    slide.addEventListener('keydown', function (e) {
+      if ((e.key === 'Enter' || e.key === ' ') && index !== emblaApi.selectedScrollSnap()) {
+        e.preventDefault();
+        emblaApi.scrollTo(index);
+      }
     });
   });
-
-  // click-and-drag for mouse; touch keeps native swipe scrolling untouched
-  var isDown = false, dragged = false, startX = 0, startScroll = 0;
-  row.addEventListener('pointerdown', function (e) {
-    if (e.pointerType !== 'mouse') return;
-    isDown = true;
-    dragged = false;
-    startX = e.clientX;
-    startScroll = row.scrollLeft;
-    row.classList.add('is-dragging');
-    row.setPointerCapture(e.pointerId);
-    stopAuto();
-  });
-  row.addEventListener('pointermove', function (e) {
-    if (!isDown) return;
-    var dx = e.clientX - startX;
-    if (Math.abs(dx) > 4) dragged = true;
-    row.scrollLeft = startScroll - dx;
-  });
-  function endDrag() {
-    if (!isDown) return;
-    isDown = false;
-    row.classList.remove('is-dragging');
-    clearTimeout(settleTimer);
-    setTimeout(function () {
-      settle();
-      scrollToIndex(current, !reduce);
-      setTimeout(function () { dragged = false; }, 0);
-      startAuto();
-    }, 30);
-  }
-  row.addEventListener('pointerup', endDrag);
-  row.addEventListener('pointercancel', endDrag);
-
-  var timer;
-  function startAuto() {
-    if (reduce) return;
-    stopAuto();
-    timer = setInterval(function () {
-      current += 1;
-      scrollToIndex(current, true);
-    }, 5000);
-  }
-  function stopAuto() { if (timer) clearInterval(timer); }
-
-  row.addEventListener('mouseenter', stopAuto);
-  row.addEventListener('mouseleave', function () { if (!isDown) startAuto(); });
-  row.addEventListener('focusin', stopAuto);
-  row.addEventListener('focusout', function (e) {
-    if (!row.contains(e.relatedTarget)) startAuto();
-  });
-  window.addEventListener('resize', function () { scrollToIndex(current, false); });
-
-  if (!reduce) startAuto();
 })();
 </script>
 </body>
