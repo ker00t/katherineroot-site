@@ -349,12 +349,50 @@
         text-decoration:none;transition:transform .3s var(--spring)}
   .site-footer__links a:hover,.site-footer__links a:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
 
+  /* --- secret menu: an invisible hotspot tucked in the very top-right
+     corner. On desktop it's completely hidden until you hover it, at
+     which point a hand-drawn arrow + note point back at the corner —
+     click opens the same links as the footer. On touch there's no
+     hover to discover it by, so the hint stays faintly visible instead
+     of being truly hidden. --- */
+  .secret-menu{position:fixed;top:0;right:0;z-index:60}
+  .secret-menu__trigger{position:absolute;top:0;right:0;width:84px;height:84px;
+        background:none;border:none;padding:0;margin:0;cursor:pointer;
+        -webkit-tap-highlight-color:transparent}
+  .secret-menu__hint{position:absolute;top:10px;right:14px;display:flex;
+        flex-direction:column;align-items:flex-end;gap:2px;
+        opacity:0;pointer-events:none;transition:opacity .3s ease}
+  @media (hover:hover){
+    .secret-menu__trigger:hover .secret-menu__hint,
+    .secret-menu__trigger:focus-visible .secret-menu__hint{opacity:1}
+  }
+  @media (hover:none){
+    .secret-menu__hint{opacity:.85}
+  }
+  .secret-menu__arrow{width:34px;height:34px;color:#fff;display:block;
+        filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+  .secret-menu__note{--tilt:-3deg;background:#fff;color:var(--charcoal);font-size:13px;
+        font-weight:600;padding:6px 12px;border-radius:999px;white-space:nowrap;
+        box-shadow:0 8px 20px rgba(0,0,0,.25);transform:rotate(var(--tilt))}
+  .secret-menu__panel{position:absolute;top:70px;right:12px;background:#fff;
+        border-radius:18px;padding:10px;display:flex;flex-direction:column;gap:2px;
+        min-width:180px;box-shadow:0 24px 60px rgba(0,0,0,.35);
+        opacity:0;transform:translateY(-10px) scale(.94);transform-origin:top right;
+        pointer-events:none;transition:opacity .25s var(--spring),transform .25s var(--spring)}
+  .secret-menu.is-open .secret-menu__panel{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+  .secret-menu__panel a{--tilt:-2deg;color:var(--charcoal);text-decoration:none;font-weight:600;
+        font-size:16px;padding:10px 14px;border-radius:12px;
+        transition:background-color .2s ease,transform .2s var(--spring)}
+  .secret-menu__panel a:hover,.secret-menu__panel a:focus-visible{
+        background:rgba(244,85,167,.12);transform:translateX(-4px) rotate(var(--tilt));outline:none}
+
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto}
     body{animation:none;background-color:#f455a7}
     .card__fan-img{display:none}
     .letter,.glyph,.tag,.cta,.card,.company,.company__badge,.company__logo,
-    .say-hi__icon,.site-footer__links a,.screens__slide img,#screens-lightbox-close{transition:none !important}
+    .say-hi__icon,.site-footer__links a,.screens__slide img,#screens-lightbox-close,
+    .secret-menu__hint,.secret-menu__panel,.secret-menu__panel a{transition:none !important}
     .letter:hover .glyph,.letter.is-active .glyph{transform:none;color:#fff}
   }
 </style>
@@ -683,6 +721,23 @@
     </div>
   </footer>
 
+  <!-- secret menu easter egg: invisible until hovered/tapped in the very
+       top-right corner, then reveals a hint pointing back at it; clicking
+       opens the same links as the footer. -->
+  <div class="secret-menu" id="secret-menu">
+    <button type="button" class="secret-menu__trigger" id="secret-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Secret menu">
+      <span class="secret-menu__hint" aria-hidden="true">
+        <svg class="secret-menu__arrow" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22C4 10 14 4 24 5c6 .6 10 4 12 8"/><path d="M28 6l8 7-9 4"/></svg>
+        <span class="secret-menu__note">Ooooh a secret menu!</span>
+      </span>
+    </button>
+    <div class="secret-menu__panel" id="secret-menu-panel" role="menu" aria-label="Secret menu">
+      <a role="menuitem" href="/assets/KatherineRootResume2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">Resume</a>
+      <a role="menuitem" href="/casestudies/index.html" style="--tilt:3deg">Case Studies</a>
+      <a role="menuitem" href="/sideprojects/index.html" style="--tilt:-2deg">Side Projects</a>
+    </div>
+  </div>
+
 <script>
 // --- hero letter-flip: same interaction as the live site (hover flips a
 // letter and shows its tag; touch taps one letter active at a time;
@@ -822,6 +877,29 @@
   });
   dialog.addEventListener('close', function () {
     lightboxImg.src = '';
+  });
+})();
+</script>
+<script>
+// --- secret menu: click the corner hotspot to toggle the panel open;
+// click outside or Escape closes it. ---
+(function () {
+  var menu = document.getElementById('secret-menu');
+  var trigger = document.getElementById('secret-menu-trigger');
+  if (!menu || !trigger) return;
+
+  function isOpen() { return menu.classList.contains('is-open'); }
+  function open() { menu.classList.add('is-open'); trigger.setAttribute('aria-expanded', 'true'); }
+  function close() { menu.classList.remove('is-open'); trigger.setAttribute('aria-expanded', 'false'); }
+
+  trigger.addEventListener('click', function () {
+    if (isOpen()) close(); else open();
+  });
+  document.addEventListener('click', function (e) {
+    if (isOpen() && !menu.contains(e.target)) close();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && isOpen()) close();
   });
 })();
 </script>
