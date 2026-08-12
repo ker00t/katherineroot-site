@@ -177,7 +177,7 @@ a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
 .card--soon .card__desc{opacity:.55}
 .card__arrow{margin-top:auto;line-height:0}
 .card__arrow svg{width:26px;height:26px}
-@media (max-width:700px){
+@media (max-width:768px){
   /* case-study cards side-scroll horizontally on mobile instead of
      stacking/wrapping vertically — cards keep a fixed width (flex-shrink
      disabled) so the row overflows and scrolls rather than squeezing. */
