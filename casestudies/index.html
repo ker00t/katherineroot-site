@@ -3,114 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/assets/favicon.png" type="image/png">
 <title>Case Studies | Katherine Root</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
 <style>
-  /* --- subpage shell: same tokens/animated background/footer as
-     sideprojects/. Aggregates every case-study card currently on
-     /manta/ and /mighty/ onto one page, grouped by company. --- */
-  :root{
-    --magenta:#FF2E93; --blue:#0074AF; --indigo:#1B45E8;
-    --violet:#7B2FF7; --purple:#A614FE; --charcoal:#17140F; --cream:#FFF1D6;
-    --lime:#bdf300; --accent:var(--lime);
-    --spring: cubic-bezier(.34,1.56,.64,1);
-  }
-  *{box-sizing:border-box}
-  html{background:var(--lime);scroll-behavior:smooth}
-  body{margin:0;color:#fff;font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
-       -webkit-font-smoothing:antialiased;background:#f455a7;
-       animation:bgCycle 200s ease-in-out infinite}
-  @keyframes bgCycle{
-    0%,6%{background-color:#f455a7}
-    20%,26%{background-color:#E81BBC}
-    40%,46%{background-color:var(--purple)}
-    60%,66%{background-color:var(--violet)}
-    80%,86%{background-color:var(--blue)}
-    100%{background-color:#f455a7}
-  }
-  a{color:inherit}
+  /* --- subpage shell: shared tokens/animated background/back-link/
+     say-hi/footer/card now live in /assets/site.css. What's left here is
+     this page's own page-head/say-hi/footer size overrides (shrunk down
+     from the shared homepage-sized defaults to the subpage-template
+     scale) plus its own group/cards layout. Aggregates every case-study
+     card currently on /manta/ and /mighty/ onto one page, grouped by
+     company. --- */
 
-  .back-link{position:fixed;top:24px;left:24px;z-index:10}
-  .back-link a{--tilt:-3deg;display:flex;align-items:center;justify-content:center;
-        width:48px;height:48px;border-radius:50%;border:2px solid #fff;color:#fff;
-        text-decoration:none;transition:transform .3s var(--spring),background-color .2s ease,color .2s ease}
-  .back-link a:hover,.back-link a:focus-visible{transform:translateY(-4px) rotate(var(--tilt));
-        background:var(--lime);color:#000;border-color:var(--lime);outline:none}
-  .back-link svg{width:22px;height:22px}
-
-  .page-head{max-width:900px;margin:0 auto;padding:clamp(120px,16vw,180px) clamp(20px,6vw,64px) clamp(24px,5vw,40px);
-        text-align:center}
-  .page-head__title{font-size:clamp(40px,8vw,88px);font-weight:600;letter-spacing:-.03em;margin:0 0 16px}
-  .page-head__intro{font-size:clamp(17px,2.2vw,22px);opacity:.9;margin:0;line-height:1.5}
+  .page-head{max-width:900px;padding-bottom:clamp(24px,5vw,40px)}
+  .page-head__title{font-size:clamp(40px,8vw,88px)}
+  .page-head__intro{font-size:clamp(17px,2.2vw,22px);line-height:1.5}
 
   .group{max-width:1280px;margin:0 auto;padding:clamp(48px,8vw,72px) clamp(20px,6vw,64px) 0}
   .group__title{font-size:clamp(26px,4vw,40px);font-weight:600;letter-spacing:-.02em;margin:0 0 10px}
   .group__intro{font-size:clamp(16px,1.8vw,19px);opacity:.85;margin:0 0 32px;max-width:640px;line-height:1.5}
   .group__intro a{text-decoration:underline;text-underline-offset:3px}
 
+  /* this page's own card-grid wrapper (differs per page); .card/
+     .card__panel/etc. themselves are shared — see site.css */
   .cards{display:flex;gap:25px;flex-wrap:wrap}
-  .card{--tilt:-2deg;position:relative;display:block;width:min(380px,100%);
-        text-decoration:none;color:#fff;transition:transform .3s var(--spring)}
-  .card:hover,.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
-  .card__panel{background:rgba(255,255,255,.1);border-radius:22px;min-height:200px;
-        padding:30px;text-align:left;display:flex;flex-direction:column;gap:14px;height:100%;
-        transition:background-color .3s ease,color .3s ease}
-  .card:hover .card__panel,.card:focus-visible .card__panel{background:#fff;color:var(--charcoal)}
-  .card:hover .card__tag,.card:focus-visible .card__tag{background:#f455a7;color:#fff}
-  .card:hover .card__desc,.card:focus-visible .card__desc{opacity:.7}
-  .card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:13px;font-weight:600;
-        padding:5px 14px;border-radius:100px;transition:background-color .3s ease,color .3s ease}
-  .card__title{font-size:clamp(20px,2.4vw,26px);font-weight:600;margin:0}
-  .card__desc{font-size:16px;line-height:1.5;margin:0;opacity:.9;transition:opacity .3s ease}
-  .card__arrow{margin-top:auto;line-height:0}
-  .card__arrow svg{width:24px;height:24px}
-
-  @media (max-width:700px){
-    /* case-study cards side-scroll horizontally on mobile instead of
-       stacking/wrapping vertically — cards keep a fixed width (flex-shrink
-       disabled) so the row overflows and scrolls rather than squeezing. */
-    .cards{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
-          scroll-snap-type:x proximity;padding-bottom:8px}
-    .card{flex:0 0 min(300px,80vw);width:auto;scroll-snap-align:start}
-  }
-
-  .card--soon{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%F0%9F%99%85%E2%80%8D%E2%99%80%EF%B8%8F</text></svg>") 16 16,default}
-  .card--soon:hover,.card--soon:focus-visible{transform:none}
-  .card--soon .card__panel{background:rgba(255,255,255,.06)}
-  .card--soon:hover .card__panel{background:rgba(255,255,255,.06);color:#fff}
-  .card--soon .card__tag{background:rgba(255,255,255,.25);color:#fff}
-  .card--soon:hover .card__tag{background:rgba(255,255,255,.25);color:#fff}
-  .card--soon .card__desc{opacity:.75}
-  .card--soon:hover .card__desc{opacity:.75}
-
-  .say-hi{max-width:700px;margin:0 auto;padding:clamp(64px,10vw,100px) clamp(20px,6vw,64px) clamp(80px,12vw,140px);text-align:center}
-  .say-hi__title{font-size:clamp(24px,3.4vw,36px);font-weight:600;margin:0 0 32px}
-  .say-hi__icons{display:flex;gap:18px;justify-content:center}
-  .say-hi__icon{--tilt:-1deg;width:66px;height:66px;border-radius:14px;border:2px solid #fff;
-        display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;
-        transition:transform .3s var(--spring),background-color .25s ease,color .2s ease,border-color .25s ease}
-  .say-hi__icon:hover,.say-hi__icon:focus-visible{transform:translateY(-6px) rotate(var(--tilt));
-        background:var(--lime);color:#000;border-color:var(--lime);outline:none}
-  .say-hi__icon svg{width:26px;height:26px}
-  .say-hi__icon--linkedin{font-size:26px;font-weight:700;letter-spacing:-.02em}
-
-  .site-footer{background:linear-gradient(180deg,rgba(189,243,0,0) 0%,var(--lime) 100%);
-        padding:clamp(64px,10vw,120px) 24px clamp(48px,8vw,80px);
-        display:flex;flex-direction:column;align-items:center;gap:40px;text-align:center}
-  .site-footer__heading{display:flex;flex-direction:column;gap:6px}
-  .site-footer__name{font-size:clamp(40px,9vw,120px);font-weight:600;letter-spacing:-.04em;margin:0}
-  .site-footer__tag{font-size:clamp(14px,1.6vw,18px);margin:0;opacity:.9}
-  .site-footer__links{display:flex;flex-direction:column;gap:6px}
-  .site-footer__links a{--tilt:-2deg;font-size:clamp(24px,4vw,44px);font-weight:600;letter-spacing:-.03em;
-        text-decoration:none;transition:transform .3s var(--spring)}
-  .site-footer__links a:hover,.site-footer__links a:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
+  .card__panel{height:100%}
 
   @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto}
-    body{animation:none;background-color:#f455a7}
-    .back-link a,.card,.card__panel,.card__tag,.card__desc,.say-hi__icon,.site-footer__links a{transition:none !important}
+    .card,.card__panel,.card__tag,.card__desc{transition:none !important}
   }
 </style>
 </head>
@@ -124,71 +47,62 @@
 
   <div class="page-head">
     <h1 class="page-head__title">Case Studies</h1>
-    <p class="page-head__intro">Every case study from my time at Manta Cares and Mighty Networks, all in one place.</p>
   </div>
 
   <div class="group">
     <h2 class="group__title">Manta Cares</h2>
-    <p class="group__intro">As the only designer at this 0-to-1 startup, I helped build software to make the experience of having cancer just a little bit easier. <a href="https://mantacares.com" target="_blank" rel="noopener noreferrer">Visit Manta Cares</a></p>
+    <p class="group__intro">As the only designer at this 0-to-1 startup, I helped build software to make the experience of having cancer just a little bit easier.</p>
     <div class="cards">
-      <a class="card" href="/casestudies/manta/year-in-review/" style="--tilt:-3deg">
+        <a class="card" href="/casestudies/manta/brand-evolution/" style="--tilt:2deg">
         <span class="card__panel">
-          <span class="card__tag">case study</span>
-          <span class="card__title">The Year Manta Became a Companion</span>
-          <span class="card__desc">A year ago, Manta Cares was a website you visited. Today it's an app that walks beside you — the story of how we turned a library of cancer content into a companion for the scariest year of someone's life.</span>
-          <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-        </span>
-      </a>
-      <a class="card" href="/casestudies/manta/dashboard-redesign/" style="--tilt:2deg">
-        <span class="card__panel">
-          <span class="card__tag">case study</span>
-          <span class="card__title">Redesigning the Dashboard Around One Person</span>
-          <span class="card__desc">When the whole company is moving fast, the most useful thing a designer can do is name the one person every decision answers to. Here's how designing the dashboard for her changed almost everything.</span>
+          <span class="card__tag">CASE STUDY</span>
+          <span class="card__title">Maturing Manta's Brand</span>
+          <span class="card__desc">I took on evolving the Manta Cares brand from a scrappy startup look into something a frightened person could trust at a glance, without losing the warmth that made us worth trusting in the first place.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </a>
       <a class="card" href="/casestudies/manta/appointment-prep/" style="--tilt:-2deg">
         <span class="card__panel">
-          <span class="card__tag">case study</span>
+          <span class="card__tag">CASE STUDY</span>
           <span class="card__title">The Eight-Minute Appointment</span>
           <span class="card__desc">A rushed visit with an oncologist is the hardest moment in the whole journey. Here's how we designed a before/during/after ritual to meet it.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </a>
-      <a class="card" href="/casestudies/manta/web-to-mobile/" style="--tilt:3deg">
+      <div class="card card--soon" style="--tilt:-2deg">
         <span class="card__panel">
-          <span class="card__tag">case study</span>
-          <span class="card__title">From Tab to Pocket</span>
-          <span class="card__desc">Getting our least tech-confident users from a browser tab into a native app, logged in, without a single moment of "wait, is this right?"</span>
-          <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-        </span>
-      </a>
-      <a class="card" href="/casestudies/manta/mobile-app/" style="--tilt:-2deg">
-        <span class="card__panel">
-          <span class="card__tag">case study</span>
+          <span class="card__tag">CASE STUDY</span>
           <span class="card__title">In Your Pocket</span>
           <span class="card__desc">Our users were already treating Manta Cares like an app. They just didn't have one yet. This is the story of finally giving them the one they'd been improvising.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
-      </a>
-      <a class="card" href="/casestudies/manta/brand-evolution/" style="--tilt:2deg">
+      </div>
+      <div class="card card--soon" style="--tilt:-3deg">
         <span class="card__panel">
-          <span class="card__tag">case study</span>
-          <span class="card__title">Earning Trust on Sight</span>
-          <span class="card__desc">Maturing the Manta Cares brand from a scrappy startup look into something a frightened person could trust at a glance — without losing the warmth that made us worth trusting in the first place.</span>
+          <span class="card__tag">CASE STUDY</span>
+          <span class="card__title">The Year Manta Became a Companion</span>
+          <span class="card__desc">A year ago, Manta Cares was a website you visited. Today it's an app that walks beside you — the story of how we turned a library of cancer content into a companion for the scariest year of someone's life.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
-      </a>
+      </div>
+      <div class="card card--soon" style="--tilt:2deg">
+        <span class="card__panel">
+          <span class="card__tag">CASE STUDY</span>
+          <span class="card__title">Redesigning the Dashboard Around One Person</span>
+          <span class="card__desc">When the whole company is moving fast, the most useful thing a designer can do is name the one person every decision answers to. Here's how designing the dashboard for her changed almost everything.</span>
+          <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </span>
+      </div>
     </div>
   </div>
 
   <div class="group">
     <h2 class="group__title">Mighty Networks</h2>
-    <p class="group__intro">I spent ten years building and running the design organization at Mighty Networks. Here are case studies from some of my favorite projects during my tenure. <a href="https://www.mightynetworks.com" target="_blank" rel="noopener noreferrer">Visit Mighty Networks</a></p>
+    <p class="group__intro">I spent ten years building and running the design organization at Mighty Networks. Here are case studies from some of my favorite projects during my tenure.</p>
     <div class="cards">
       <a class="card" href="/casestudies/mighty/first-app-experience/" style="--tilt:-2deg">
         <span class="card__panel">
-          <span class="card__tag">case study</span>
+          <span class="card__tag">CASE STUDY</span>
           <span class="card__title">First App Experience</span>
           <span class="card__desc">For years the experience of downloading the Mighty Networks app was crusty and abandoned, forever deemed a P2 not worth updating. Here's the value of making a killer first impression.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
@@ -196,7 +110,7 @@
       </a>
       <a class="card" href="/casestudies/mighty/introducing-ai/" style="--tilt:2deg">
         <span class="card__panel">
-          <span class="card__tag">case study</span>
+          <span class="card__tag">CASE STUDY</span>
           <span class="card__title">Introducing AI</span>
           <span class="card__desc">When it became clear in early 2023 that AI was changing the tech industry, we held a hackathon to put it to work for Mighty — and ultimately released a powerful set of AI features.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
@@ -204,7 +118,7 @@
       </a>
       <a class="card" href="/casestudies/mighty/people-magic/" style="--tilt:-3deg">
         <span class="card__panel">
-          <span class="card__tag">case study</span>
+          <span class="card__tag">CASE STUDY</span>
           <span class="card__title">Unlocking People Magic</span>
           <span class="card__desc">As a B2B2C company, Mighty Networks has to balance catering not just to Hosts, but to their members. If you build for the members, the Hosts will follow — so how do you make that experience truly magical?</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
@@ -212,21 +126,21 @@
       </a>
       <div class="card card--soon" style="--tilt:3deg">
         <span class="card__panel">
-          <span class="card__tag">coming soon</span>
+          <span class="card__tag">COMING SOON</span>
           <span class="card__title">A Mighty What If&hellip;</span>
           <span class="card__desc">Mighty has struggled to identify a core persona or user flow for Hosts. Here's what it might look like to narrow in on a few of the biggest features — and its potential business impact.</span>
         </span>
       </div>
       <div class="card card--soon" style="--tilt:-2deg">
         <span class="card__panel">
-          <span class="card__tag">coming soon</span>
+          <span class="card__tag">COMING SOON</span>
           <span class="card__title">Spaces and Membership Plans</span>
           <span class="card__desc">In 2022 we took on an ambitious, structural reorganization of the product — rebuilding the mental model, navigation system, and internal architecture. Did it pay off? Spoiler: yes, big time.</span>
         </span>
       </div>
       <div class="card card--soon" style="--tilt:3deg">
         <span class="card__panel">
-          <span class="card__tag">coming soon</span>
+          <span class="card__tag">COMING SOON</span>
           <span class="card__title">A Unique Design System</span>
           <span class="card__desc">Built from the ground up before many of today's best practices and collaborative tools existed — unique to the team and its development cycle, grown into a company-wide documentation system.</span>
         </span>
@@ -234,8 +148,16 @@
     </div>
   </div>
 
-  <section class="say-hi" aria-label="Contact">
-    <h2 class="say-hi__title">Say hi sometime</h2>
+  <footer class="site-footer" id="footer">
+    <div class="site-footer__heading">
+      <a href="/" class="site-footer__name">Katherine Root</a>
+      <p class="site-footer__tag">Product, AI, and Experience Design Expert</p>
+    </div>
+    <div class="site-footer__links">
+      <a href="/assets/KatherineRootResume2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">Resume</a>
+      <a href="/casestudies/index.html" style="--tilt:3deg">Case Studies</a>
+      <a href="/sideprojects/index.html" style="--tilt:-4deg">Side Projects</a>
+    </div>
     <div class="say-hi__icons">
       <a class="say-hi__icon say-hi__icon--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="--tilt:-2deg"><span aria-hidden="true">in</span></a>
       <a class="say-hi__icon" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="--tilt:2deg">
@@ -244,18 +166,6 @@
       <a class="say-hi__icon" href="mailto:keroot@gmail.com" aria-label="Email" style="--tilt:-3deg">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
       </a>
-    </div>
-  </section>
-
-  <footer class="site-footer" id="footer">
-    <div class="site-footer__heading">
-      <p class="site-footer__name">Katherine Root</p>
-      <p class="site-footer__tag">Product, AI, and Experience Design Expert</p>
-    </div>
-    <div class="site-footer__links">
-      <a href="/assets/KatherineRootResume2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">Resume</a>
-      <a href="/casestudies/index.html" style="--tilt:3deg">Case Studies</a>
-      <a href="/" style="--tilt:-4deg">Home</a>
     </div>
   </footer>
 
