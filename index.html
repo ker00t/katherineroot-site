@@ -399,27 +399,39 @@
         text-decoration:none;transition:transform .3s var(--spring)}
   .site-footer__links a:hover,.site-footer__links a:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
 
-  /* --- secret menu: matches Figma's "secret menu" mock. Unlike the earlier
-     build, the hamburger icon itself is always visible in the top-right
-     corner (not a fully invisible hotspot) — the "secret" part is the
-     hand-drawn arrow + tilted note that appears on hover, pointing back at
-     it. Click swaps the icon for a close X and slides in a full-height
-     lime panel over a dark scrim, matching the mock's link list (Home,
-     Resume, Case Studies, Side Projects) plus the say-hi social icons. On
-     touch there's no hover, so the hint stays hidden until actually
-     tapped (tied to the same .is-open state as the panel, via JS below)
-     rather than showing up front. --- */
+  /* --- secret menu: matches Figma's "secret menu" mock. A subtle sparkly
+     glow sits permanently in the top-right corner (per the mock's own
+     annotation: "add a subtle, sparkly effect to the top right corner of
+     the page") — genuinely a fixture of the page, not hover-gated. The
+     hamburger icon itself IS hover-gated, same as the hand-drawn arrow +
+     tilted note next to it — both stay invisible until the (larger,
+     still-invisible) trigger hotspot is hovered, so the icon doesn't spoil
+     the surprise before you find it. Click swaps the icon for a close X
+     and slides in a full-height lime panel over a dark scrim, matching the
+     mock's link list (Home, Resume, Case Studies, Side Projects) plus the
+     say-hi social icons. On touch there's no hover, so the icon/hint stay
+     hidden until the hotspot is actually tapped (tied to the same
+     .is-open state as the panel, via JS below) rather than showing up
+     front. --- */
   .secret-menu{position:fixed;inset:0;z-index:60;pointer-events:none}
-  .secret-menu__trigger{position:fixed;top:28px;right:28px;z-index:2;width:40px;height:40px;
-        background:none;border:none;padding:0;margin:0;cursor:pointer;color:#fff;
+  .secret-menu__glow{position:fixed;top:-56px;right:-70px;width:340px;height:288px;
+        z-index:1;pointer-events:none}
+  .secret-menu__trigger{position:fixed;top:16px;right:16px;z-index:3;width:64px;height:64px;
+        display:flex;align-items:flex-start;justify-content:flex-end;padding:12px;
+        background:none;border:none;cursor:pointer;color:#fff;
         pointer-events:auto;-webkit-tap-highlight-color:transparent;
         transition:color .3s var(--spring)}
   .secret-menu.is-open .secret-menu__trigger{color:var(--charcoal)}
-  .secret-menu__icon{display:block;width:100%;height:100%}
+  .secret-menu__icon{display:block;width:36px;height:36px;flex:none}
+  .secret-menu__icon--menu{opacity:0;transition:opacity .3s ease}
+  @media (hover:hover){
+    .secret-menu__trigger:hover .secret-menu__icon--menu,
+    .secret-menu__trigger:focus-visible .secret-menu__icon--menu{opacity:1}
+  }
   .secret-menu__icon--close{display:none}
   .secret-menu.is-open .secret-menu__icon--menu{display:none}
-  .secret-menu.is-open .secret-menu__icon--close{display:block}
-  .secret-menu__hint{position:absolute;top:32px;right:46px;display:flex;
+  .secret-menu.is-open .secret-menu__icon--close{display:block;opacity:1}
+  .secret-menu__hint{position:absolute;top:20px;right:34px;display:flex;
         flex-direction:column;align-items:flex-end;
         opacity:0;pointer-events:none;transition:opacity .3s ease}
   @media (hover:hover){
@@ -801,12 +813,47 @@
     </div>
   </footer>
 
-  <!-- secret menu easter egg, per Figma's "secret menu" mock: a persistently
-       visible hamburger icon top-right that reveals a hand-drawn arrow +
-       tilted note on hover/tap; clicking swaps it for a close icon and
-       slides in a full-height lime panel (over a dark scrim) with the same
-       links as the footer plus Side Projects, and the say-hi social icons. -->
+  <!-- secret menu easter egg, per Figma's "secret menu" mock: a subtle
+       sparkly glow is a permanent fixture of the top-right corner (per the
+       mock's own annotation), while the hamburger icon + hand-drawn arrow
+       + tilted note underneath it stay invisible until hovered/tapped;
+       clicking swaps the icon for a close icon and slides in a
+       full-height lime panel (over a dark scrim) with the same links as
+       the footer plus Side Projects, and the say-hi social icons. -->
   <div class="secret-menu" id="secret-menu">
+    <svg class="secret-menu__glow" viewBox="0 0 520 440" aria-hidden="true">
+      <defs>
+        <radialGradient id="secret-menu-glow-big" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#FFB8DB" stop-opacity=".65"/>
+          <stop offset="50%" stop-color="#FF8CBF" stop-opacity=".34"/>
+          <stop offset="100%" stop-color="#F545A6" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="secret-menu-glow-small" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#FFD9EB" stop-opacity=".68"/>
+          <stop offset="55%" stop-color="#FFB8DB" stop-opacity=".32"/>
+          <stop offset="100%" stop-color="#FF8CBF" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="260" cy="220" rx="260" ry="220" fill="url(#secret-menu-glow-big)"/>
+      <ellipse cx="270" cy="200" rx="140" ry="120" fill="url(#secret-menu-glow-small)"/>
+      <g fill="#FFD6EE" opacity=".48">
+        <circle cx="238" cy="194" r="5"/><circle cx="288" cy="178" r="3.5"/><circle cx="216" cy="172" r="2.5"/>
+        <circle cx="322" cy="208" r="4"/><circle cx="360" cy="182" r="2"/><circle cx="194" cy="212" r="3"/>
+        <circle cx="390" cy="228" r="3"/><circle cx="168" cy="242" r="2.5"/><circle cx="340" cy="256" r="2"/>
+        <circle cx="260" cy="264" r="1.5"/><circle cx="418" cy="200" r="2.5"/><circle cx="148" cy="204" r="2"/>
+        <circle cx="116" cy="182" r="1.5"/><circle cx="440" cy="244" r="1.5"/><circle cx="188" cy="278" r="2.5"/>
+        <circle cx="376" cy="278" r="1.5"/><circle cx="80" cy="222" r="1.5"/><circle cx="452" cy="272" r="2"/>
+        <circle cx="120" cy="266" r="1"/><circle cx="300" cy="300" r="1.5"/><circle cx="410" cy="308" r="1"/>
+        <circle cx="58" cy="250" r="1"/><circle cx="220" cy="314" r="1"/><circle cx="458" cy="320" r="1.5"/>
+        <circle cx="90" cy="296" r="1"/>
+      </g>
+      <g fill="#fff4fb" opacity=".41"><rect x="314" y="190" width="1" height="9" rx=".5"/><rect x="310" y="194" width="9" height="1" rx=".5"/></g>
+      <g fill="#fff" opacity=".45"><rect x="269" y="218" width="2" height="12" rx="1"/><rect x="264" y="223" width="12" height="2" rx="1"/></g>
+      <g fill="#ffebf6" opacity=".36"><rect x="187" y="234" width="2" height="8" rx="1"/><rect x="184" y="237" width="8" height="2" rx="1"/></g>
+      <g fill="#ffd8ee" opacity=".28"><rect x="399" y="250" width="1" height="7" rx=".5"/><rect x="396" y="253" width="7" height="1" rx=".5"/></g>
+      <g fill="#ffd0ea" opacity=".2"><rect x="134" y="268" width="2" height="6" rx="1"/><rect x="132" y="270" width="6" height="2" rx="1"/></g>
+      <g fill="#fff" opacity=".39"><rect x="355" y="168" width="2" height="8" rx="1"/><rect x="352" y="171" width="8" height="2" rx="1"/></g>
+    </svg>
     <button type="button" class="secret-menu__trigger" id="secret-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Secret menu">
       <svg class="secret-menu__icon secret-menu__icon--menu" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 12H30M10 20H30M10 28H30M6 2H34C36.2091 2 38 3.79086 38 6V34C38 36.2091 36.2091 38 34 38H6C3.79086 38 2 36.2091 2 34V6C2 3.79086 3.79086 2 6 2Z"/></svg>
       <svg class="secret-menu__icon secret-menu__icon--close" viewBox="0 0 29 29" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M26.5 2.5L2.5 26.5M2.5 2.5L26.5 26.5"/></svg>
