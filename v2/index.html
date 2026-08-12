@@ -101,35 +101,36 @@
   .letter.is-active .tag{opacity:1;transform:translateX(-50%) translateY(0) scale(1) rotate(var(--tilt))}
   .hero__sub{font-size:clamp(17px,2vw,24px);max-width:1000px;margin:0}
 
-  /* --- companies: 5-logo row, new SVG logo set from Figma (replaces the
-     old raster set), in the new order (Simply Hired, Launch, Manta,
-     Mighty, Copper). On hover: same tilt-on-hover language as the rest
-     of the site (own --tilt per company), the mark crossfades+pops from
-     its white cutout to the real "color" variant, with a white die-cut
-     "sticker" outline that hugs the color mark's own silhouette (a
-     stack of offset drop-shadows follows the art's alpha edge, unlike a
-     box-shadow which would just be a rectangle) instead of a plain
-     rounded card behind it. --- */
+  /* --- companies: 5-logo row, new SVG logo set from Figma, in the new
+     order (Simply Hired, Launch, Manta, Mighty, Copper). On hover: same
+     tilt-on-hover language as the rest of the site (own --tilt per
+     company), the mark crossfades+pops from its white cutout to the
+     real "color" variant. The color variant is Figma's own multi-layer
+     composition (a baked-in background shape + the real brand mark,
+     sometimes +1 more layer) reproduced as stacked, percentage-inset
+     child images — no synthetic background effect of ours on top. --- */
   .companies__row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
            gap:clamp(28px,5vw,67px);row-gap:56px}
   .company{--tilt:-2deg;position:relative;transition:transform .3s var(--spring)}
   .company:hover,.company:focus-within{transform:translateY(-6px) rotate(var(--tilt))}
   .company__badge{position:relative;display:flex;align-items:center;justify-content:center;padding:18px}
   .company__logo{display:block;object-fit:contain;transition:opacity .45s var(--spring)}
-  .company__logo--color{position:absolute;inset:18px;opacity:0;transform:scale(.88);
-           transition:opacity .45s var(--spring) .05s,transform .45s var(--spring) .05s;
-           filter:
-             drop-shadow(4px 0 0 #fff) drop-shadow(-4px 0 0 #fff)
-             drop-shadow(0 4px 0 #fff) drop-shadow(0 -4px 0 #fff)
-             drop-shadow(2.8px 2.8px 0 #fff) drop-shadow(-2.8px 2.8px 0 #fff)
-             drop-shadow(2.8px -2.8px 0 #fff) drop-shadow(-2.8px -2.8px 0 #fff)}
+  .company__logo--color{position:absolute;left:50%;top:50%;opacity:0;
+           transform:translate(-50%,-50%) scale(.88);
+           transition:opacity .45s var(--spring) .05s,transform .45s var(--spring) .05s}
   .company:hover .company__logo--white,.company:focus-within .company__logo--white{opacity:0;transition-delay:0s}
-  .company:hover .company__logo--color,.company:focus-within .company__logo--color{opacity:1;transform:scale(1)}
+  .company:hover .company__logo--color,.company:focus-within .company__logo--color{
+           opacity:1;transform:translate(-50%,-50%) scale(1)}
+  .company__logo-layer{position:absolute;display:block;max-width:none}
   .company__logo--simply{height:clamp(64px,9vw,106px);width:auto}
   .company__logo--launch{width:clamp(120px,17vw,242px);height:auto}
   .company__logo--manta{width:clamp(70px,10vw,140px);height:clamp(70px,10vw,140px)}
   .company__logo--mighty{width:clamp(110px,15.5vw,221px);height:auto}
   .company__logo--copper{width:clamp(70px,10vw,140px);height:clamp(70px,10vw,140px)}
+  .company__logo--color--simply{width:clamp(70px,10vw,120px);aspect-ratio:118.722/133.5}
+  .company__logo--color--launch{width:clamp(130px,18.5vw,260px);aspect-ratio:284/98}
+  .company__logo--color--manta,.company__logo--color--copper{width:clamp(75px,10.5vw,148px);aspect-ratio:1/1}
+  .company__logo--color--mighty{width:clamp(120px,17vw,236px);aspect-ratio:248/90}
 
   /* --- case-study cards: strategy / people / leadership sections. Not-yet-
      live cards (matching the real site's "coming soon" cards) get a muted
@@ -139,12 +140,18 @@
         min-height:280px;padding:34px;text-align:left;display:flex;flex-direction:column;gap:16px;
         text-decoration:none;color:#fff;transition:transform .3s var(--spring)}
   a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
+  /* "coming soon" cards read as genuinely disabled: flattened to a dashed
+     outline on almost no fill, desaturated, and a not-allowed cursor —
+     distinct from the live cards' solid translucent panel, not just dimmer. */
+  .card--soon{background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.3);
+        filter:grayscale(.6);cursor:not-allowed}
   .card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:14px;font-weight:600;
         padding:5px 14px;border-radius:100px}
-  .card--soon .card__tag{background:rgba(255,255,255,.35);color:#fff}
+  .card--soon .card__tag{background:rgba(255,255,255,.25);color:rgba(255,255,255,.8)}
   .card__title{font-size:clamp(22px,2.6vw,32px);font-weight:600;margin:0}
+  .card--soon .card__title{color:rgba(255,255,255,.7)}
   .card__desc{font-size:17px;line-height:1.5;margin:0;opacity:.9}
-  .card--soon .card__desc{opacity:.65}
+  .card--soon .card__desc{opacity:.55}
   .card__arrow{margin-top:auto;line-height:0}
   .card__arrow svg{width:26px;height:26px}
 
@@ -183,11 +190,17 @@
           transform:translate(calc(10px - 50%),calc(-15px - 50%)) rotate(-30.2deg) scale(1);transition-delay:.1s}
   }
 
-  /* --- screens: the same 3 phone mockups used by the live site's company-
-     hover fan, shown large and static here. --- */
-  .screens__row{display:flex;gap:clamp(14px,3vw,30px);justify-content:center;flex-wrap:wrap}
-  .screens__row img{height:clamp(140px,30vh,380px);width:auto;border-radius:14px;
-        box-shadow:0 20px 50px rgba(0,0,0,.25)}
+  /* --- screens: the "pretty screens" gallery from Figma (22 real product
+     shots across Manta Cares and Mighty Networks), on the same Embla
+     carousel base as Kind Words — full-bleed, native drag, real loop.
+     No autoplay here (wasn't asked for on this one); it's a browse-at-
+     your-own-pace gallery, not a rotating showcase. --- */
+  .screens .embla{width:100vw;margin-left:calc(50% - 50vw);cursor:grab}
+  .screens .embla:active{cursor:grabbing}
+  .screens__slide{flex:0 0 auto}
+  .screens__slide:last-child{margin-right:24px}
+  .screens__slide img{height:clamp(160px,32vh,420px);width:auto;border-radius:14px;
+        box-shadow:0 20px 50px rgba(0,0,0,.25);display:block}
 
   /* --- testimonials: a native horizontal scroll-snap gallery, full-bleed
      to the viewport edge. Built on Embla Carousel's "loop" example
@@ -207,6 +220,11 @@
         border-radius:22px;background:#fff;color:#000;margin:0;
         padding:24px;display:flex;flex-direction:column;justify-content:center;gap:24px;
         text-align:center;cursor:pointer}
+  /* Embla's loop math only accounts for flex `gap` between adjacent DOM
+     siblings — the wrap seam (last slide back to the first) has no
+     sibling relationship to inherit it from, so it renders with zero
+     gap unless the last slide carries its own matching margin. */
+  .kind-words__card.embla__slide:last-child{margin-right:24px}
   .kind-words__card:focus-visible{outline:2px solid var(--v2-cta);outline-offset:2px}
   .kind-words__quote{font-size:20px;line-height:29px;margin:0;font-weight:400}
   .kind-words__cite{font-style:normal;display:flex;flex-direction:column;gap:4px}
@@ -290,31 +308,47 @@
       <div class="company" style="--tilt:-3deg" tabindex="0">
         <div class="company__badge">
           <img class="company__logo company__logo--simply company__logo--white" src="assets/logos/simply-hired-white.svg" alt="Simply Hired">
-          <img class="company__logo company__logo--simply company__logo--color" src="assets/logos/simply-hired-color.svg" alt="" aria-hidden="true">
+          <div class="company__logo company__logo--color company__logo--color--simply" aria-hidden="true">
+            <img class="company__logo-layer" style="left:0.15%;right:0.2%;top:0;bottom:0" src="assets/logos/simply-hired-color-bg.svg" alt="">
+            <img class="company__logo-layer" style="top:10.47%;right:24.48%;bottom:11.4%;left:13.44%" src="assets/logos/simply-hired-color-mark.svg" alt="">
+            <img class="company__logo-layer" style="top:69.64%;right:7.62%;bottom:10.71%;left:70.18%" src="assets/logos/simply-hired-color-dot.svg" alt="">
+          </div>
         </div>
       </div>
       <div class="company" style="--tilt:2deg" tabindex="0">
         <div class="company__badge">
           <img class="company__logo company__logo--launch company__logo--white" src="assets/logos/launch-white.svg" alt="Launch Design">
-          <img class="company__logo company__logo--launch company__logo--color" src="assets/logos/launch-color.svg" alt="" aria-hidden="true">
+          <div class="company__logo company__logo--color company__logo--color--launch" aria-hidden="true">
+            <img class="company__logo-layer" style="left:0.15%;right:0.2%;top:0;bottom:0" src="assets/logos/launch-color-bg.svg" alt="">
+            <img class="company__logo-layer" style="top:12.55%;right:6.24%;bottom:14.59%;left:8.45%" src="assets/logos/launch-color-logo.svg" alt="">
+          </div>
         </div>
       </div>
       <div class="company" style="--tilt:-2deg" tabindex="0">
         <div class="company__badge">
           <img class="company__logo company__logo--manta company__logo--white" src="assets/logos/manta-white.svg" alt="Manta Cares">
-          <img class="company__logo company__logo--manta company__logo--color" src="assets/logos/manta-color.svg" alt="" aria-hidden="true">
+          <div class="company__logo company__logo--color company__logo--color--manta" aria-hidden="true">
+            <img class="company__logo-layer" style="inset:0" src="assets/logos/manta-copper-color-bg.svg" alt="">
+            <img class="company__logo-layer" style="top:11.11%;right:10.96%;bottom:11.11%;left:11.27%" src="assets/logos/manta-color-icon.svg" alt="">
+          </div>
         </div>
       </div>
       <div class="company" style="--tilt:3deg" tabindex="0">
         <div class="company__badge">
           <img class="company__logo company__logo--mighty company__logo--white" src="assets/logos/mighty-white.svg" alt="Mighty Networks">
-          <img class="company__logo company__logo--mighty company__logo--color" src="assets/logos/mighty-color.svg" alt="" aria-hidden="true">
+          <div class="company__logo company__logo--color company__logo--color--mighty" aria-hidden="true">
+            <img class="company__logo-layer" style="top:0.92%;right:0.18%;bottom:0.83%;left:0.28%" src="assets/logos/mighty-color-bg.svg" alt="">
+            <img class="company__logo-layer" style="top:13.89%;right:6.34%;bottom:11.67%;left:4.55%" src="assets/logos/mighty-color-wordmark.svg" alt="">
+          </div>
         </div>
       </div>
       <div class="company" style="--tilt:-4deg" tabindex="0">
         <div class="company__badge">
           <img class="company__logo company__logo--copper company__logo--white" src="assets/logos/copper-white.svg" alt="Copper CRM">
-          <img class="company__logo company__logo--copper company__logo--color" src="assets/logos/copper-color.svg" alt="" aria-hidden="true">
+          <div class="company__logo company__logo--color company__logo--color--copper" aria-hidden="true">
+            <img class="company__logo-layer" style="inset:0" src="assets/logos/manta-copper-color-bg.svg" alt="">
+            <img class="company__logo-layer" style="top:11.11%;right:10.96%;bottom:11.11%;left:11.27%" src="assets/logos/copper-color-icon.svg" alt="">
+          </div>
         </div>
       </div>
     </div>
@@ -390,17 +424,40 @@
   <!-- ============ screens ============ -->
   <section class="section" id="screens">
     <h2 class="section__title">Oh and I make things look pretty ✨</h2>
-    <div class="screens__row">
-      <img src="/assets/hover-phone-1.png" alt="LiveWell app screen">
-      <img src="/assets/hover-phone-3.png" alt="Optimistic Entrepreneur app screen">
-      <img src="/assets/hover-phone-2.png" alt="Body Soul Collective app screen">
+    <div class="screens__row embla">
+      <div class="embla__viewport" id="screens-viewport">
+        <div class="embla__container">
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-1.png" alt="Manta Cares app screen 1"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-2.png" alt="Manta Cares app screen 2"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-3.png" alt="Manta Cares app screen 3"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-4.png" alt="Manta Cares app screen 4"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-5.png" alt="Manta Cares app screen 5"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-6.png" alt="Manta Cares app screen 6"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-7.png" alt="Manta Cares app screen 7"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-8.png" alt="Manta Cares app screen 8"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-1.png" alt="Mighty Networks app screen 1"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-2.png" alt="Mighty Networks app screen 2"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-3.png" alt="Mighty Networks app screen 3"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-4.png" alt="Mighty Networks app screen 4"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-5.png" alt="Mighty Networks app screen 5"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-6.png" alt="Mighty Networks app screen 6"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-7.png" alt="Mighty Networks app screen 7"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-8.png" alt="Mighty Networks app screen 8"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-9.png" alt="Mighty Networks app screen 9"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-10.png" alt="Mighty Networks app screen 10"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-11.png" alt="Mighty Networks app screen 11"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-12.png" alt="Mighty Networks app screen 12"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-13.png" alt="Mighty Networks app screen 13"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-14.png" alt="Mighty Networks app screen 14"></div>
+        </div>
+      </div>
     </div>
     <a class="cta" href="#testimonials" style="--tilt:4deg">SO PRETTY <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
   <!-- ============ testimonials ============ -->
   <section class="section" id="testimonials">
-    <h2 class="section__title">Don't want to take my word for it? Hear from my co-workers.</h2>
+    <h2 class="section__title">Don't want to take my word for it?<br/>Hear from my co-workers.</h2>
     <div class="kind-words">
       <div class="embla" role="region" aria-label="Kind words from co-workers">
         <div class="embla__viewport" id="kw-viewport">
@@ -581,6 +638,16 @@
       }
     });
   });
+})();
+</script>
+<script>
+// --- Pretty screens gallery: same Embla base as Kind Words (loop:true,
+// native drag) but no autoplay/click-to-center — this one's a browse-at-
+// your-own-pace gallery of real product shots, not a rotating showcase. ---
+(function () {
+  var viewport = document.getElementById('screens-viewport');
+  if (!viewport || !window.EmblaCarousel) return;
+  EmblaCarousel(viewport, { loop: true, align: 'center' });
 })();
 </script>
 </body>
