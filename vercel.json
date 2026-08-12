@@ -1,0 +1,17 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "katherineroot.com" }],
+      "destination": "https://www.katherineroot.com/:path*",
+      "permanent": true
+    },
+    { "source": "/home", "destination": "/", "permanent": true },
+    { "source": "/about-me", "destination": "/", "permanent": true },
+    { "source": "/case-studies", "destination": "/casestudies/", "permanent": true },
+    { "source": "/case-studies-fae", "destination": "/casestudies/mighty/first-app-experience/", "permanent": true },
+    { "source": "/case-studies-introducing-ai", "destination": "/casestudies/mighty/introducing-ai/", "permanent": true },
+    { "source": "/case-studies-people-magic", "destination": "/casestudies/mighty/people-magic/", "permanent": true },
+    { "source": "/resume", "destination": "/assets/KatherineRootResume2026.pdf", "permanent": true }
+  ]
+}
