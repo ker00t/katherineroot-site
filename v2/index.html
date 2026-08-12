@@ -191,10 +191,9 @@
   }
 
   /* --- screens: the "pretty screens" gallery from Figma (22 real product
-     shots across Manta Cares and Mighty Networks), on the same Embla
-     carousel base as Kind Words — full-bleed, native drag, real loop.
-     No autoplay here (wasn't asked for on this one); it's a browse-at-
-     your-own-pace gallery, not a rotating showcase.
+     shots across Manta Cares and Mighty Networks). Uses Embla's
+     "drag-free" example (momentum dragging, no snap/loop) rather than
+     Kind Words' loop/snap-to-center setup — see the script below.
      .screens-gallery is a plain block wrapper (matches .kind-words)
      around the .embla div — without it, .embla ends up as a *direct*
      flex child of the section's own `align-items:center`, and that
@@ -204,7 +203,6 @@
      right edge where drags didn't register at all. --- */
   .screens-gallery{width:100%}
   .screens__slide{flex:0 0 auto}
-  .screens__slide:last-child{margin-right:24px}
   .screens__slide img{height:clamp(160px,32vh,420px);width:auto;border-radius:14px;
         box-shadow:0 20px 50px rgba(0,0,0,.25);display:block}
 
@@ -649,13 +647,15 @@
 })();
 </script>
 <script>
-// --- Pretty screens gallery: same Embla base as Kind Words (loop:true,
-// native drag) but no autoplay/click-to-center — this one's a browse-at-
-// your-own-pace gallery of real product shots, not a rotating showcase. ---
+// --- Pretty screens gallery: Embla's "drag-free" example
+// (embla-carousel.com/docs/examples/predefined#drag-free) — momentum-
+// based free dragging instead of the loop/snap-to-center behavior Kind
+// Words uses. No autoplay/click-to-center here either; it's a browse-
+// at-your-own-pace gallery of real product shots. ---
 (function () {
   var viewport = document.getElementById('screens-viewport');
   if (!viewport || !window.EmblaCarousel) return;
-  EmblaCarousel(viewport, { loop: true, align: 'center' });
+  EmblaCarousel(viewport, { dragFree: true });
 })();
 </script>
 </body>
