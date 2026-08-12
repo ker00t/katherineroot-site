@@ -115,11 +115,12 @@
   .companies__row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
            gap:clamp(28px,5vw,67px);row-gap:56px;
            /* the fanned-out caption/name text is absolutely positioned and can
-              extend well beyond the row's own box (worst case ~166px above,
-              ~141px below badge center) — this margin reserves clearance so
-              hover text never runs into the section title above or the CTA
-              below, on top of the section's own flex gap. */
-           margin:70px 0}
+              extend well beyond the row's own box (worst case ~192px above,
+              on Copper; ~190px below, on Manta, badge-center to caption's
+              outer edge) — this margin reserves clearance so hover text
+              never runs into the section title above or the CTA below, on
+              top of the section's own flex gap. */
+           margin:100px 0}
   .company{--tilt:-2deg;position:relative;display:block;text-decoration:none;transition:transform .3s var(--spring)}
   .company:hover,.company:focus-within{transform:translateY(-6px) rotate(var(--tilt));z-index:1}
   .company__badge{position:relative;display:flex;align-items:center;justify-content:center}
@@ -141,48 +142,51 @@
            transform:translate(-50%,-50%) scale(.4);transform-origin:center center;
            transition:opacity .35s var(--spring),transform .45s var(--spring)}
   .company:hover .company__piece,.company:focus-within .company__piece{opacity:1}
-  .company__caption{color:#fff;font-size:15px;line-height:1.35;width:200px;margin:0}
+  .company__caption{color:#fff;font-size:15px;line-height:1.35;width:280px;margin:0;
+        display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   /* the only fanned-out piece that's a real click target (see the <a
      class="company"> wrapping everything) — pointer-events:auto here (against
      the piece default of none) is what lets the cursor land on it directly,
      re-affirming :hover on the way in and making it clickable on the way out. */
-  .company__name{color:#fff;font-weight:600;font-size:16px;margin:0;white-space:nowrap;pointer-events:auto}
+  .company__name{color:#fff;font-weight:600;font-size:16px;margin:0;white-space:nowrap;pointer-events:auto;
+        display:inline-flex;align-items:center;gap:6px}
+  .company__name-link-icon{width:14px;height:14px;flex:none}
   .company__arrow{width:26px;height:auto}
 
   .company:hover .company__caption--simply,.company:focus-within .company__caption--simply{
-        transform:translate(calc(26px - 50%),calc(-114px - 50%)) rotate(-9.41deg) scale(1)}
+        transform:translate(calc(32px - 50%),calc(-145px - 50%)) rotate(-9.41deg) scale(1)}
   .company:hover .company__connector--simply,.company:focus-within .company__connector--simply{
-        transform:translate(calc(64px - 50%),calc(-53px - 50%)) rotate(19.16deg) scale(1)}
+        transform:translate(calc(81px - 50%),calc(-67px - 50%)) rotate(19.16deg) scale(1)}
   .company:hover .company__name--simply,.company:focus-within .company__name--simply{
-        transform:translate(calc(16px - 50%),calc(72px - 50%)) rotate(-12.91deg) scale(1)}
+        transform:translate(calc(20px - 50%),calc(91px - 50%)) rotate(-12.91deg) scale(1)}
 
   .company:hover .company__caption--launch,.company:focus-within .company__caption--launch{
-        transform:translate(calc(9px - 50%),calc(-104px - 50%)) rotate(4.81deg) scale(1)}
+        transform:translate(calc(10px - 50%),calc(-121px - 50%)) rotate(4.81deg) scale(1)}
   .company:hover .company__connector--launch,.company:focus-within .company__connector--launch{
-        transform:translate(calc(116px - 50%),calc(-60px - 50%)) rotate(-130.62deg) scaleY(-1) scale(1)}
+        transform:translate(calc(137px - 50%),calc(-70px - 50%)) rotate(-130.62deg) scaleY(-1) scale(1)}
   .company:hover .company__name--launch,.company:focus-within .company__name--launch{
-        transform:translate(calc(-5px - 50%),calc(65px - 50%)) rotate(5.37deg) scale(1)}
+        transform:translate(calc(-6px - 50%),calc(76px - 50%)) rotate(5.37deg) scale(1)}
 
   .company:hover .company__caption--manta,.company:focus-within .company__caption--manta{
-        transform:translate(calc(0px - 50%),calc(101px - 50%)) rotate(0deg) scale(1)}
+        transform:translate(calc(0px - 50%),calc(159px - 50%)) rotate(0deg) scale(1)}
   .company:hover .company__connector--manta,.company:focus-within .company__connector--manta{
-        transform:translate(calc(86px - 50%),calc(51px - 50%)) rotate(0deg) scale(1)}
+        transform:translate(calc(110px - 50%),calc(66px - 50%)) rotate(0deg) scale(1)}
   .company:hover .company__name--manta,.company:focus-within .company__name--manta{
-        transform:translate(calc(0px - 50%),calc(-93px - 50%)) rotate(0deg) scale(1)}
+        transform:translate(calc(0px - 50%),calc(-120px - 50%)) rotate(0deg) scale(1)}
 
   .company:hover .company__caption--mighty,.company:focus-within .company__caption--mighty{
-        transform:translate(calc(6px - 50%),calc(-95px - 50%)) rotate(5.9deg) scale(1)}
+        transform:translate(calc(4px - 50%),calc(-116px - 50%)) rotate(5.9deg) scale(1)}
   .company:hover .company__connector--mighty,.company:focus-within .company__connector--mighty{
-        transform:translate(calc(-122px - 50%),calc(-45px - 50%)) rotate(-6.13deg) scale(1)}
+        transform:translate(calc(-140px - 50%),calc(-60px - 50%)) rotate(-6.13deg) scale(1)}
   .company:hover .company__name--mighty,.company:focus-within .company__name--mighty{
-        transform:translate(calc(-9px - 50%),calc(69px - 50%)) rotate(6.79deg) scale(1)}
+        transform:translate(calc(-13px - 50%),calc(68px - 50%)) rotate(6.79deg) scale(1)}
 
   .company:hover .company__caption--copper,.company:focus-within .company__caption--copper{
-        transform:translate(calc(0px - 50%),calc(-126px - 50%)) rotate(-3.7deg) scale(1)}
+        transform:translate(calc(0px - 50%),calc(-161px - 50%)) rotate(-3.7deg) scale(1)}
   .company:hover .company__connector--copper,.company:focus-within .company__connector--copper{
-        transform:translate(calc(92px - 50%),calc(-74px - 50%)) rotate(-93.23deg) scaleY(-1) scale(1)}
+        transform:translate(calc(118px - 50%),calc(-95px - 50%)) rotate(-93.23deg) scaleY(-1) scale(1)}
   .company:hover .company__name--copper,.company:focus-within .company__name--copper{
-        transform:translate(calc(0px - 50%),calc(95px - 50%)) rotate(0deg) scale(1)}
+        transform:translate(calc(0px - 50%),calc(121px - 50%)) rotate(0deg) scale(1)}
 
   /* --- touch alternative: the fixed-px fan-out above is tuned for desktop
      spacing and has nowhere to go on a narrow screen, so on devices with no
@@ -465,8 +469,8 @@
         </div>
         <p class="company__piece company__caption company__caption--launch">I started at this small UX firm straight out of undergrad.</p>
         <img class="company__piece company__arrow company__connector--launch" src="assets/logos/launch-arrow.svg" alt="" aria-hidden="true">
-        <p class="company__piece company__name company__name--launch">Launch Design</p>
-        <span class="company__tap-label" aria-hidden="true">Launch Design <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        <p class="company__piece company__name company__name--launch">Launch Design <svg class="company__name-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></p>
+        <span class="company__tap-label" aria-hidden="true">Launch Design <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
       </a>
       <a class="company" href="https://www.mantacares.com" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">
         <div class="company__badge">
@@ -478,8 +482,8 @@
         </div>
         <p class="company__piece company__caption company__caption--manta">My latest role, founding designer, creating an app to help cancer patients navigate their diagnosis.</p>
         <img class="company__piece company__arrow company__connector--manta" src="assets/logos/manta-arrow.svg" alt="" aria-hidden="true">
-        <p class="company__piece company__name company__name--manta">Manta Cares</p>
-        <span class="company__tap-label" aria-hidden="true">Manta Cares <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        <p class="company__piece company__name company__name--manta">Manta Cares <svg class="company__name-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></p>
+        <span class="company__tap-label" aria-hidden="true">Manta Cares <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
       </a>
       <a class="company" href="https://www.mightynetworks.com" target="_blank" rel="noopener noreferrer" style="--tilt:3deg">
         <div class="company__badge">
@@ -491,8 +495,8 @@
         </div>
         <p class="company__piece company__caption company__caption--mighty">I spent 10 YEARS building this product and team &mdash; I know it like the back of my hand.</p>
         <img class="company__piece company__arrow company__connector--mighty" src="assets/logos/mighty-arrow.svg" alt="" aria-hidden="true">
-        <p class="company__piece company__name company__name--mighty">Mighty Networks</p>
-        <span class="company__tap-label" aria-hidden="true">Mighty Networks <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        <p class="company__piece company__name company__name--mighty">Mighty Networks <svg class="company__name-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></p>
+        <span class="company__tap-label" aria-hidden="true">Mighty Networks <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
       </a>
       <a class="company" href="https://www.copper.com/" target="_blank" rel="noopener noreferrer" style="--tilt:-4deg">
         <div class="company__badge">
@@ -504,8 +508,8 @@
         </div>
         <p class="company__piece company__caption company__caption--copper">I was part of the founding design team here when it was still called &ldquo;Prosperworks&rdquo;</p>
         <img class="company__piece company__arrow company__connector--copper" src="assets/logos/copper-arrow.svg" alt="" aria-hidden="true">
-        <p class="company__piece company__name company__name--copper">Copper CRM</p>
-        <span class="company__tap-label" aria-hidden="true">Copper CRM <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        <p class="company__piece company__name company__name--copper">Copper CRM <svg class="company__name-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></p>
+        <span class="company__tap-label" aria-hidden="true">Copper CRM <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
       </a>
     </div>
     <a class="cta" href="#strategy" style="--tilt:2deg">Wow cool <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
@@ -697,7 +701,7 @@
 
   <!-- ============ tldr ============ -->
   <section class="section" id="tldr">
-    <h2 class="section__title">The TLDR?<br/><span class="section__title--regular">I do design because I love it, and I bring that passion to all of the work that I do 💖</span></h2>
+    <h2 class="section__title">I do design because I love it, and I bring that passion to all of the work that I do 💖</h2>
     <a class="cta" href="#say-hi" style="--tilt:2deg">Let's talk <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
