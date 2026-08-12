@@ -186,23 +186,17 @@
 
   /* --- touch alternative: the fixed-px fan-out above is tuned for desktop
      spacing and has nowhere to go on a narrow screen, so on devices with no
-     hover it's hidden outright and replaced by a single readable panel that
-     sits in normal document flow below the row (JS fills it on tap). --- */
-  .company-info{display:none}
+     hover it's hidden outright. Tapping a logo instead reveals a small
+     name+arrow label in normal document flow directly beneath that logo's
+     own badge (not a shared panel) — tapping the same logo again follows
+     its real href; see the script below. --- */
+  .company__tap-label{display:none}
   @media (hover:none){
     .company__piece{display:none}
-    .company:focus-visible .company__badge,.company.is-selected .company__badge{
-          outline:2px solid rgba(255,255,255,.65);outline-offset:8px;border-radius:999px}
-    .company-info{display:block;max-width:340px;margin:28px auto 0;padding:16px 22px;
-          background:rgba(255,255,255,.14);border-radius:18px;text-align:center;
-          opacity:0;transform:translateY(-8px);pointer-events:none;
-          transition:opacity .3s var(--spring),transform .3s var(--spring)}
-    .company-info.is-visible{opacity:1;transform:translateY(0);pointer-events:auto}
-    .company-info__name{margin:0 0 6px;color:#fff;font-weight:600;font-size:16px}
-    .company-info__caption{margin:0;color:#fff;font-size:14px;line-height:1.45;opacity:.9}
-    .company-info__link{display:inline-block;margin-top:12px;color:#fff;font-weight:600;
-          font-size:14px;text-decoration:underline;text-underline-offset:3px}
-    .company-info__link[hidden]{display:none}
+    .company.is-selected .company__tap-label{display:flex;align-items:center;
+          justify-content:center;gap:6px;margin-top:10px;color:#fff;
+          font-weight:600;font-size:15px}
+    .company__tap-label svg{width:16px;height:16px;flex:none}
   }
 
   /* --- case-study cards: strategy / people / leadership sections. Not-yet-
@@ -361,7 +355,7 @@
        relying on flex-wrap to happen to break there, and size up now that
        each word gets a full-width line to itself instead of sharing one. */
     .name{flex-direction:column;align-items:center}
-    .glyph{font-size:clamp(60px,18vw,100px)}
+    .glyph{font-size:clamp(66px,20vw,110px)}
     /* company logos: single stacked column instead of wrapped rows, each
        logo sized up since it no longer has to share a row with 2-3 others. */
     .companies__row{flex-direction:column}
@@ -370,6 +364,12 @@
     .company__logo--manta{width:clamp(95px,25vw,150px);height:clamp(95px,25vw,150px)}
     .company__logo--mighty{width:clamp(150px,40vw,240px)}
     .company__logo--copper{width:clamp(95px,25vw,150px);height:clamp(95px,25vw,150px)}
+    /* case-study cards (strategy/people/leadership sections) side-scroll
+       horizontally instead of stacking/wrapping vertically — same
+       fixed-width/no-shrink treatment as casestudies/manta/mighty. */
+    .cards{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;
+          -webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding-bottom:8px}
+    .card{flex:0 0 min(300px,80vw);width:auto;scroll-snap-align:start}
   }
 
   /* --- say hi: same 3 contact icons as the live site, re-skinned to
@@ -441,7 +441,7 @@
     html{scroll-behavior:auto}
     body{animation:none;background-color:#f455a7}
     .card__fan-img{display:none}
-    .letter,.glyph,.tag,.cta,.card,.company,.company__badge,.company__logo,.company-info,
+    .letter,.glyph,.tag,.cta,.card,.company,.company__badge,.company__logo,
     .say-hi__icon,.site-footer__links a,.screens__slide img,#screens-lightbox-close,
     .secret-menu__hint,.secret-menu__panel,.secret-menu__panel a{transition:none !important}
     .letter:hover .glyph,.letter.is-active .glyph{transform:none;color:#fff}
@@ -492,6 +492,7 @@
         <p class="company__piece company__caption company__caption--simply">I grew a lot in this role, learning a lot about how companies operate.</p>
         <img class="company__piece company__arrow company__connector--simply" src="assets/logos/simplyhired-arrow.svg" alt="" aria-hidden="true">
         <p class="company__piece company__name company__name--simply">Simply Hired</p>
+        <span class="company__tap-label" aria-hidden="true">Simply Hired</span>
       </div>
       <a class="company" href="https://launchdesign.com/" target="_blank" rel="noopener noreferrer" style="--tilt:2deg">
         <div class="company__badge">
@@ -504,6 +505,7 @@
         <p class="company__piece company__caption company__caption--launch">I started at this small UX firm straight out of undergrad.</p>
         <img class="company__piece company__arrow company__connector--launch" src="assets/logos/launch-arrow.svg" alt="" aria-hidden="true">
         <p class="company__piece company__name company__name--launch">Launch Design</p>
+        <span class="company__tap-label" aria-hidden="true">Launch Design <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
       <a class="company" href="https://www.mantacares.com" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">
         <div class="company__badge">
@@ -516,6 +518,7 @@
         <p class="company__piece company__caption company__caption--manta">My latest role, founding designer, creating an app to help cancer patients navigate their diagnosis.</p>
         <img class="company__piece company__arrow company__connector--manta" src="assets/logos/manta-arrow.svg" alt="" aria-hidden="true">
         <p class="company__piece company__name company__name--manta">Manta Cares</p>
+        <span class="company__tap-label" aria-hidden="true">Manta Cares <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
       <a class="company" href="https://www.mightynetworks.com" target="_blank" rel="noopener noreferrer" style="--tilt:3deg">
         <div class="company__badge">
@@ -528,6 +531,7 @@
         <p class="company__piece company__caption company__caption--mighty">I spent 10 YEARS building this product and team &mdash; I know it like the back of my hand.</p>
         <img class="company__piece company__arrow company__connector--mighty" src="assets/logos/mighty-arrow.svg" alt="" aria-hidden="true">
         <p class="company__piece company__name company__name--mighty">Mighty Networks</p>
+        <span class="company__tap-label" aria-hidden="true">Mighty Networks <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
       <a class="company" href="https://www.copper.com/" target="_blank" rel="noopener noreferrer" style="--tilt:-4deg">
         <div class="company__badge">
@@ -540,17 +544,8 @@
         <p class="company__piece company__caption company__caption--copper">I was part of the founding design team here when it was still called &ldquo;Prosperworks&rdquo;</p>
         <img class="company__piece company__arrow company__connector--copper" src="assets/logos/copper-arrow.svg" alt="" aria-hidden="true">
         <p class="company__piece company__name company__name--copper">Copper CRM</p>
+        <span class="company__tap-label" aria-hidden="true">Copper CRM <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
-    </div>
-    <!-- touch-only readable alternative to the desktop fan-out: on hover:none
-         devices the scattered .company__piece captions are hidden entirely
-         (no room to fan out on a narrow screen without overlapping other
-         text) and tapping a logo instead fills this single in-flow panel,
-         so it can never overlap the title/CTA — see the script below. -->
-    <div class="company-info" id="company-info" aria-live="polite">
-      <p class="company-info__name"></p>
-      <p class="company-info__caption"></p>
-      <a class="company-info__link" href="#" target="_blank" rel="noopener noreferrer">Visit website &rarr;</a>
     </div>
     <a class="cta" href="#strategy" style="--tilt:2deg">Wow cool <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
@@ -837,55 +832,35 @@
 })();
 
 // --- companies: on hover:none devices the desktop fan-out (CSS above hides
-// it entirely there) is replaced by tapping a logo to fill a single shared
-// panel below the row with that company's name/caption — tap again (or the
-// same logo) to close, matching the hero letters' tap-toggle pattern.
-// .company is now a real <a href> (so non-touch clicking the logo or the
-// fanned-out name navigates natively), so every tap here is prevented from
-// following that link — on touch, navigation only ever happens through the
-// panel's own "Visit website" link, never the badge itself. ---
+// it entirely there) is replaced by a two-tap pattern on the logo itself.
+// First tap on a logo reveals its own .company__tap-label (name + arrow)
+// directly beneath that badge, closing any other open one. A second tap on
+// that same already-expanded logo follows its real href natively (no JS
+// navigation needed — we just stop calling preventDefault). Simply Hired
+// has no href, so its second tap just collapses it again. ---
 (function () {
   var noHover = window.matchMedia('(hover: none)').matches;
   if (!noHover) return;
   var companies = Array.prototype.slice.call(document.querySelectorAll('.company'));
-  var panel = document.getElementById('company-info');
-  if (!companies.length || !panel) return;
-  var nameEl = panel.querySelector('.company-info__name');
-  var captionEl = panel.querySelector('.company-info__caption');
-  var linkEl = panel.querySelector('.company-info__link');
-  var current = null;
+  if (!companies.length) return;
 
-  function close() {
+  function closeAll() {
     companies.forEach(function (c) { c.classList.remove('is-selected'); });
-    panel.classList.remove('is-visible');
-    current = null;
   }
 
   companies.forEach(function (company) {
     company.addEventListener('click', function (e) {
+      var isSelected = company.classList.contains('is-selected');
+      var href = company.getAttribute('href');
+      if (isSelected && href) return; // second tap with a real link: let it navigate
       e.preventDefault();
-      var wasSelected = company === current;
-      close();
-      if (!wasSelected) {
-        var name = company.querySelector('.company__name');
-        var caption = company.querySelector('.company__caption');
-        var href = company.getAttribute('href');
-        nameEl.textContent = name ? name.textContent : '';
-        captionEl.textContent = caption ? caption.textContent : '';
-        if (href) {
-          linkEl.href = href;
-          linkEl.hidden = false;
-        } else {
-          linkEl.hidden = true;
-        }
-        company.classList.add('is-selected');
-        panel.classList.add('is-visible');
-        current = company;
-      }
+      if (isSelected) { company.classList.remove('is-selected'); return; }
+      closeAll();
+      company.classList.add('is-selected');
     });
   });
   document.addEventListener('click', function (e) {
-    if (current && !e.target.closest('.companies__row') && !e.target.closest('#company-info')) close();
+    if (!e.target.closest('.companies__row')) closeAll();
   });
 })();
 </script>
