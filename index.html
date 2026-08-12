@@ -399,43 +399,66 @@
         text-decoration:none;transition:transform .3s var(--spring)}
   .site-footer__links a:hover,.site-footer__links a:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
 
-  /* --- secret menu: an invisible hotspot tucked in the very top-right
-     corner. On desktop it's completely hidden until you hover it, at
-     which point a hand-drawn arrow + note point back at the corner —
-     click opens the same links as the footer. On touch there's no hover,
-     so the hint stays hidden until the corner is actually tapped (tied
-     to the same .is-open state as the panel, via JS below) rather than
-     being visible up front. --- */
-  .secret-menu{position:fixed;top:0;right:0;z-index:60}
-  .secret-menu__trigger{position:absolute;top:0;right:0;width:84px;height:84px;
-        background:none;border:none;padding:0;margin:0;cursor:pointer;
-        -webkit-tap-highlight-color:transparent}
-  .secret-menu__hint{position:absolute;top:10px;right:14px;display:flex;
-        flex-direction:column;align-items:flex-end;gap:2px;
+  /* --- secret menu: matches Figma's "secret menu" mock. Unlike the earlier
+     build, the hamburger icon itself is always visible in the top-right
+     corner (not a fully invisible hotspot) — the "secret" part is the
+     hand-drawn arrow + tilted note that appears on hover, pointing back at
+     it. Click swaps the icon for a close X and slides in a full-height
+     lime panel over a dark scrim, matching the mock's link list (Home,
+     Resume, Case Studies, Side Projects) plus the say-hi social icons. On
+     touch there's no hover, so the hint stays hidden until actually
+     tapped (tied to the same .is-open state as the panel, via JS below)
+     rather than showing up front. --- */
+  .secret-menu{position:fixed;inset:0;z-index:60;pointer-events:none}
+  .secret-menu__trigger{position:fixed;top:28px;right:28px;z-index:2;width:40px;height:40px;
+        background:none;border:none;padding:0;margin:0;cursor:pointer;color:#fff;
+        pointer-events:auto;-webkit-tap-highlight-color:transparent;
+        transition:color .3s var(--spring)}
+  .secret-menu.is-open .secret-menu__trigger{color:var(--charcoal)}
+  .secret-menu__icon{display:block;width:100%;height:100%}
+  .secret-menu__icon--close{display:none}
+  .secret-menu.is-open .secret-menu__icon--menu{display:none}
+  .secret-menu.is-open .secret-menu__icon--close{display:block}
+  .secret-menu__hint{position:absolute;top:32px;right:46px;display:flex;
+        flex-direction:column;align-items:flex-end;
         opacity:0;pointer-events:none;transition:opacity .3s ease}
   @media (hover:hover){
     .secret-menu__trigger:hover .secret-menu__hint,
     .secret-menu__trigger:focus-visible .secret-menu__hint{opacity:1}
+    /* once the panel is actually open, drop the hint even if still
+       hovering the trigger — it's redundant next to an open menu. */
+    .secret-menu.is-open .secret-menu__hint{opacity:0 !important}
   }
   @media (hover:none){
     .secret-menu.is-open .secret-menu__hint{opacity:1}
   }
-  .secret-menu__arrow{width:34px;height:34px;color:#fff;display:block;
+  .secret-menu__arrow{width:20px;height:44px;color:#fff;display:block;
+        transform:rotate(-127deg);filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+  .secret-menu__note{color:#fff;font-weight:600;font-size:15px;white-space:nowrap;
+        margin-top:-6px;margin-right:2px;transform:rotate(16deg);
         filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
-  .secret-menu__note{--tilt:-3deg;background:#fff;color:var(--charcoal);font-size:13px;
-        font-weight:600;padding:6px 12px;border-radius:999px;white-space:nowrap;
-        box-shadow:0 8px 20px rgba(0,0,0,.25);transform:rotate(var(--tilt))}
-  .secret-menu__panel{position:absolute;top:70px;right:12px;background:#fff;
-        border-radius:18px;padding:10px;display:flex;flex-direction:column;gap:2px;
-        min-width:180px;box-shadow:0 24px 60px rgba(0,0,0,.35);
-        opacity:0;transform:translateY(-10px) scale(.94);transform-origin:top right;
-        pointer-events:none;transition:opacity .25s var(--spring),transform .25s var(--spring)}
-  .secret-menu.is-open .secret-menu__panel{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
-  .secret-menu__panel a{--tilt:-2deg;color:var(--charcoal);text-decoration:none;font-weight:600;
-        font-size:16px;padding:10px 14px;border-radius:12px;
-        transition:background-color .2s ease,transform .2s var(--spring)}
+  .secret-menu__scrim{position:fixed;inset:0;z-index:0;background:rgba(0,0,0,.3);
+        opacity:0;pointer-events:none;transition:opacity .3s ease}
+  .secret-menu.is-open .secret-menu__scrim{opacity:1;pointer-events:auto}
+  .secret-menu__panel{position:fixed;top:0;right:0;bottom:0;z-index:1;
+        width:min(430px,88vw);background:var(--lime);
+        display:flex;flex-direction:column;align-items:center;
+        padding:144px 24px 56px;overflow-y:auto;
+        transform:translateX(100%);pointer-events:none;
+        transition:transform .4s var(--spring)}
+  .secret-menu.is-open .secret-menu__panel{transform:translateX(0);pointer-events:auto}
+  .secret-menu__panel a{color:var(--charcoal);text-decoration:none;font-weight:600;
+        font-size:clamp(24px,3vw,32px);padding:10px 0;transition:transform .2s var(--spring)}
   .secret-menu__panel a:hover,.secret-menu__panel a:focus-visible{
-        background:rgba(244,85,167,.12);transform:translateX(-4px) rotate(var(--tilt));outline:none}
+        transform:translateX(-6px);outline:none}
+  .secret-menu__socials{display:flex;gap:14px;margin-top:auto;padding-top:32px}
+  .secret-menu__social{width:54px;height:54px;border:3px solid var(--charcoal);border-radius:15px;
+        display:flex;align-items:center;justify-content:center;color:var(--charcoal);
+        text-decoration:none;transition:transform .2s var(--spring)}
+  .secret-menu__social:hover,.secret-menu__social:focus-visible{
+        transform:translateY(-4px);outline:none}
+  .secret-menu__social svg{width:22px;height:22px}
+  .secret-menu__social--linkedin{font-size:19px;font-weight:700}
 
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto}
@@ -443,7 +466,8 @@
     .card__fan-img{display:none}
     .letter,.glyph,.tag,.cta,.card,.company,.company__badge,.company__logo,
     .say-hi__icon,.site-footer__links a,.screens__slide img,#screens-lightbox-close,
-    .secret-menu__hint,.secret-menu__panel,.secret-menu__panel a{transition:none !important}
+    .secret-menu__hint,.secret-menu__panel,.secret-menu__panel a,.secret-menu__scrim,
+    .secret-menu__trigger,.secret-menu__social{transition:none !important}
     .letter:hover .glyph,.letter.is-active .glyph{transform:none;color:#fff}
   }
 </style>
@@ -777,21 +801,36 @@
     </div>
   </footer>
 
-  <!-- secret menu easter egg: invisible until hovered/tapped in the very
-       top-right corner, then reveals a hint pointing back at it; clicking
-       opens the same links as the footer. -->
+  <!-- secret menu easter egg, per Figma's "secret menu" mock: a persistently
+       visible hamburger icon top-right that reveals a hand-drawn arrow +
+       tilted note on hover/tap; clicking swaps it for a close icon and
+       slides in a full-height lime panel (over a dark scrim) with the same
+       links as the footer plus Side Projects, and the say-hi social icons. -->
   <div class="secret-menu" id="secret-menu">
     <button type="button" class="secret-menu__trigger" id="secret-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Secret menu">
+      <svg class="secret-menu__icon secret-menu__icon--menu" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 12H30M10 20H30M10 28H30M6 2H34C36.2091 2 38 3.79086 38 6V34C38 36.2091 36.2091 38 34 38H6C3.79086 38 2 36.2091 2 34V6C2 3.79086 3.79086 2 6 2Z"/></svg>
+      <svg class="secret-menu__icon secret-menu__icon--close" viewBox="0 0 29 29" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M26.5 2.5L2.5 26.5M2.5 2.5L26.5 26.5"/></svg>
       <span class="secret-menu__hint" aria-hidden="true">
-        <svg class="secret-menu__arrow" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22C4 10 14 4 24 5c6 .6 10 4 12 8"/><path d="M28 6l8 7-9 4"/></svg>
+        <svg class="secret-menu__arrow" viewBox="0 0 30 66" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.3348 2.5001C13.5861 3.49665 17.3401 8.30996 18.947 15.3174C21.4506 26.2357 20.3576 34.7503 19.3353 38.5803C17.3318 46.0872 13.0373 53.8052 9.82368 58.8199C8.60787 60.7171 8.11383 61.246 7.76214 59.0128C5.51817 44.7642 5.33372 39.2101 3.8277 37.1985C0.99444 33.4143 3.33182 49.2871 4.95249 55.2766C5.92629 58.8754 7.65428 61.4191 8.92251 62.4602C9.53363 62.9618 10.4744 63.0167 11.3209 62.9394C12.1675 62.8621 12.9924 62.5506 15.382 61.5274C17.7717 60.5042 21.7012 58.7787 27.1086 56.6411"/></svg>
         <span class="secret-menu__note">Ooooh a secret menu!</span>
       </span>
     </button>
-    <div class="secret-menu__panel" id="secret-menu-panel" role="menu" aria-label="Secret menu">
-      <a role="menuitem" href="/assets/KatherineRootResume2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">Resume</a>
-      <a role="menuitem" href="/casestudies/index.html" style="--tilt:3deg">Case Studies</a>
-      <a role="menuitem" href="/sideprojects/index.html" style="--tilt:-2deg">Side Projects</a>
-    </div>
+    <div class="secret-menu__scrim" id="secret-menu-scrim"></div>
+    <nav class="secret-menu__panel" id="secret-menu-panel" aria-label="Secret menu">
+      <a href="/">Home</a>
+      <a href="/assets/KatherineRootResume2026.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+      <a href="/casestudies/index.html">Case Studies</a>
+      <a href="/sideprojects/index.html">Side Projects</a>
+      <div class="secret-menu__socials">
+        <a class="secret-menu__social secret-menu__social--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><span aria-hidden="true">in</span></a>
+        <a class="secret-menu__social" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+        </a>
+        <a class="secret-menu__social" href="mailto:keroot@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+        </a>
+      </div>
+    </nav>
   </div>
 
 <script>
@@ -861,6 +900,18 @@
   });
   document.addEventListener('click', function (e) {
     if (!e.target.closest('.companies__row')) closeAll();
+  });
+})();
+
+// --- companies: clicking a logo (a real <a target="_blank">) opens the
+// company's site in a new tab, but the anchor keeps keyboard focus in
+// *this* tab afterward — since the hover/color-swap/tilt treatment is
+// driven by :hover/:focus-within, that leaves the logo visually stuck in
+// its "hovered" look until the cursor happens to move again. Blur it
+// right after the click so it drops back to resting state immediately. ---
+(function () {
+  document.querySelectorAll('a.company').forEach(function (company) {
+    company.addEventListener('click', function () { company.blur(); });
   });
 })();
 </script>
@@ -970,20 +1021,32 @@
 })();
 </script>
 <script>
-// --- secret menu: click the corner hotspot to toggle the panel open;
-// click outside or Escape closes it. ---
+// --- secret menu: click the corner icon to toggle the full-height panel
+// open; click the scrim, click outside, or Escape closes it. Body scroll
+// is locked while open since the panel + scrim together cover the whole
+// viewport, matching the mock's full-screen takeover. ---
 (function () {
   var menu = document.getElementById('secret-menu');
   var trigger = document.getElementById('secret-menu-trigger');
+  var scrim = document.getElementById('secret-menu-scrim');
   if (!menu || !trigger) return;
 
   function isOpen() { return menu.classList.contains('is-open'); }
-  function open() { menu.classList.add('is-open'); trigger.setAttribute('aria-expanded', 'true'); }
-  function close() { menu.classList.remove('is-open'); trigger.setAttribute('aria-expanded', 'false'); }
+  function open() {
+    menu.classList.add('is-open');
+    trigger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    menu.classList.remove('is-open');
+    trigger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
 
   trigger.addEventListener('click', function () {
     if (isOpen()) close(); else open();
   });
+  if (scrim) scrim.addEventListener('click', close);
   document.addEventListener('click', function (e) {
     if (isOpen() && !menu.contains(e.target)) close();
   });
