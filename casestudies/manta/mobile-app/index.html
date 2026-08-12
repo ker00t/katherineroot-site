@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>In Your Pocket | Katherine Root</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&display=swap" rel="stylesheet">
+<style>
+  /* --- case-study article shell: same tokens as the subpage template
+     (sideprojects/, casestudies/) plus long-form article typography.
+     Reused verbatim from /mighty/first-app-experience/. Content moved
+     verbatim from the previous self-hosted Manta Cares case study —
+     not paraphrased. --- */
+  :root{
+    --magenta:#FF2E93; --blue:#0074AF; --indigo:#1B45E8;
+    --violet:#7B2FF7; --purple:#A614FE; --charcoal:#17140F; --cream:#FFF1D6;
+    --lime:#bdf300; --accent:var(--lime);
+    --spring: cubic-bezier(.34,1.56,.64,1);
+  }
+  *{box-sizing:border-box}
+  html{background:var(--lime);scroll-behavior:smooth}
+  body{margin:0;color:#fff;font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+       -webkit-font-smoothing:antialiased;background:#f455a7;
+       animation:bgCycle 200s ease-in-out infinite}
+  @keyframes bgCycle{
+    0%,6%{background-color:#f455a7}
+    20%,26%{background-color:#E81BBC}
+    40%,46%{background-color:var(--purple)}
+    60%,66%{background-color:var(--violet)}
+    80%,86%{background-color:var(--blue)}
+    100%{background-color:#f455a7}
+  }
+  a{color:inherit}
+  img{max-width:100%}
+
+  .back-link{position:fixed;top:24px;left:24px;z-index:10}
+  .back-link a{--tilt:-3deg;display:flex;align-items:center;justify-content:center;
+        width:48px;height:48px;border-radius:50%;border:2px solid #fff;color:#fff;
+        text-decoration:none;transition:transform .3s var(--spring),background-color .2s ease,color .2s ease}
+  .back-link a:hover,.back-link a:focus-visible{transform:translateY(-4px) rotate(var(--tilt));
+        background:var(--lime);color:#000;border-color:var(--lime);outline:none}
+  .back-link svg{width:22px;height:22px}
+
+  .page-head{max-width:760px;margin:0 auto;padding:clamp(120px,16vw,180px) clamp(20px,6vw,64px) clamp(40px,7vw,56px);
+        text-align:center}
+  .page-head__eyebrow{display:inline-block;background:#fff;color:#f455a7;font-size:13px;font-weight:600;
+        padding:6px 16px;border-radius:100px;margin-bottom:20px}
+  .page-head__title{font-size:clamp(36px,7vw,72px);font-weight:600;letter-spacing:-.03em;margin:0 0 16px;line-height:1.05}
+  .page-head__intro{font-size:clamp(17px,2.1vw,21px);opacity:.9;margin:0;line-height:1.55}
+  .page-head__intro a{color:var(--lime);text-decoration:underline}
+
+  .article{max-width:720px;margin:0 auto;padding:0 clamp(20px,6vw,64px) clamp(48px,8vw,80px);
+        text-align:left;font-size:18px;line-height:1.7}
+  .article h2{font-size:clamp(24px,3vw,32px);font-weight:600;letter-spacing:-.02em;margin:48px 0 16px}
+  .article h3{font-size:clamp(19px,2.2vw,22px);font-weight:600;margin:36px 0 12px;color:var(--lime)}
+  .article p{margin:0 0 20px;opacity:.95}
+  .article strong{font-weight:600;color:#fff}
+  .article ul{margin:0 0 20px;padding-left:22px}
+  .article li{margin-bottom:10px;opacity:.95}
+  .article a{color:var(--lime)}
+  .article blockquote{margin:32px 0;padding:20px 24px;border-left:4px solid var(--lime);
+        background:rgba(255,255,255,.08);border-radius:0 16px 16px 0;font-size:17px;line-height:1.6}
+  .article blockquote cite{display:block;margin-top:10px;font-size:14px;opacity:.7;font-style:normal}
+  .article__img{border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);margin:32px 0;display:block}
+  .article__img-row{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin:32px 0}
+  .article__img-row img{height:280px;width:auto;border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+
+  .article__meta{font-size:13px;opacity:.65;letter-spacing:.04em;margin:0 0 clamp(32px,6vw,48px)}
+  .article__eyebrow{display:block;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+        color:var(--lime);margin:clamp(36px,6vw,52px) 0 6px}
+  .article__eyebrow + h2{margin-top:0}
+
+  .article__nav{max-width:720px;margin:0 auto;padding:clamp(24px,5vw,40px) clamp(20px,6vw,64px) clamp(64px,10vw,112px)}
+  .article__nav-label{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.65;margin:0 0 14px}
+  .article__nav-links{display:flex;flex-direction:column;gap:10px}
+  .article__nav-links a{--tilt:-2deg;text-decoration:none;color:#fff;font-size:15px;font-weight:600;
+        display:inline-flex;align-items:center;gap:6px;transition:transform .18s var(--spring),color .18s}
+  .article__nav-links a:hover,.article__nav-links a:focus-visible{transform:translateX(4px);color:var(--lime);outline:none}
+
+  .article-cta{max-width:720px;margin:0 auto;padding:0 clamp(20px,6vw,64px) clamp(64px,10vw,100px);text-align:center}
+  .cta{--tilt:-2deg;display:inline-flex;align-items:center;gap:10px;
+       background:var(--lime);color:#000;font-size:16px;font-weight:400;
+       padding:14px 28px;border-radius:70px;text-decoration:none;white-space:nowrap;
+       transition:transform .3s var(--spring)}
+  .cta:hover,.cta:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
+
+  .say-hi{max-width:700px;margin:0 auto;padding:0 clamp(20px,6vw,64px) clamp(80px,12vw,140px);text-align:center}
+  .say-hi__title{font-size:clamp(24px,3.4vw,36px);font-weight:600;margin:0 0 32px}
+  .say-hi__icons{display:flex;gap:18px;justify-content:center}
+  .say-hi__icon{--tilt:-1deg;width:66px;height:66px;border-radius:14px;border:2px solid #fff;
+        display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;
+        transition:transform .3s var(--spring),background-color .25s ease,color .2s ease,border-color .25s ease}
+  .say-hi__icon:hover,.say-hi__icon:focus-visible{transform:translateY(-6px) rotate(var(--tilt));
+        background:var(--lime);color:#000;border-color:var(--lime);outline:none}
+  .say-hi__icon svg{width:26px;height:26px}
+  .say-hi__icon--linkedin{font-size:26px;font-weight:700;letter-spacing:-.02em}
+
+  .site-footer{background:linear-gradient(180deg,rgba(189,243,0,0) 0%,var(--lime) 100%);
+        padding:clamp(64px,10vw,120px) 24px clamp(48px,8vw,80px);
+        display:flex;flex-direction:column;align-items:center;gap:40px;text-align:center}
+  .site-footer__heading{display:flex;flex-direction:column;gap:6px}
+  .site-footer__name{font-size:clamp(40px,9vw,120px);font-weight:600;letter-spacing:-.04em;margin:0}
+  .site-footer__tag{font-size:clamp(14px,1.6vw,18px);margin:0;opacity:.9}
+  .site-footer__links{display:flex;flex-direction:column;gap:6px}
+  .site-footer__links a{--tilt:-2deg;font-size:clamp(24px,4vw,44px);font-weight:600;letter-spacing:-.03em;
+        text-decoration:none;transition:transform .3s var(--spring)}
+  .site-footer__links a:hover,.site-footer__links a:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    body{animation:none;background-color:#f455a7}
+    .back-link a,.cta,.say-hi__icon,.site-footer__links a,.article__nav-links a{transition:none !important}
+  }
+</style>
+</head>
+<body>
+
+  <div class="back-link">
+    <a href="/casestudies/index.html" aria-label="Back to Manta Cares">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    </a>
+  </div>
+
+  <div class="page-head">
+    <span class="page-head__eyebrow">CASE STUDY</span>
+    <h1 class="page-head__title">In Your Pocket</h1>
+    <p class="page-head__intro">Our users were already treating Manta Cares like an app. They just didn't have one yet. They were saving our website to their home screens, bringing their phones (not their laptops) to chemo, and writing in to ask how to "add to home screen" in Safari. As Head of Design, my job here wasn't to convince anyone they wanted a mobile app — it was to finally give them the one they'd been improvising, for people having the hardest year of their lives.</p>
+  </div>
+
+  <article class="article">
+    <p class="article__meta">Case study · Manta Cares</p>
+
+    <h2>The Problem</h2>
+    <p>Manta Cares is a free, HIPAA-compliant platform for cancer patients and care partners. For most of our history, it lived on the web: Dashboard, Cancer Maps, Appointment Notebook, Symptom Tracker, and Hope, our AI care partner — all of it behind a browser tab. That was a deliberate, reasonable choice for a small team. But it quietly asked a lot of our users.</p>
+    <p>I went looking for evidence of how people actually reached us on mobile, and it was hard to look away from. Across roughly 900 conversations with Hope, iPhone came up about twice as often as Android, and the questions were almost never about features. They were about plumbing. How do I save this site to my home screen? Where's the share button? How do I bookmark you so I don't have to log in again? People were hand-building a worse version of a native app, one Safari tap at a time, and then writing to our support team when it didn't behave like the real thing.</p>
+    <blockquote>"They bring their phone, not their laptop, to appointments. Logging in through a mobile browser was one more annoying thing to deal with on a hard day."
+      <cite>— the sentiment we heard, over and over, from patients</cite>
+    </blockquote>
+    <p>That's the part that made this more than a roadmap item. The friction wasn't landing on a power user with three monitors. It was landing on someone in a waiting room, on a bad day, who just wanted the tool to be where every other tool on their phone already was. The cost of "not yet" was being paid by exactly the people we exist to support.</p>
+
+    <h2>The Approach</h2>
+    <p>I framed the launch around a single, slightly unglamorous goal: don't make people think. Not about which app, not about which account, not about whether they were in the "real" Manta or a bookmark pretending to be one. Everything below follows from that.</p>
+    <p>I also set a measurable bar so this wouldn't live in the "you can't measure it but you can feel it" category forever. The target was to double app downloads among our core users — from 102 in Q1 to 200+ in Q2 — with a one-month data check-in built into the plan from day one.</p>
+    <p>We shipped iOS, Android, and iPad on April 30, with full event parity to web and marketing attribution wired up before launch so we'd actually be able to read the results.</p>
+
+    <span class="article__eyebrow">Principle 1</span>
+    <h2>Meet People Where They Already Are</h2>
+    <p>The Hope data had already answered the strategy question for me. We weren't creating demand; we were catching up to it. So the design job was to remove every reason someone had ever needed to improvise.</p>
+    <p>The biggest of those was the account. People had spent months building up Cancer Maps, appointment notes, and symptom history on the web, and the fastest way to kill trust in a brand-new app is to make it feel like a blank, separate place. So the entire first-run experience rests on one promise: just sign in with your existing account, and everything you've built is already here. No migration, no "new app, new start," no second profile to wonder about.</p>
+    <p>I also stopped treating "mobile web" and "the app" as a fork in the road. If you landed on our site from a phone, we detected your platform and pointed you at the right store, rather than making you figure out iOS-versus-Android yourself. And we settled an early debate decisively: sign up first, then download. Asking someone to install an app before they understood the value would have been backwards. Let them get to the value in the browser, then offer to put it in their pocket.</p>
+
+    <span class="article__eyebrow">Principle 2</span>
+    <h2>A Nudge, Never a Shove</h2>
+    <p>Most "get the app" patterns are designed for healthy, distractible consumers, and they're allowed to be a little annoying. Ours weren't. Our audience skews older, more rural (especially on Android), and less tech-confident, and many of them are reading us between a diagnosis and an infusion. A pushy interstitial isn't just bad manners in that context — it's a small cruelty.</p>
+    <p>So I designed the download prompts to be easy to take and just as easy to ignore. App store badges sit quietly under the sign-up form as a secondary option. A dedicated onboarding step — "Take Manta Cares with you" — appears only after someone has finished the core setup, so it never interrupts the part that actually matters, and it always offers "Skip for now" with no friction. On the dashboard, a download card is dismissible twice and then gone for good: hide it, and it waits a week; dismiss it again, and we stop asking.</p>
+    <p>One constraint shaped this more than any visual decision. The highest-converting nudge would have been an SMS download link — but SMS would have triggered a HIPAA legal review we didn't want to take on for a launch. Rather than fight it, I leaned into something that fit the audience better anyway: a "send me a link" option over a QR code, so a patient on a desktop could either scan with their phone or email themselves the link to open later. For an older user who started on a laptop, "email me the link so I can tap it on my phone tonight" turned out to be more humane than a clever deep link. The compliance limit and the user need pointed in the same direction.</p>
+
+    <span class="article__eyebrow">Principle 3</span>
+    <h2>Hide the Plumbing</h2>
+    <p>The least glamorous work on this launch was the most important, and it was all about making sure no one could end up in the wrong place.</p>
+    <p>The first trap was our own past success. Because people had been bookmarking the site PWA-style for so long, we knew "is this the bookmark or the real app?" confusion would show up the moment we launched — the support data was already showing early signs of it. So before go-live we built it into the support taxonomy on purpose: dedicated tags and macros for app-versus-web confusion, install help, version issues, and login, so the team could spot and resolve the predictable problems fast instead of rediscovering them one ticket at a time.</p>
+    <p>The second trap was on the Android store, where a company called "Mantra Care" sits close enough to "Manta Cares" to be a genuine wrong-turn risk. That made our store listing, our naming, and even our review responses a design surface, not just a marketing one — every word had to make it obvious you'd found us.</p>
+    <p>None of this shows up in a portfolio screenshot. But getting a vulnerable user safely from "I heard there's an app" to "I'm signed in and it's all here," without a single moment of "wait, is this right?", is the actual product.</p>
+
+    <span class="article__eyebrow">Principle 4</span>
+    <h2>Make the Launch a System, Not a Sprint</h2>
+    <p>A launch like this is a design problem at the org level too, and as the person defining and executing the moving parts across product, marketing, support, and engineering, I treated it that way.</p>
+    <p>We set an internal "ready" date ahead of the public launch date, which absorbed the inevitable last-mile surprises without ever threatening the real deadline. We worked from one source of messaging — a single primer of what the app is, what it isn't, and what we could and couldn't claim — so that the same language flowed cleanly into the app store copy, the patient email, the provider email, and our partner outreach without five people reinventing it. And we ran the whole thing off a color-coded, owner-by-owner checklist so any team could scan in five seconds and see what was blocking what.</p>
+    <p>Not everything was clean — Shopify fought me on something as basic as rounding a button's corners, and our mobile announcement banner broke on exactly the devices we most wanted to reach. But the system was strong enough to surface those problems early and route them, which is the whole point of having one. We ran a retro and wrote the process down, so the next launch starts from a template instead of from scratch.</p>
+
+    <h2>Conclusions</h2>
+    <p>We shipped on time, on all three platforms, to a real audience rather than a press cycle — this was for the people who use Manta, not for investors. A few honest takeaways:</p>
+    <ul>
+      <li><strong>We set a clear, measurable bar and instrumented for it.</strong> The goal was to double core-user downloads (102 → 200+) in the quarter, with a one-month check-in baked into the plan and full event-and-attribution tracking live at launch, so the result was something we could actually read instead of guess at.</li>
+      <li><strong>The account-continuity promise was the quiet MVP.</strong> "Sign in, it's all here" did more for trust than any onboarding flourish, and it's the decision I'd defend first.</li>
+      <li><strong>Compliance shaped the design for the better.</strong> Losing SMS pushed us toward a QR-plus-"email me the link" pattern that fit our older, desktop-starting users more gently than the "optimal" version would have.</li>
+      <li><strong>We deliberately left things on the floor.</strong> In-app font scaling, an "app out of date" prompt, a version-info screen for troubleshooting, and a store preview video were all scoped, named, and consciously deferred rather than half-shipped.</li>
+      <li><strong>The biggest deliverable wasn't a screen — it was a repeatable launch.</strong> Mobile is now a first-class surface at Manta, and we walked away with a written, reusable playbook that the team has already leaned on for the launches that came after.</li>
+    </ul>
+    <p>The work I'm proudest of here is invisible by design. If we did it right, a patient never noticed the app launch at all. They just opened their phone one day and found that the thing they'd been improvising was finally, quietly, real.</p>
+    <p><em>Manta Cares is free for cancer patients and care partners — on iOS, Android, and the web.</em></p>
+  </article>
+
+  <nav class="article__nav" aria-label="More Manta case studies">
+    <p class="article__nav-label">More Manta case studies</p>
+    <div class="article__nav-links">
+      <a href="/casestudies/manta/year-in-review/">The Year Manta Became a Companion →</a>
+      <a href="/casestudies/manta/dashboard-redesign/">Redesigning the Dashboard Around One Person →</a>
+      <a href="/casestudies/manta/appointment-prep/">The Eight-Minute Appointment →</a>
+      <a href="/casestudies/manta/web-to-mobile/">From Tab to Pocket →</a>
+      <a href="/casestudies/manta/brand-evolution/">Earning Trust on Sight →</a>
+    </div>
+  </nav>
+
+  <section class="say-hi" aria-label="Contact">
+    <h2 class="say-hi__title">Say hi sometime</h2>
+    <div class="say-hi__icons">
+      <a class="say-hi__icon say-hi__icon--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="--tilt:-2deg"><span aria-hidden="true">in</span></a>
+      <a class="say-hi__icon" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="--tilt:2deg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+      </a>
+      <a class="say-hi__icon" href="mailto:keroot@gmail.com" aria-label="Email" style="--tilt:-3deg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="footer">
+    <div class="site-footer__heading">
+      <p class="site-footer__name">Katherine Root</p>
+      <p class="site-footer__tag">Product, AI, and Experience Design Expert</p>
+    </div>
+    <div class="site-footer__links">
+      <a href="/assets/KatherineRootResume2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">Resume</a>
+      <a href="/casestudies/index.html" style="--tilt:3deg">Case Studies</a>
+      <a href="/" style="--tilt:-4deg">Home</a>
+    </div>
+  </footer>
+
+</body>
+</html>
