@@ -194,9 +194,15 @@
      shots across Manta Cares and Mighty Networks), on the same Embla
      carousel base as Kind Words — full-bleed, native drag, real loop.
      No autoplay here (wasn't asked for on this one); it's a browse-at-
-     your-own-pace gallery, not a rotating showcase. --- */
-  .screens .embla{width:100vw;margin-left:calc(50% - 50vw);cursor:grab}
-  .screens .embla:active{cursor:grabbing}
+     your-own-pace gallery, not a rotating showcase.
+     .screens-gallery is a plain block wrapper (matches .kind-words)
+     around the .embla div — without it, .embla ends up as a *direct*
+     flex child of the section's own `align-items:center`, and that
+     extra layer of centering logic collides with the width:100vw/
+     margin-left:calc(50% - 50vw) full-bleed trick, throwing the whole
+     element ~18px left of true-center. That was the dead zone on the
+     right edge where drags didn't register at all. --- */
+  .screens-gallery{width:100%}
   .screens__slide{flex:0 0 auto}
   .screens__slide:last-child{margin-right:24px}
   .screens__slide img{height:clamp(160px,32vh,420px);width:auto;border-radius:14px;
@@ -424,6 +430,7 @@
   <!-- ============ screens ============ -->
   <section class="section" id="screens">
     <h2 class="section__title">Oh and I make things look pretty ✨</h2>
+    <div class="screens-gallery">
     <div class="screens__row embla">
       <div class="embla__viewport" id="screens-viewport">
         <div class="embla__container">
@@ -451,6 +458,7 @@
           <div class="embla__slide screens__slide"><img src="assets/screens/mighty-14.png" alt="Mighty Networks app screen 14"></div>
         </div>
       </div>
+    </div>
     </div>
     <a class="cta" href="#testimonials" style="--tilt:4deg">SO PRETTY <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
