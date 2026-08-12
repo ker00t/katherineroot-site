@@ -82,11 +82,34 @@ img{max-width:100%}
 .article blockquote{margin:32px 0;padding:20px 24px;border-left:4px solid var(--lime);
       background:rgba(255,255,255,.08);border-radius:0 16px 16px 0;font-size:17px;line-height:1.6}
 .article blockquote cite{display:block;margin-top:10px;font-size:14px;opacity:.7;font-style:normal}
-.article__img{border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);margin:32px 0;display:block}
+.article__img{border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);margin:32px 0;display:block;
+      cursor:zoom-in;transition:transform .25s var(--spring)}
+.article__img:hover,.article__img:focus-visible{transform:translateY(-4px)}
 .article__img-row{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin:32px 0}
-.article__img-row img{height:280px;width:auto;border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.article__img-row img{height:280px;width:auto;border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);
+      cursor:zoom-in;transition:transform .25s var(--spring)}
+.article__img-row img:hover,.article__img-row img:focus-visible{transform:translateY(-4px)}
 .article__video{border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);margin:32px auto;display:block;max-height:640px}
 .article__caption{text-align:center;font-size:14px;opacity:.65;margin:-20px 0 32px;font-style:italic}
+
+/* --- article lightbox: click any case-study image to open it larger,
+   same native-<dialog> pattern as the homepage's pretty-screens
+   lightbox (free Escape/backdrop-click + focus trap, no dependency).
+   Shared by every case-study page — see assets/lightbox.js. --- */
+#article-lightbox{border:none;background:transparent;padding:0;max-width:none;
+      max-height:none;position:fixed;inset:0;margin:auto;overflow:visible}
+#article-lightbox::backdrop{background:rgba(0,0,0,.85)}
+#article-lightbox[open]{display:flex;align-items:center;justify-content:center}
+#article-lightbox-img{max-width:min(900px,88vw);max-height:88vh;width:auto;height:auto;
+      display:block;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+#article-lightbox-close{position:fixed;top:24px;right:24px;width:44px;height:44px;
+      border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,.3);color:#fff;
+      font-size:24px;line-height:1;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      transition:background .2s ease,transform .2s var(--spring)}
+#article-lightbox-close:hover,#article-lightbox-close:focus-visible{
+      background:var(--lime);color:#000;border-color:var(--lime);
+      transform:scale(1.08);outline:none}
 
 /* meta byline + "Principle N" eyebrow above an h2 (Manta case studies) */
 .article__meta{font-size:13px;opacity:.65;margin:0 0 clamp(32px,6vw,48px)}
@@ -194,4 +217,5 @@ a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
   html{scroll-behavior:auto}
   body{animation:none;background-color:#f455a7}
   .back-link a,.say-hi__icon,.site-footer__links a{transition:none !important}
+  .article__img,.article__img-row img{transition:none !important}
 }

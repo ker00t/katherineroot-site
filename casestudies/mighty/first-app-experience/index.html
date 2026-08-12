@@ -63,7 +63,6 @@
 
   <article class="article">
     <div class="article__img-row">
-      <img src="media/fae-1.webp" alt="Screens from the new first app experience proposal">
       <img src="media/fae-2.png" alt="Screens from the new first app experience proposal">
     </div>
     <p class="article__caption">Screens from the new first app experience proposal</p>
@@ -83,12 +82,10 @@
       "Thanks for sharing the screenshot! It looks like [the member] created a new network instead of creating a new account. I encourage her to sign up on the web at the Landing Page here, and I will delete the other account."
       <cite>&mdash; Customer Advocate, speaking to a Host</cite>
     </blockquote>
-    <img class="article__img" src="media/fae-4.png" alt="">
     <p>Based on these observations, one principle for the new first app experience was to speak to the member. I wanted to focus on helping members understand the world they were entering, and <strong>excite them about the idea of navigating a new app</strong> rather than dreading it.</p>
     <p>In my proposal, I accomplish this by downplaying host use cases, using common language like "community" rather than concepts like "Network" that need explaining, and providing clear options that spoke to the member-specific use cases we identified.</p>
     <div class="article__img-row">
       <img src="media/fae-5.png" alt="The original vs updated landing screens of the Mighty Networks App">
-      <img src="media/fae-6.png" alt="The original vs updated landing screens of the Mighty Networks App">
     </div>
     <p class="article__caption">The original vs updated landing screens of the Mighty Networks App</p>
 
@@ -97,7 +94,6 @@
     <p>For one, it meant that our app did not reflect the very clear and colorful branding we had at Mighty Networks, resulting in our app feeling disconnected from our brand, and even a little bit untrustworthy. It also left members with nothing to anchor on upon first download of the app, and no voice to help them find their way.</p>
     <p>With this proposal, I made sure that our brand as Mighty Networks was front and center, while still celebrating the brands of the individual networks themselves. I wanted to create clear, defined moments that made it obvious when you were interacting with the world of Mighty, and when you were interacting with an individual network. <strong>Big, bold color changes</strong> and <strong>obvious screen transitions</strong> help you not just notice, but celebrate when you leave the world of Mighty to head somewhere new.</p>
     <video class="article__video" src="media/fae-video-1.mp4" autoplay loop muted playsinline></video>
-    <img class="article__img" src="media/fae-7.png" alt="" style="max-width:420px;margin-left:auto;margin-right:auto">
     <p class="article__caption">Animations showcasing Mighty branding vs network branding</p>
     <p>This clear separation of branding also allows us to accommodate for another common use case, where <strong>members can click on a direct link to a specific network</strong>. These members can skip the Mighty branding entirely, and will only ever see the branding for the Network they're going to, giving them confidence they are in the right place.</p>
 
@@ -112,12 +108,10 @@
     <p class="article__caption">Network loading animation showcasing people and spaces</p>
 
     <h3>Principle 4: Showcase Our Best</h3>
-    <img class="article__img" src="media/fae-9.png" alt="">
     <p>A major sticking point in prioritizing a project to update the first app experience was our dreaded "Featured Networks" screen. We had hoped to curate a list of our favorite networks for new members to admire, but in practice this screen had the opposite effect.</p>
     <p>Many of our networks require payment to join, or are private communities reserved just for those who are approved. We were showcasing networks that we were proud of, but without the ability to see what was happening inside them, a new member had no idea how interesting they were. Instead they often looked dead, and even abandoned.</p>
     <div class="article__img-row">
       <img src="media/fae-10.png" alt="The original vs updated browsing experience in the Mighty Networks App">
-      <img src="media/fae-11.png" alt="The original vs updated browsing experience in the Mighty Networks App">
     </div>
     <p class="article__caption">The original vs updated browsing experience in the Mighty Networks App</p>
     <p>This proposal was a great opportunity to re-evaluate whether we needed this screen in our app at all. The goal for showcasing networks in the first place was just to prove that Mighty Networks is a place where vibrant, active, interesting communities come to thrive. And while we needed a mechanism for members to be able to find networks that were using our app, we didn't necessarily need every network to be available for browsing.</p>
@@ -137,9 +131,11 @@
     <p>In the process of making these updates, the company underwent a change in branding, so while we implemented some of the ideas described in this proposal, they take on a more mellow tone to match our new, more understated brand.</p>
   </article>
 
-  <div class="article-cta">
-    <a class="cta" href="/casestudies/index.html">More Mighty Networks case studies</a>
-  </div>
+  <!-- click any article image to open it larger here -->
+  <dialog id="article-lightbox">
+    <button type="button" id="article-lightbox-close" aria-label="Close">&times;</button>
+    <img id="article-lightbox-img" src="" alt="">
+  </dialog>
 
   <footer class="site-footer" id="footer">
     <div class="site-footer__heading">
@@ -162,5 +158,6 @@
     </div>
   </footer>
 
+<script src="/assets/lightbox.js" defer></script>
 </body>
 </html>

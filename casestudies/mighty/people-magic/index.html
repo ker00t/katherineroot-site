@@ -91,9 +91,11 @@
     <p>Finding these magical moments in a product experience is the never ending work of a designer &mdash; they're the kinds of things that keep me up in the middle of the night. Keep checking back here to see what new ideas are on my mind lately!</p>
   </article>
 
-  <div class="article-cta">
-    <a class="cta" href="/casestudies/index.html">More Mighty Networks case studies</a>
-  </div>
+  <!-- click any article image to open it larger here -->
+  <dialog id="article-lightbox">
+    <button type="button" id="article-lightbox-close" aria-label="Close">&times;</button>
+    <img id="article-lightbox-img" src="" alt="">
+  </dialog>
 
   <footer class="site-footer" id="footer">
     <div class="site-footer__heading">
@@ -116,5 +118,6 @@
     </div>
   </footer>
 
+<script src="/assets/lightbox.js" defer></script>
 </body>
 </html>
