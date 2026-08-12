@@ -1,0 +1,101 @@
+{
+ "2a9d42df-8b97-4c53-a9c0-360949b35dde": {
+  "systemDataSourceType": "mp4",
+  "alexandriaUrl": "https://video.squarespace-cdn.com/content/v1/649378526c54e630f4b17c1a/2a9d42df-8b97-4c53-a9c0-360949b35dde/{variant}",
+  "durationSeconds": 9.866667,
+  "aspectRatio": 1.7777777777777777,
+  "id": "67abead9cac66841434f8162",
+  "systemDataVariants": "1920:1080,640:360",
+  "alexandriaLibraryId": "649378526c54e630f4b17c1a",
+  "systemDataId": "2a9d42df-8b97-4c53-a9c0-360949b35dde",
+  "videoCodec": "h264"
+ },
+ "ff1ba93d-5272-43c6-a14a-00d41ab1ff3f": {
+  "systemDataSourceType": "mp4",
+  "alexandriaUrl": "https://video.squarespace-cdn.com/content/v1/649378526c54e630f4b17c1a/ff1ba93d-5272-43c6-a14a-00d41ab1ff3f/{variant}",
+  "durationSeconds": 5.433333,
+  "aspectRatio": 0.6976744186046512,
+  "id": "669d6a47cb2ace32c9ebe042",
+  "systemDataVariants": "1080:1548,360:516",
+  "alexandriaLibraryId": "649378526c54e630f4b17c1a",
+  "systemDataId": "ff1ba93d-5272-43c6-a14a-00d41ab1ff3f",
+  "videoCodec": "h264"
+ },
+ "87b0be22-01d1-4870-9085-19d18ad400b8": {
+  "systemDataSourceType": "mp4",
+  "alexandriaUrl": "https://video.squarespace-cdn.com/content/v1/649378526c54e630f4b17c1a/87b0be22-01d1-4870-9085-19d18ad400b8/{variant}",
+  "durationSeconds": 7.083333,
+  "aspectRatio": 0.6976744186046512,
+  "id": "669d6a66f32d0e0ff4c38ab0",
+  "systemDataVariants": "1080:1548,360:516",
+  "alexandriaLibraryId": "649378526c54e630f4b17c1a",
+  "systemDataId": "87b0be22-01d1-4870-9085-19d18ad400b8",
+  "videoCodec": "h264"
+ },
+ "fe0c3412-4e07-45fa-b4bb-9be5420a8bdd": {
+  "systemDataSourceType": "mp4",
+  "alexandriaUrl": "https://video.squarespace-cdn.com/content/v1/649378526c54e630f4b17c1a/fe0c3412-4e07-45fa-b4bb-9be5420a8bdd/{variant}",
+  "durationSeconds": 9.8,
+  "aspectRatio": 0.6976744186046512,
+  "id": "669eac18df917e6a47a3b248",
+  "systemDataVariants": "1080:1548,360:516",
+  "alexandriaLibraryId": "649378526c54e630f4b17c1a",
+  "systemDataId": "fe0c3412-4e07-45fa-b4bb-9be5420a8bdd",
+  "videoCodec": "h264"
+ },
+ "6aa006fe-6d00-4006-8b6e-c76d7292e216": {
+  "systemDataSourceType": "mp4",
+  "alexandriaUrl": "https://video.squarespace-cdn.com/content/v1/649378526c54e630f4b17c1a/6aa006fe-6d00-4006-8b6e-c76d7292e216/{variant}",
+  "durationSeconds": 8.683333,
+  "aspectRatio": 1.7407407407407407,
+  "id": "66f5c388c11a6d589c0ee436",
+  "systemDataVariants": "1880:1080,626:360",
+  "alexandriaLibraryId": "649378526c54e630f4b17c1a",
+  "systemDataId": "6aa006fe-6d00-4006-8b6e-c76d7292e216",
+  "videoCodec": "h264"
+ },
+ "49d610d5-11a1-4557-a747-3ca2a1961dd7": {
+  "systemDataSourceType": "mp4",
+  "alexandriaUrl": "https://video.squarespace-cdn.com/content/v1/649378526c54e630f4b17c1a/49d610d5-11a1-4557-a747-3ca2a1961dd7/{variant}",
+  "durationSeconds": 30.566667,
+  "aspectRatio": 1.5907407407407408,
+  "id": "66fad95458d4134223cfb763",
+  "systemDataVariants": "1718:1080,572:360",
+  "alexandriaLibraryId": "649378526c54e630f4b17c1a",
+  "systemDataId": "49d610d5-11a1-4557-a747-3ca2a1961dd7",
+  "videoCodec": "h264"
+ },
+ "e8dae48a-6e37-47d4-8fff-38e197796e79": {
+  "systemDataSourceType": "mp4",
+  "alexandriaUrl": "https://video.squarespace-cdn.com/content/v1/649378526c54e630f4b17c1a/e8dae48a-6e37-47d4-8fff-38e197796e79/{variant}",
+  "durationSeconds": 9.333333,
+  "aspectRatio": 1.5851851851851853,
+  "id": "66fadd42aa3e392c6eceab5c",
+  "systemDataVariants": "1712:1080,570:360",
+  "alexandriaLibraryId": "649378526c54e630f4b17c1a",
+  "systemDataId": "e8dae48a-6e37-47d4-8fff-38e197796e79",
+  "videoCodec": "h264"
+ },
+ "9d6fce1b-3f3a-40fc-b91f-9d58c6e0162c": {
+  "systemDataSourceType": "mp4",
+  "alexandriaUrl": "https://video.squarespace-cdn.com/content/v1/649378526c54e630f4b17c1a/9d6fce1b-3f3a-40fc-b91f-9d58c6e0162c/{variant}",
+  "durationSeconds": 27.3,
+  "aspectRatio": 0.5222437137330754,
+  "id": "67e333f127291f6e25bb543f",
+  "systemDataVariants": "1080:2068,360:690",
+  "alexandriaLibraryId": "649378526c54e630f4b17c1a",
+  "systemDataId": "9d6fce1b-3f3a-40fc-b91f-9d58c6e0162c",
+  "videoCodec": "h264"
+ },
+ "a52692ed-0963-457d-bfdc-322b565d8a61": {
+  "systemDataSourceType": "mp4",
+  "alexandriaUrl": "https://video.squarespace-cdn.com/content/v1/649378526c54e630f4b17c1a/a52692ed-0963-457d-bfdc-322b565d8a61/{variant}",
+  "durationSeconds": 28.116667,
+  "aspectRatio": 1.6092592592592592,
+  "id": "67e4397b4c1c7209dd93d980",
+  "systemDataVariants": "1738:1080,580:360",
+  "alexandriaLibraryId": "649378526c54e630f4b17c1a",
+  "systemDataId": "a52692ed-0963-457d-bfdc-322b565d8a61",
+  "videoCodec": "h264"
+ }
+}
