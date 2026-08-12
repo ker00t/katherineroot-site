@@ -1,157 +1,85 @@
-<!-- ============================================================
-     THE FLIP — portfolio header for katherineroot.com
-     Self-contained. No build step, no dependencies.
-     Drop into any page, or lift the <style>/<header>/<script> apart.
-
-     Three states, all handled below:
-       1. Pointer + hover  -> flip on hover (the real interaction)
-       2. Touch / no-hover  -> flip on tap, one letter active at a time
-       3. prefers-reduced-motion -> static name, no motion, tags hidden
-
-     Accessibility: the <h1> exposes the plain name "Katherine Root"
-     to screen readers; the animated glyphs and tags are decorative
-     (aria-hidden), so nothing reads as gibberish.
-     ============================================================ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Katherine Root — experience designer</title>
-<script src="/assets/theme-init.js"></script>
+<title>Katherine Root | Experience Designer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&display=swap" rel="stylesheet">
 <style>
-  /* --- palette: every fixed color on the site, named once. Used directly on
-     routes/tags/stats, and by the theme accents below (which are the only
-     colors that shift by time of day — everything here doesn't). Kept
-     identical to the palette section in assets/site.css — this page is
-     self-contained and doesn't load that file, so update both. */
+  /* --- v2 preview: a from-scratch homepage following the Figma "portfolio"
+     (v2) mock — 10 full-bleed sections in one scrolling story, closing on a
+     gradient footer. Self-contained like the current root index.html (own
+     style/script, no site.css). No time-of-day theming here: per the Figma
+     annotation on the hero, the background instead slowly cycles through a
+     curated set of bright hues, always paired with the fixed neon-green CTA
+     color. Kept: the hero letter-flip and every tilt-hover interaction from
+     the current site — reused verbatim where the component is identical
+     (letter-flip, say-hi icons). Kind Words is a native horizontal
+     scroll-snap gallery here rather than the live site's JS carousel. */
   :root{
-    --blue:#0074AF;    --blue-pastel:#A8D6EF;
-    --teal:#00C2A8;    --teal-pastel:#A8E8DD;
-    --indigo:#1B45E8;  --indigo-pastel:#B8C4FA;
-    --violet:#7B2FF7;  --violet-pastel:#D9BEFA;
-    --purple:#A614FE;  --purple-pastel:#D9BEFA;
-    --green:#80BD3E;   --green-pastel:#CBE8A8;
-    --lime:#C8F135;    --lime-pastel:#E9F7AD;
-    --pink:#FF0096;    --pink-pastel:#FFB8DC;
-    --orange:#FF4800;  --orange-pastel:#FFCBB0;
-    --magenta:#FF2E93;
-    --orange-red:#FF5A1F;
-    --charcoal:#17140F; /* fixed dark text-on-bright-chip color */
-    --cream:#FFF1D6;    /* fixed light text-on-dark-chip color */
-  }
-
-  :root{
-    /* night (also the no-JS fallback) */
-    --paper:#17140F;      /* dark field */
-    --ink:#FFF1D6;        /* cream type */
-    --muted:#9B9384;
-    --surface-rgb:255,241,214;  /* --ink as r,g,b — translucent borders/tints on dark bg */
-    --accent:var(--lime);      /* the pop color — bright enough to read on this dark paper */
-    --accent-ink:var(--charcoal); /* text/icon color for content drawn ON TOP of --accent */
-    --lift: -8px;         /* how high a flipped letter jumps */
-    --dur: .5s;
+    --magenta:#FF2E93; --blue:#0074AF; --indigo:#1B45E8;
+    --violet:#7B2FF7; --purple:#A614FE; --charcoal:#17140F; --cream:#FFF1D6;
+    --lime:#bdf300;
+    --accent:var(--lime);
     --spring: cubic-bezier(.34,1.56,.64,1);
+    --lift: -8px;
+    --dur: .5s;
   }
-
-  /* --- time of day: JS sets data-time on <html> before first paint ---
-     Morning and afternoon share one accent (indigo, ~5.2–5.5:1 contrast
-     against both papers) instead of each picking their own — one
-     light-theme accent, not two. Lime pops fine on dark papers (night/
-     evening) but disappears on light ones, hence the swap. */
-  :root[data-time="morning"]{
-    --paper:#FFE49E;
-    --ink:#231B12;
-    --muted:#5C4A28;
-    --surface-rgb:35,27,18;
-    --accent:var(--indigo);
-    --accent-ink:var(--cream);
-  }
-  :root[data-time="afternoon"]{
-    --paper:#C8E5F5;
-    --ink:#142430;
-    --muted:#2D4552;
-    --surface-rgb:20,36,48;
-    --accent:var(--indigo);
-    --accent-ink:var(--cream);
-  }
-  :root[data-time="evening"]{
-    --paper:#4F294C;
-    --ink:#FFF1D6;
-    --muted:#C9A8C6;
-    --surface-rgb:255,241,214;
-    /* lime still pops fine on this dark plum — no accent override needed */
-  }
-
   *{box-sizing:border-box}
-  body{margin:0;background:var(--paper);color:var(--ink);
-       font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
-       -webkit-font-smoothing:antialiased;
-       transition:background-color .5s ease,color .5s ease}
-
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
            overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-
-  /* --- header: Figma "header" component, fixed + hidden until you scroll
-     past the hero (see the IntersectionObserver near the bottom of this
-     file). Values pulled directly from Figma nodes 36:1947/36:1949 via
-     the MCP get_design_context tool — not eyeballed from a screenshot:
-       pill: border-radius 100px, padding 40px/24px, backdrop-blur 2px
-       light (morning/afternoon): bg rgba(255,255,255,.4), border #FFF7E2, ink #1c170f
-       dark  (evening/night):     bg rgba(255,255,255,.1), border rgba(255,247,226,.1), ink #FFF1D3
-       text: "Katherine Root  |  Experience Designer" 20px, tracking .2px
-       links: work / resume / linkedin / email, 18px, gap 16px, tracking .18px
-       position when visible: 32px from top, pill inset ~64px from the frame edges
-     On morning/afternoon: white fill/border at 40%/60% opacity and no
-     shadow, per explicit feedback — tuned by eye against our actual
-     papers rather than reused verbatim from Figma's own light values. */
-  .header{position:fixed;top:32px;left:0;right:0;z-index:20;
-         padding:0 clamp(20px,5vw,48px);
-         opacity:0;transform:translateY(-16px);pointer-events:none;
-         transition:opacity .35s ease,transform .35s ease}
-  .header.is-visible{opacity:1;transform:translateY(0);pointer-events:auto}
-  /* TEMP: header hidden site-wide per request — everything above is left
-     intact so it can come back by deleting this one rule. */
-  .header{display:none}
-
-  .nav{--header-ink:#1C170F;max-width:1080px;margin:0 auto;display:flex;align-items:center;
-       justify-content:space-between;gap:16px;flex-wrap:wrap;border-radius:100px;
-       padding:24px clamp(20px,4vw,40px);
-       background:rgba(255,255,255,.4);border:1px solid #FFF7E2;
-       backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
-  :root[data-time="evening"] .nav,:root[data-time="night"] .nav{
-       --header-ink:#FFF1D3;background:rgba(255,255,255,.1);border-color:rgba(255,247,226,.1)}
-  :root[data-time="morning"] .nav,:root[data-time="afternoon"] .nav{
-       background:rgba(255,255,255,.4);border-width:1.5px;border-color:rgba(255,255,255,.6)}
-
-  .nav__id{display:flex;align-items:baseline;gap:.35em}
-  .nav__mark{--tilt:-3deg;font-size:20px;font-weight:600;color:var(--header-ink);text-decoration:none;
-             letter-spacing:.2px;display:inline-block;transition:transform .18s var(--spring),color .18s}
-  .nav__mark:hover,.nav__mark:focus-visible{transform:translateY(-3px) rotate(var(--tilt));color:var(--accent);outline:none}
-  .nav__tagline{font-size:20px;color:var(--header-ink);letter-spacing:.2px}
-
-  .nav__links{display:flex;gap:16px;list-style:none;margin:0;padding:0}
-  .nav__links a{--tilt:-4deg;font-size:18px;color:var(--header-ink);letter-spacing:.18px;text-decoration:none;
-                display:inline-block;transition:transform .18s var(--spring),color .18s}
-  .nav__links a:hover,.nav__links a:focus-visible{transform:translateY(-3px) rotate(var(--tilt));color:var(--accent);outline:none}
-  .nav__links a:focus-visible{text-decoration:underline;text-underline-offset:4px}
-
-  @media (max-width:720px){
-    .nav__tagline{display:none}
+  /* html's own background is what shows in the mobile rubber-band overscroll
+     area beyond the document edges — set to the footer's solid green so
+     pulling up past the bottom shows green, not the page's rotating hue. */
+  html{background:var(--lime)}
+  body{margin:0;color:#fff;font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+       -webkit-font-smoothing:antialiased;background:#f455a7;
+       animation:bgCycle 200s ease-in-out infinite}
+  @keyframes bgCycle{
+    0%,6%{background-color:#f455a7}
+    20%,26%{background-color:#E81BBC}
+    40%,46%{background-color:var(--purple)}
+    60%,66%{background-color:var(--violet)}
+    80%,86%{background-color:var(--blue)}
+    100%{background-color:#f455a7}
   }
+  a{color:inherit}
+  img{max-width:100%}
 
-  /* --- the name --- */
-  .name{margin:clamp(56px,10vw,104px) 0 0;display:flex;flex-wrap:nowrap;
-        justify-content:center;perspective:800px;column-gap:clamp(12px,3vw,40px)}
+  /* --- section shell: every section fills the viewport (annotation on the
+     "companies" frame — applies site-wide, not just there), full-bleed,
+     stacked in one story with a CTA at the bottom that scrolls to the next. */
+  html{scroll-behavior:smooth}
+  .section{min-height:100vh;display:flex;flex-direction:column;align-items:center;
+           justify-content:center;gap:clamp(40px,7vw,80px);
+           padding:clamp(48px,8vw,64px) clamp(20px,6vw,64px);text-align:center}
+  .section__title{font-size:clamp(32px,6vw,80px);font-weight:600;letter-spacing:-.03em;
+           line-height:1.1;margin:0;max-width:1340px}
+  .section__title--regular{font-weight:400}
+
+  .cta{--tilt:-2deg;display:inline-flex;align-items:center;gap:10px;
+       background:var(--lime);color:#000;font-size:clamp(14px,1.4vw,16px);font-weight:400;
+       padding:clamp(12px,1.6vw,16px) clamp(20px,2.6vw,32px);border-radius:70px;
+       text-decoration:none;white-space:nowrap;
+       transition:transform .3s var(--spring)}
+  .cta:hover,.cta:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
+  .cta svg{width:16px;height:16px;flex:none}
+
+  /* reusable down/right chevron — same glyph as the current site's
+     .route__arrow, just rotated per context instead of a separate asset */
+  .chev{transform:rotate(90deg)}
+
+  /* --- hero: name/tags/letter-flip lifted verbatim from the current site's
+     index.html (.letter/.glyph/.tag), just recolored for white-on-bright. --- */
+  .hero{gap:clamp(0px,0vw,24px)}
+  .hero__lead{font-size:clamp(17px,2vw,24px);margin:0}
+  .hero .cta{margin-top:clamp(20px,4vw,40px)}
+  .name{display:flex;flex-wrap:wrap;justify-content:center;row-gap:.05em;
+        perspective:800px;column-gap:clamp(8px,2vw,28px)}
   .word{display:flex}
-
   .letter{position:relative;display:inline-block;cursor:default;-webkit-tap-highlight-color:transparent}
-  /* click bounce on non-touch devices — applied to .letter (not .glyph),
-     which already carries its own hover-driven transform, so the two
-     never fight over the same property */
   @keyframes letterBounce{
     0%,100%{transform:translateY(0)}
     30%{transform:translateY(-10px)}
@@ -159,528 +87,568 @@
     75%{transform:translateY(-2px)}
   }
   .letter.is-bouncing{animation:letterBounce .5s var(--spring)}
-
-  .glyph{display:inline-block;
-         font-size:clamp(36px,12vw,146px);line-height:1;font-weight:600;letter-spacing:-.035em;
+  .glyph{display:inline-block;color:#fff;
+         font-size:clamp(52px,13vw,180px);line-height:1;font-weight:600;letter-spacing:-.03em;
          transition:transform var(--dur) var(--spring),color var(--dur)}
-
-  /* mobile: there's no room to keep both words on one line at a size
-     worth reading, so let "Root" wrap and go bigger instead */
-  @media (max-width:640px){
-    .name{flex-wrap:wrap;row-gap:.05em}
-    .glyph{font-size:clamp(56px,22vw,110px)}
-  }
   .letter:hover .glyph,
   .letter.is-active .glyph{transform:translateY(var(--lift)) rotateY(180deg) scale(1.12);color:var(--accent)}
-
-  .tag{--tilt:-3deg;position:absolute;left:50%;top:-46px;white-space:nowrap;
-       font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;
+  .tag{--tilt:-3deg;position:absolute;left:50%;top:-42px;white-space:nowrap;
+       font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;
        opacity:0;pointer-events:none;
        transform:translateX(-50%) translateY(10px) scale(.75) rotate(var(--tilt));
        transition:opacity .34s var(--spring),transform .34s var(--spring)}
   .letter:hover .tag,
   .letter.is-active .tag{opacity:1;transform:translateX(-50%) translateY(0) scale(1) rotate(var(--tilt))}
+  .hero__sub{font-size:clamp(17px,2vw,24px);max-width:1000px;margin:0}
 
-  /* --- bio: the short subtitle, with a hover-revealed prompt that expands
-     into the long-winded version. Uses the grid 0fr->1fr trick so the
-     expand/collapse animates to auto height instead of jumping. --- */
-  .bio{text-align:center;margin:clamp(14px,3vw,20px) auto 0;max-width:640px;position:relative;
-       padding:0 clamp(20px,5vw,48px)}
-  .bio__short{font-size:clamp(15px,2.2vw,20px);color:var(--muted);letter-spacing:.02em;margin:0;
-         transition:opacity .25s ease}
-  .bio.is-expanded .bio__short{display:none}
+  /* --- companies: 5-logo row using the real single-file asset set from
+     Figma's "company hover" frame (assets/logos/{company}-{white,color,
+     bg,arrow}.svg — each company's white/color/bg share one native
+     viewBox, so color stacks directly on bg with no percentage-inset
+     math). On hover: same tilt language as the rest of the site, the
+     mark crossfades from its white cutout to color-on-bg in place (the
+     logo itself doesn't move or resize, matching Figma — hover just
+     recolors it and reveals a caption/name/connector-arrow around it),
+     and a caption + company name + a hand-drawn connector arrow fan out
+     to their own per-company position/rotation (lifted from Figma's
+     company-hover1..5 frames, scaled down to this row's on-page size). --- */
+  .companies__row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+           gap:clamp(28px,5vw,67px);row-gap:56px}
+  .company{--tilt:-2deg;position:relative;transition:transform .3s var(--spring)}
+  .company:hover,.company:focus-within{transform:translateY(-6px) rotate(var(--tilt));z-index:1}
+  .company__badge{position:relative;display:flex;align-items:center;justify-content:center}
+  .company__logo{display:block;object-fit:contain;transition:opacity .45s var(--spring)}
+  .company__logo--color{position:absolute;inset:0;opacity:0;
+           transition:opacity .45s var(--spring) .05s}
+  .company__logo-layer{position:absolute;display:block;width:100%;height:100%;object-fit:contain}
+  .company:hover .company__logo--white,.company:focus-within .company__logo--white{opacity:0;transition-delay:0s}
+  .company:hover .company__logo--color,.company:focus-within .company__logo--color{opacity:1}
+  .company__logo--simply{height:clamp(64px,9vw,106px);width:auto}
+  .company__logo--launch{width:clamp(120px,17vw,242px);height:auto}
+  .company__logo--manta{width:clamp(70px,10vw,140px);height:clamp(70px,10vw,140px)}
+  .company__logo--mighty{width:clamp(110px,15.5vw,221px);height:auto}
+  .company__logo--copper{width:clamp(70px,10vw,140px);height:clamp(70px,10vw,140px)}
 
-  /* filled pill, same treatment as the hero .tag chips above — solid
-     accent fill, 14px/600 label — rather than the outlined/translucent
-     style used elsewhere for secondary buttons. */
-  .bio__prompt{--tilt:-2deg;margin:10px auto 0;display:inline-flex;align-items:center;gap:5px;
-         padding:7px 16px;border-radius:999px;border:none;
-         background:var(--accent);color:var(--accent-ink);font-family:inherit;
-         font-size:14px;font-weight:600;letter-spacing:.02em;cursor:pointer;
-         opacity:0;transform:translateY(10px) scale(.75) rotate(var(--tilt));pointer-events:none;
-         transition:opacity .34s var(--spring),transform .34s var(--spring)}
-  .bio:hover .bio__prompt,.bio.is-touch-revealed .bio__prompt{
-         opacity:1;transform:translateY(0) scale(1) rotate(var(--tilt));pointer-events:auto}
-  .bio.is-expanded .bio__prompt{display:none}
-  .bio__prompt:hover,.bio__prompt:focus-visible{transform:translateY(-3px) scale(1) rotate(var(--tilt));outline:none}
-  .bio__prompt svg{width:12px;height:12px;transition:transform .25s var(--spring)}
-  .bio__prompt:hover svg{transform:translateX(3px) rotate(90deg)}
+  /* the caption/name/arrow trio: hidden + collapsed to the badge's
+     center at rest, each fans out to its own spot on hover/focus */
+  .company__piece{position:absolute;left:50%;top:50%;pointer-events:none;opacity:0;
+           transform:translate(-50%,-50%) scale(.4);transform-origin:center center;
+           transition:opacity .35s var(--spring),transform .45s var(--spring)}
+  .company:hover .company__piece,.company:focus-within .company__piece{opacity:1}
+  .company__caption{color:#fff;font-size:15px;line-height:1.35;width:200px;margin:0}
+  .company__name{color:#fff;font-weight:600;font-size:16px;margin:0;white-space:nowrap}
+  .company__arrow{width:26px;height:auto}
 
-  .bio__long-wrap{display:grid;grid-template-rows:0fr;overflow:hidden;
-         transition:grid-template-rows .5s var(--spring)}
-  .bio.is-expanded .bio__long-wrap{grid-template-rows:1fr}
-  .bio__long{min-height:0;text-align:left;font-size:15px;line-height:1.7;color:var(--muted);
-         opacity:0;transition:opacity .3s ease}
-  .bio.is-expanded .bio__long{opacity:1;transition:opacity .4s ease .15s}
-  .bio__long p{margin:0 0 16px}
-  .bio__long strong{color:var(--ink);font-weight:600}
-  .bio__collapse{display:block;margin:4px auto 0;padding:7px 16px;border-radius:999px;
-         border:1px solid rgba(var(--surface-rgb),.2);background:transparent;color:var(--muted);
-         font-family:inherit;font-size:12px;font-weight:600;letter-spacing:.02em;cursor:pointer;
-         transition:color .18s,border-color .18s,transform .2s var(--spring)}
-  .bio__collapse:hover,.bio__collapse:focus-visible{color:var(--accent);border-color:var(--accent);
-         transform:translateY(-2px);outline:none}
+  .company:hover .company__caption--simply,.company:focus-within .company__caption--simply{
+        transform:translate(calc(26px - 50%),calc(-114px - 50%)) rotate(-9.41deg) scale(1)}
+  .company:hover .company__connector--simply,.company:focus-within .company__connector--simply{
+        transform:translate(calc(64px - 50%),calc(-53px - 50%)) rotate(19.16deg) scale(1)}
+  .company:hover .company__name--simply,.company:focus-within .company__name--simply{
+        transform:translate(calc(16px - 50%),calc(72px - 50%)) rotate(-12.91deg) scale(1)}
 
-  .hint{text-align:center;margin:0;font-size:13px;color:var(--muted);letter-spacing:.05em}
-  .hint__tap{display:none}
+  .company:hover .company__caption--launch,.company:focus-within .company__caption--launch{
+        transform:translate(calc(9px - 50%),calc(-104px - 50%)) rotate(4.81deg) scale(1)}
+  .company:hover .company__connector--launch,.company:focus-within .company__connector--launch{
+        transform:translate(calc(116px - 50%),calc(-60px - 50%)) rotate(-130.62deg) scaleY(-1) scale(1)}
+  .company:hover .company__name--launch,.company:focus-within .company__name--launch{
+        transform:translate(calc(-5px - 50%),calc(65px - 50%)) rotate(5.37deg) scale(1)}
 
-  /* --- video intro placeholder --- */
-  .video-intro{max-width:1080px;margin:clamp(48px,9vw,88px) auto 0;padding:0 clamp(20px,5vw,48px)}
-  .video-intro__frame{aspect-ratio:16/9;border-radius:24px;
-         border:1.5px dashed rgba(var(--surface-rgb),.25);background:rgba(var(--surface-rgb),.03);
-         display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
-  .video-intro__play{width:clamp(52px,6vw,72px);height:clamp(52px,6vw,72px);border-radius:50%;
-         background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center}
-  .video-intro__play svg{width:clamp(18px,2vw,24px);height:clamp(18px,2vw,24px);transform:translateX(1px)}
-  .video-intro__label{font-size:13px;letter-spacing:.05em;color:var(--muted)}
+  .company:hover .company__caption--manta,.company:focus-within .company__caption--manta{
+        transform:translate(calc(0px - 50%),calc(101px - 50%)) rotate(0deg) scale(1)}
+  .company:hover .company__connector--manta,.company:focus-within .company__connector--manta{
+        transform:translate(calc(86px - 50%),calc(51px - 50%)) rotate(0deg) scale(1)}
+  .company:hover .company__name--manta,.company:focus-within .company__name--manta{
+        transform:translate(calc(0px - 50%),calc(-93px - 50%)) rotate(0deg) scale(1)}
 
-  /* --- routes: the ways off this page --- */
-  .routes{max-width:1080px;margin:0 auto;
-          padding:clamp(48px,9vw,88px) clamp(20px,5vw,48px) clamp(64px,10vw,112px);
-          display:flex;flex-direction:column;gap:16px}
-  /* Manta + Mighty: a bigger, 2-up featured row with each company's logo */
-  .routes__featured{display:grid;grid-template-columns:1fr;gap:16px}
-  @media (min-width:720px){
-    .routes__featured{grid-template-columns:repeat(2,1fr)}
-  }
-  .route--featured{min-height:280px}
-  .route__logo{align-self:flex-start;display:inline-flex;align-items:center;
-         background:#fff;padding:10px 14px;border-radius:12px;margin-bottom:2px}
-  .route__logo img{height:24px;width:auto;display:block}
+  .company:hover .company__caption--mighty,.company:focus-within .company__caption--mighty{
+        transform:translate(calc(6px - 50%),calc(-95px - 50%)) rotate(5.9deg) scale(1)}
+  .company:hover .company__connector--mighty,.company:focus-within .company__connector--mighty{
+        transform:translate(calc(-122px - 50%),calc(-45px - 50%)) rotate(-6.13deg) scale(1)}
+  .company:hover .company__name--mighty,.company:focus-within .company__name--mighty{
+        transform:translate(calc(-9px - 50%),calc(69px - 50%)) rotate(6.79deg) scale(1)}
 
-  /* --- company hover: Figma "company hover" frame — on hover, 3 real phone
-     screenshots pop up and fan out from the card's outer top corner (top-
-     right for Mighty, top-left for Manta, mirrored). Desktop/mouse only
-     (touch has no hover to trigger this from); collapsed to invisible at
-     the corner otherwise, so it never affects layout or touch devices. */
-  .route__fan-img{position:absolute;top:0;width:70px;height:143px;display:block;
+  .company:hover .company__caption--copper,.company:focus-within .company__caption--copper{
+        transform:translate(calc(0px - 50%),calc(-126px - 50%)) rotate(-3.7deg) scale(1)}
+  .company:hover .company__connector--copper,.company:focus-within .company__connector--copper{
+        transform:translate(calc(92px - 50%),calc(-74px - 50%)) rotate(-93.23deg) scaleY(-1) scale(1)}
+  .company:hover .company__name--copper,.company:focus-within .company__name--copper{
+        transform:translate(calc(0px - 50%),calc(95px - 50%)) rotate(0deg) scale(1)}
+
+  /* --- case-study cards: strategy / people / leadership sections. Not-yet-
+     live cards (matching the real site's "coming soon" cards) get a muted
+     tag and no arrow/link. --- */
+  .cards{display:flex;gap:25px;flex-wrap:wrap;justify-content:center;max-width:1280px}
+  .card{--tilt:-2deg;position:relative;display:block;width:min(620px,100%);
+        text-decoration:none;color:#fff;transition:transform .3s var(--spring)}
+  a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
+  /* the actual visible panel is a separate element *after* the fan images
+     in DOM order (see .card__fan-img below) — negative z-index on a card
+     child only sinks it below the card's own *content*, not below the
+     card's own background (an opaque background doesn't occlude a
+     descendant just because that descendant has z-index:-1). Two
+     same-stacking-level siblings where the later one is opaque is what
+     actually makes the panel cover the phones where they overlap, while
+     leaving the parts that extend past the panel's edges visible. */
+  .card__panel{position:relative;background:rgba(255,255,255,.1);border-radius:22px;
+        min-height:280px;padding:34px;text-align:left;display:flex;flex-direction:column;gap:16px;
+        transition:background-color .3s ease,color .3s ease}
+  /* on hover the panel flips to solid white (instead of the resting
+     translucent-on-color look) — tag/title/desc/arrow all recolor from
+     white-on-color to dark-ink/brand-color-on-white so everything stays
+     legible against the new background. */
+  a.card:hover .card__panel,a.card:focus-visible .card__panel{background:#fff;color:var(--charcoal)}
+  a.card:hover .card__tag,a.card:focus-visible .card__tag{background:#f455a7;color:#fff}
+  a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
+  /* "coming soon" cards read as genuinely disabled: flattened to a dashed
+     outline on almost no fill, desaturated, and a not-allowed cursor —
+     distinct from the live cards' solid translucent panel, not just dimmer. */
+  .card--soon{cursor:not-allowed}
+  .card--soon .card__panel{background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.3);
+        filter:grayscale(.6)}
+  .card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:14px;font-weight:600;
+        padding:5px 14px;border-radius:100px;transition:background-color .3s ease,color .3s ease}
+  .card--soon .card__tag{background:rgba(255,255,255,.25);color:rgba(255,255,255,.8)}
+  .card__title{font-size:clamp(22px,2.6vw,32px);font-weight:600;margin:0}
+  .card--soon .card__title{color:rgba(255,255,255,.7)}
+  .card__desc{font-size:17px;line-height:1.5;margin:0;opacity:.9;transition:opacity .3s ease}
+  .card--soon .card__desc{opacity:.55}
+  .card__arrow{margin-top:auto;line-height:0}
+  .card__arrow svg{width:26px;height:26px}
+
+  /* --- card fan-hover: same pop-from-the-corner phone fan as the live
+     site's company-hover on Manta/Mighty, ported verbatim (same image
+     size, offsets, rotations, stagger) onto every case-study card.
+     Placeholder images (the 3 existing phone screenshots) on every card
+     for now, not yet matched per case study. Desktop/mouse only, same as
+     the original. These come *before* .card__panel in the DOM (see
+     markup) so the panel's opaque hover background paints over them. --- */
+  .card__fan-img{position:absolute;top:0;width:110px;height:224px;display:block;
          pointer-events:none;opacity:0;transform-origin:center center;
          transform:translate(-50%,-50%) rotate(0deg) scale(.3);
          transition:transform .4s var(--spring),opacity .3s ease}
-  .route--fan-left .route__fan-img{left:0}
-  .route--fan-right .route__fan-img{left:100%}
-  .route__fan-img.fan-1{z-index:1} /* green "LiveWell" — sits furthest back */
-  .route__fan-img.fan-3{z-index:2} /* blue "Optimistic Entrepreneur" — middle */
-  .route__fan-img.fan-2{z-index:3} /* pink "Body Soul" — frontmost */
+  .card--fan-left .card__fan-img{left:0}
+  .card--fan-right .card__fan-img{left:100%}
   @media (hover:hover){
-    .route--featured:hover .route__fan-img,
-    .route--featured:focus-visible .route__fan-img{opacity:1}
-    .route--fan-right:hover .fan-1,.route--fan-right:focus-visible .fan-1{
-          transform:translate(calc(-120px - 50%),calc(-70px - 50%)) rotate(17deg) scale(1);transition-delay:0s}
-    .route--fan-right:hover .fan-3,.route--fan-right:focus-visible .fan-3{
-          transform:translate(calc(-55px - 50%),calc(-55px - 50%)) rotate(30deg) scale(1);transition-delay:.05s}
-    .route--fan-right:hover .fan-2,.route--fan-right:focus-visible .fan-2{
-          transform:translate(calc(0px - 50%),calc(-15px - 50%)) rotate(49deg) scale(1);transition-delay:.1s}
-    .route--fan-left:hover .fan-1,.route--fan-left:focus-visible .fan-1{
-          transform:translate(calc(-20px - 50%),calc(-20px - 50%)) rotate(-67deg) scale(1);transition-delay:0s}
-    .route--fan-left:hover .fan-3,.route--fan-left:focus-visible .fan-3{
-          transform:translate(calc(30px - 50%),calc(-60px - 50%)) rotate(-30deg) scale(1);transition-delay:.05s}
-    .route--fan-left:hover .fan-2,.route--fan-left:focus-visible .fan-2{
-          transform:translate(calc(85px - 50%),calc(-80px - 50%)) rotate(8deg) scale(1);transition-delay:.1s}
+    .card:not(.card--soon):hover .card__fan-img,
+    .card:not(.card--soon):focus-within .card__fan-img{opacity:1}
+    .card--fan-right:hover .fan-1,.card--fan-right:focus-within .fan-1{
+          transform:translate(calc(-117px - 50%),calc(-41px - 50%)) rotate(16.8deg) scale(1);transition-delay:0s}
+    .card--fan-right:hover .fan-3,.card--fan-right:focus-within .fan-3{
+          transform:translate(calc(47px - 50%),calc(58px - 50%)) rotate(49.4deg) scale(1);transition-delay:.05s}
+    .card--fan-right:hover .fan-2,.card--fan-right:focus-within .fan-2{
+          transform:translate(calc(-4px - 50%),calc(-34px - 50%)) rotate(30.1deg) scale(1);transition-delay:.1s}
+    .card--fan-left:hover .fan-1,.card--fan-left:focus-within .fan-1{
+          transform:translate(calc(-43px - 50%),calc(61px - 50%)) rotate(-67.4deg) scale(1);transition-delay:0s}
+    .card--fan-left:hover .fan-3,.card--fan-left:focus-within .fan-3{
+          transform:translate(calc(116px - 50%),calc(-21px - 50%)) rotate(7.6deg) scale(1);transition-delay:.05s}
+    .card--fan-left:hover .fan-2,.card--fan-left:focus-within .fan-2{
+          transform:translate(calc(10px - 50%),calc(-15px - 50%)) rotate(-30.2deg) scale(1);transition-delay:.1s}
   }
-  /* everything else: the regular 3-up grid */
-  .routes__grid{display:grid;grid-template-columns:1fr;gap:16px}
-  @media (min-width:720px){
-    .routes__grid{grid-template-columns:repeat(3,1fr)}
-  }
-  /* --accent-vivid/--accent-pastel are set per-instance inline; --route-accent
-     resolves to vivid normally, and to pastel on morning/afternoon (below). */
-  .route{--route-accent:var(--accent-vivid, var(--accent));--tilt:-1deg;position:relative;display:flex;flex-direction:column;gap:10px;
-         min-height:200px;padding:28px 24px 24px;border-radius:22px;
-         border:1px solid rgba(var(--surface-rgb),.14);background:rgba(var(--surface-rgb),.03);
-         text-decoration:none;color:var(--ink);
-         transition:transform .3s var(--spring),border-color .3s,background .3s}
-  .route:hover,.route:focus-visible{transform:translateY(-6px) rotate(var(--tilt));
-         border-color:var(--route-accent);background:rgba(var(--surface-rgb),.06);outline:none}
-  :root[data-time="morning"] .route,:root[data-time="afternoon"] .route{
-         --route-accent:var(--accent-pastel, var(--accent-vivid, var(--accent)))}
-  .route__tag{align-self:flex-start;font-size:11px;font-weight:600;letter-spacing:.06em;
-         text-transform:uppercase;padding:5px 10px;border-radius:999px;
-         background:var(--route-accent);color:var(--tag-ink,var(--cream))}
-  /* pastel pills are all light — dark text reads better across the board */
-  :root[data-time="morning"] .route__tag,:root[data-time="afternoon"] .route__tag{color:var(--charcoal)}
-  .route__title{font-size:clamp(22px,3.2vw,28px);font-weight:600;letter-spacing:-.02em}
-  .route__desc{font-size:14px;color:var(--muted);line-height:1.45}
-  .route__arrow{margin-top:auto;padding-top:16px;display:inline-block;line-height:0;color:var(--route-accent);
-         transition:transform .3s var(--spring)}
-  .route:hover .route__arrow,.route:focus-visible .route__arrow{transform:translateX(6px)}
 
-  /* --- by the numbers: one unified grid of career highlights, not broken
-     down by company. Same card visual language as .route (border/bg/hover
-     treatment, vivid-normally-pastel-on-light accent per stat). */
-  .stats{max-width:1080px;margin:0 auto;padding:0 clamp(20px,5vw,48px) clamp(64px,10vw,112px)}
-  .stats__title{font-size:clamp(32px,5.5vw,56px);font-weight:600;letter-spacing:-.03em;
-         margin:0 0 clamp(24px,5vw,40px);text-align:center}
-  .stat-list{display:grid;grid-template-columns:1fr;gap:16px;list-style:none;margin:0;padding:0}
-  @media (min-width:720px){
-    .stat-list{grid-template-columns:repeat(3,1fr)}
-  }
-  .stat{--stat-accent:var(--accent-vivid, var(--accent));border-radius:22px;
-         padding:28px 24px;border:1px solid rgba(var(--surface-rgb),.14);background:rgba(var(--surface-rgb),.03)}
-  :root[data-time="morning"] .stat,:root[data-time="afternoon"] .stat{
-         background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.55);
-         --stat-accent:var(--accent-pastel, var(--accent-vivid, var(--accent)))}
-  .stat__value{display:block;font-size:clamp(28px,3.8vw,38px);font-weight:600;letter-spacing:-.02em;color:var(--stat-accent)}
-  .stat__label{display:block;font-size:14px;color:var(--muted);line-height:1.45;margin-top:8px}
+  /* --- screens: the "pretty screens" gallery from Figma (22 real product
+     shots across Manta Cares and Mighty Networks). Uses Embla's
+     "drag-free" example (momentum dragging, no snap/loop) rather than
+     Kind Words' loop/snap-to-center setup — see the script below.
+     .screens-gallery is a plain block wrapper (matches .kind-words)
+     around the .embla div — without it, .embla ends up as a *direct*
+     flex child of the section's own `align-items:center`, and that
+     extra layer of centering logic collides with the width:100vw/
+     margin-left:calc(50% - 50vw) full-bleed trick, throwing the whole
+     element ~18px left of true-center. That was the dead zone on the
+     right edge where drags didn't register at all. No box-shadow on
+     the images — the phone screenshots already have transparent
+     corners around a light bezel, and a dark drop-shadow was reading
+     as a visible dark halo/background behind each one. Click any
+     image to open it larger in the lightbox dialog below. --- */
+  .screens-gallery{width:100%}
+  /* the shared .embla__viewport only pads the bottom (for Kind Words'
+     drag cursor/shadow room) — these slides also lift on hover, so
+     without top padding too the viewport's overflow:hidden clips the
+     top few pixels the instant a slide lifts. */
+  .screens-gallery .embla__viewport{padding-top:10px}
+  .screens__slide{flex:0 0 auto}
+  .screens__slide img{height:clamp(160px,32vh,420px);width:auto;border-radius:14px;
+        display:block;cursor:zoom-in;transition:transform .25s var(--spring)}
+  .screens__slide img:hover,.screens__slide img:focus-visible{transform:translateY(-4px)}
 
-  /* --- kind words: a rotating carousel of real LinkedIn recommendations.
-     Matches the Figma "Kind Words" mock: a 3-up peek carousel — the active
-     card centered and full-strength, the prev/next cards peeking in at the
-     viewport edges at reduced opacity. Every card is a fixed height (280px,
-     per Figma) regardless of quote length, so the row never jumps as it
-     rotates; --surface-rgb is used instead of Figma's literal morning-only
-     colors so it still works across all four themes.
+  /* --- lightbox: native <dialog> so Escape/backdrop-click and focus
+     trapping come for free. Opened by clicking any pretty-screens
+     image; shows it large, centered, at its natural aspect ratio. --- */
+  #screens-lightbox{border:none;background:transparent;padding:0;max-width:none;
+        max-height:none;position:fixed;inset:0;margin:auto;overflow:visible}
+  #screens-lightbox::backdrop{background:rgba(0,0,0,.85)}
+  #screens-lightbox[open]{display:flex;align-items:center;justify-content:center}
+  #screens-lightbox-img{max-width:min(560px,88vw);max-height:88vh;width:auto;height:auto;
+        display:block;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  #screens-lightbox-close{position:fixed;top:24px;right:24px;width:44px;height:44px;
+        border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,.3);color:#fff;
+        font-size:24px;line-height:1;cursor:pointer;
+        display:flex;align-items:center;justify-content:center;
+        transition:background .2s ease,transform .2s var(--spring)}
+  #screens-lightbox-close:hover,#screens-lightbox-close:focus-visible{
+        background:var(--lime);color:#000;border-color:var(--lime);
+        transform:scale(1.08);outline:none}
 
-     Real sliding track, not a crossfade: exactly 3 card elements sit
-     absolutely positioned in the row, each carrying a "slot" (-1/0/+1 =
-     peek-left/center/peek-right). Advancing animates every card's own
-     transform + opacity straight to its new slot — actual left/right
-     movement, no fading of text content. Once a card slides fully past
-     the edge (|slot| >= 2) it's invisible, so JS repaints it with the
-     next recommendation and snaps it (no transition) to the slot it'll
-     slide in from next time — a 3-element circular buffer standing in
-     for a full-length track. */
-  .kind-words{margin:0 auto;padding:0 0 clamp(64px,10vw,112px);text-align:center;overflow:hidden}
-  .kind-words__title{font-size:clamp(32px,5.5vw,56px);font-weight:600;letter-spacing:-.03em;
-         margin:0 0 clamp(24px,5vw,40px)}
-  .kind-words__row{position:relative;height:280px;width:100vw;margin-left:calc(50% - 50vw)}
-  .kind-words__card{position:absolute;top:0;left:50%;width:min(620px,86vw);height:280px;
-         border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:24px;
-         align-items:center;justify-content:center;overflow:hidden;text-align:center;
-         font:inherit;margin:0;border:1px solid rgba(var(--surface-rgb),.14);
-         background:rgba(var(--surface-rgb),.03);
-         transition:transform .45s var(--spring),opacity .45s var(--spring),background .3s,border-color .3s}
-  .kind-words__card.kw-no-transition{transition:background .3s,border-color .3s}
-  :root[data-time="morning"] .kind-words__card,:root[data-time="afternoon"] .kind-words__card{
-         background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.6)}
-  .kind-words__card.is-peek{cursor:pointer}
-  .kind-words__card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  .kind-words__quote{font-size:20px;line-height:26px;color:var(--muted);margin:0;font-weight:400}
+  /* --- testimonials: a native horizontal scroll-snap gallery, full-bleed
+     to the viewport edge. Built on Embla Carousel's "loop" example
+     (embla-carousel.com/docs/examples/predefined#loop) via CDN — real
+     infinite looping is native to Embla (loop:true), so there's no
+     hand-rolled clone-node/scrollend machinery here anymore. Autoplay
+     is the official Embla Autoplay plugin (5s delay, pauses on
+     hover/focus, doesn't die after one interaction). Dragging is
+     Embla's built-in pointer drag; clicking an off-center slide calls
+     emblaApi.scrollTo() on it. --- */
+  .kind-words{width:100%}
+  .embla{width:100vw;margin-left:calc(50% - 50vw);cursor:grab}
+  .embla:active{cursor:grabbing}
+  .embla__viewport{overflow:hidden;padding-bottom:20px}
+  .embla__container{display:flex;gap:24px;touch-action:pan-y pinch-zoom}
+  .kind-words__card{flex:0 0 min(620px,86vw);min-width:0;min-height:280px;
+        border-radius:22px;background:#fff;color:#000;margin:0;
+        padding:24px;display:flex;flex-direction:column;justify-content:center;gap:24px;
+        text-align:center;cursor:pointer}
+  /* Embla's loop math only accounts for flex `gap` between adjacent DOM
+     siblings — the wrap seam (last slide back to the first) has no
+     sibling relationship to inherit it from, so it renders with zero
+     gap unless the last slide carries its own matching margin. */
+  .kind-words__card.embla__slide:last-child{margin-right:24px}
+  .kind-words__card:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+  .kind-words__quote{font-size:20px;line-height:29px;margin:0;font-weight:400}
   .kind-words__cite{font-style:normal;display:flex;flex-direction:column;gap:4px}
-  .kind-words__name{font-weight:600;font-size:16px;color:var(--ink)}
-  .kind-words__role{font-size:14px;color:var(--muted)}
-  .kind-words__controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:24px}
-  .kind-words__arrow{width:36px;height:36px;border-radius:50%;border:1px solid rgba(var(--surface-rgb),.2);
-         background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;
-         cursor:pointer;padding:0;transition:color .18s,border-color .18s,transform .2s var(--spring)}
-  .kind-words__arrow:hover,.kind-words__arrow:focus-visible{color:var(--accent);border-color:var(--accent);outline:none}
-  .kind-words__arrow svg{width:16px;height:16px}
-  .kind-words__dots{display:flex;gap:6px}
-  .kind-words__dot{width:6px;height:6px;border-radius:50%;background:rgba(var(--surface-rgb),.25);border:none;
-         padding:0;cursor:pointer;transition:background .2s,transform .2s var(--spring)}
-  .kind-words__dot.is-active{background:var(--accent);transform:scale(1.3)}
-
-  /* below this breakpoint three 620px cards don't fit — drop the peek
-     cards and show just the active one, still at the fixed 280px
-     height, inset to the normal page gutter. JS positioning still
-     applies (slot 0 = centered), this just hides the off-center ones. */
-  @media (max-width:900px){
-    .kind-words__row{width:auto;margin-left:0;padding:0 clamp(20px,5vw,48px);overflow:hidden}
-    .kind-words__card.is-peek{display:none}
-    .kind-words__card{width:100%}
+  .kind-words__name{font-weight:600;font-size:16px;color:#f455a7}
+  .kind-words__role{font-size:14px;color:rgba(0,0,0,.6)}
+  @media (max-width:700px){
+    .embla__viewport{padding-inline:20px}
+    .kind-words__card{flex-basis:100%}
   }
 
-  /* --- say hi: contact icons --- */
-  .say-hi{max-width:1080px;margin:0 auto;padding:clamp(24px,5vw,48px) clamp(20px,5vw,48px) 0;
-          display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center}
-  .say-hi__title{font-size:clamp(32px,5.5vw,56px);font-weight:600;letter-spacing:-.03em;margin:0}
-  .say-hi__icons{display:flex;gap:14px}
-  /* same hover treatment as .route: lift + tilt + accent border + bg tint */
-  .say-hi__icon{--icon-accent:var(--accent);--tilt:-1deg;width:64px;height:64px;border-radius:8px;
-         display:flex;align-items:center;justify-content:center;
-         background:rgba(var(--surface-rgb),.03);border:1px solid rgba(var(--surface-rgb),.14);
-         color:var(--ink);text-decoration:none;
-         transition:transform .3s var(--spring),border-color .3s,background .3s}
+  /* --- say hi: same 3 contact icons as the live site, re-skinned to
+     circular white-bordered chips. --- */
+  .say-hi__icons{display:flex;gap:18px;justify-content:center}
+  .say-hi__icon{--tilt:-1deg;width:82px;height:82px;border-radius:16px;border:2px solid #fff;
+        display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;
+        transition:transform .3s var(--spring),background .25s ease,color .2s ease,border-color .25s ease}
   .say-hi__icon:hover,.say-hi__icon:focus-visible{transform:translateY(-6px) rotate(var(--tilt));
-         border-color:var(--icon-accent);background:rgba(var(--surface-rgb),.06);outline:none}
-  .say-hi__icon svg{width:28px;height:28px}
-  .say-hi__icon--linkedin{font-size:24px;font-weight:700;letter-spacing:-.02em}
+        background:var(--lime);color:#000;border-color:var(--lime);outline:none}
+  .say-hi__icon svg{width:32px;height:32px}
+  .say-hi__icon--linkedin{font-size:32px;font-weight:700;letter-spacing:-.02em}
 
-  /* --- footer: a glow that shifts with the time of day, and the time toggle ---
-     The glow is the exact exported Figma asset (assets/glow-*.svg, one per
-     theme, opacity baked into each file) — not a recreated gradient. Only one
-     is shown at a time; which one is picked purely by CSS off data-time. */
-  .site-footer{position:relative;height:215px;overflow:hidden;
-         display:flex;justify-content:center;margin-top:clamp(24px,5vw,48px)}
-  .site-footer__glow-img{position:absolute;left:50%;top:10px;width:1508px;height:817px;
-         transform:translateX(-50%);pointer-events:none;display:none;
-         -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 18%,transparent 25%);
-         mask-image:linear-gradient(to bottom,#000 0%,#000 18%,transparent 25%)}
-  .site-footer__glow-img.is-night{display:block} /* also the no-JS fallback */
-  :root[data-time="morning"] .site-footer__glow-img.is-night,
-  :root[data-time="afternoon"] .site-footer__glow-img.is-night,
-  :root[data-time="evening"] .site-footer__glow-img.is-night{display:none}
-  :root[data-time="morning"] .site-footer__glow-img.is-morning{display:block}
-  :root[data-time="afternoon"] .site-footer__glow-img.is-afternoon{display:block}
-  :root[data-time="evening"] .site-footer__glow-img.is-evening{display:block}
-  .site-footer__toggle{position:relative;z-index:1;margin-top:68px;width:40px;height:40px;
-         background:none;border:none;padding:0;cursor:pointer;color:var(--ink);
-         display:flex;align-items:center;justify-content:center}
-  .site-footer__toggle svg{transition:transform .3s var(--spring)}
-  .site-footer__toggle:hover svg,.site-footer__toggle:focus-visible svg{transform:scale(1.1)}
-  .site-footer__toggle:focus-visible{outline:2px solid var(--ink);outline-offset:4px;border-radius:50%}
-  /* click transition: the icon spins/shrinks out, swaps, then springs back in — driven by assets/time-toggle.js toggling .is-swapping */
-  #time-toggle-icon{display:inline-block;line-height:0;transition:opacity .18s ease,transform .18s ease}
-  #time-toggle-icon.is-swapping{opacity:0;transform:scale(.5) rotate(-90deg)}
+  /* --- footer: gradient close, giant repeated name, 3 stacked links, then
+     the same social icons as say-hi. No opaque base of its own —
+     genuinely transparent at the top so the page's animated background
+     shows through and fades into solid lime at the bottom, matching the
+     Figma gradient (rgba(189,243,0,0) -> #bdf300). --- */
+  .site-footer{background:linear-gradient(180deg,rgba(189,243,0,0) 0%,var(--lime) 100%);
+        padding:clamp(64px,10vw,120px) 24px clamp(48px,8vw,80px);
+        display:flex;flex-direction:column;align-items:center;gap:40px;text-align:center}
+  .site-footer__heading{display:flex;flex-direction:column;gap:6px}
+  .site-footer__name{font-size:clamp(48px,11vw,150px);font-weight:600;letter-spacing:-.04em;margin:0}
+  .site-footer__tag{font-size:clamp(15px,1.8vw,22px);margin:0;opacity:.9}
+  .site-footer__links{display:flex;flex-direction:column;gap:6px}
+  .site-footer__links a{--tilt:-2deg;font-size:clamp(28px,4.5vw,56px);font-weight:600;letter-spacing:-.03em;
+        text-decoration:none;transition:transform .3s var(--spring)}
+  .site-footer__links a:hover,.site-footer__links a:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
 
-  /* --- morning/afternoon: lighter surfaces on cards/buttons/video frame ---
-     --surface-rgb is --ink's r,g,b, which works as a subtle tint on the dark
-     evening/night papers (ink there is light cream). On morning/afternoon
-     ink is dark, so the same trick made these surfaces read as a dark tint
-     instead of light. Figma's own reference uses a plain white overlay for
-     cards on these two light papers (rgba(255,255,255,.4) fill / .5 border),
-     so these overrides switch to that instead of reusing --surface-rgb. */
-  :root[data-time="morning"] .route,:root[data-time="afternoon"] .route{
-        background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.55)}
-  :root[data-time="morning"] .route:hover,:root[data-time="afternoon"] .route:hover,
-  :root[data-time="morning"] .route:focus-visible,:root[data-time="afternoon"] .route:focus-visible{
-        background:rgba(255,255,255,.55)}
-  :root[data-time="morning"] .say-hi__icon,:root[data-time="afternoon"] .say-hi__icon{
-        background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.55)}
-  :root[data-time="morning"] .say-hi__icon:hover,:root[data-time="afternoon"] .say-hi__icon:hover,
-  :root[data-time="morning"] .say-hi__icon:focus-visible,:root[data-time="afternoon"] .say-hi__icon:focus-visible{
-        background:rgba(255,255,255,.55)}
-  :root[data-time="morning"] .video-intro__frame,:root[data-time="afternoon"] .video-intro__frame{
-        background:rgba(255,255,255,.4);border-color:rgba(255,255,255,.5)}
-
-  /* --- touch / no-hover: JS drives .is-active per tap --- */
-  @media (hover: none){
-    .letter{cursor:pointer}
-    .hint{margin-top:16px}
-    .hint__tap{display:inline}
-  }
-
-  /* --- reduced motion: no flips, no tags, calm static name --- */
   @media (prefers-reduced-motion: reduce){
-    .glyph{transition:none}
-    .letter:hover .glyph,.letter.is-active .glyph{transform:none;color:var(--ink)}
-    .tag{display:none}
-    .hint{display:none}
-    .route{transition:none}
-    .route:hover,.route:focus-visible{transform:none}
-    .route__arrow{transition:none}
-    .route:hover .route__arrow,.route:focus-visible .route__arrow{transform:none}
-    .say-hi__icon,.site-footer__toggle svg,#time-toggle-icon{transition:none}
-    .say-hi__icon:hover,.say-hi__icon:focus-visible{transform:none}
-    .site-footer__toggle:hover svg,.site-footer__toggle:focus-visible svg{transform:none}
-    #time-toggle-icon.is-swapping{opacity:1;transform:none}
-    .header{transition:none}
-    .route__fan-img{display:none}
-    .bio__prompt,.bio__long-wrap,.bio__long,.bio__collapse{transition:none}
-    .bio__prompt:hover svg{transform:none}
-    .kind-words__card,.kind-words__arrow,.kind-words__dot{transition:none}
+    html{scroll-behavior:auto}
+    body{animation:none;background-color:#f455a7}
+    .card__fan-img{display:none}
+    .letter,.glyph,.tag,.cta,.card,.company,.company__badge,.company__logo,
+    .say-hi__icon,.site-footer__links a,.screens__slide img,#screens-lightbox-close{transition:none !important}
+    .letter:hover .glyph,.letter.is-active .glyph{transform:none;color:#fff}
   }
 </style>
 </head>
 <body>
-  <header class="header">
-    <nav class="nav" aria-label="Primary">
-      <span class="nav__id">
-        <a class="nav__mark" href="/">Katherine Root</a>
-        <span class="nav__tagline">| Experience Designer</span>
-      </span>
-      <ul class="nav__links">
-        <li><a href="/#work" style="--tilt:-4deg">work</a></li>
-        <li><a href="https://static1.squarespace.com/static/649378526c54e630f4b17c1a/t/6a56af8dda4aaa7c4e2ef8d4/1784065933655/KatherineRootResume_2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:3deg">resume</a></li>
-        <li><a href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" style="--tilt:-5deg">linkedin</a></li>
-        <li><a href="mailto:keroot@gmail.com" style="--tilt:4deg">email</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <!-- h1 carries the real, readable name for AT + SEO -->
-  <h1 class="name" id="name">
+  <!-- ============ hero ============ -->
+  <section class="section hero" id="hero">
+    <p class="hero__lead">Hi there! My name is</p>
+    <h1 class="name" id="name">
       <span class="sr-only">Katherine Root</span>
-
-      <!-- everything below is decorative; data-tag/data-color drive the reveal -->
       <span class="word" aria-hidden="true">
-        <span class="letter"><span class="glyph">K</span><span class="tag" style="background:var(--magenta);color:var(--cream);--tilt:-4deg">15 years of design</span></span>
-        <span class="letter"><span class="glyph">a</span><span class="tag" style="background:var(--lime);color:var(--charcoal);--tilt:5deg">UX / UI / HCI</span></span>
-        <span class="letter"><span class="glyph">t</span><span class="tag" style="background:var(--indigo);color:var(--cream);--tilt:-7deg">startup expert</span></span>
-        <span class="letter"><span class="glyph">h</span><span class="tag" style="background:var(--orange-red);color:var(--cream);--tilt:3deg">engineering whisperer</span></span>
-        <span class="letter"><span class="glyph">e</span><span class="tag" style="background:var(--teal);color:var(--cream);--tilt:-2deg">currently vibe coding</span></span>
-        <span class="letter"><span class="glyph">r</span><span class="tag" style="background:var(--violet);color:var(--cream);--tilt:6deg">co-founder?!</span></span>
-        <span class="letter"><span class="glyph">i</span><span class="tag" style="background:var(--magenta);color:var(--cream);--tilt:-5deg">NJ native</span></span>
-        <span class="letter"><span class="glyph">n</span><span class="tag" style="background:var(--lime);color:var(--charcoal);--tilt:2deg">sci-fi lover</span></span>
-        <span class="letter"><span class="glyph">e</span><span class="tag" style="background:var(--indigo);color:var(--cream);--tilt:-6deg">boy mom</span></span>
+        <span class="letter"><span class="glyph">K</span><span class="tag" style="background:var(--magenta);color:#fff;--tilt:-4deg">15 years of design</span></span>
+        <span class="letter"><span class="glyph">a</span><span class="tag" style="background:#C8F135;color:var(--charcoal);--tilt:5deg">UX / UI / HCI</span></span>
+        <span class="letter"><span class="glyph">t</span><span class="tag" style="background:var(--indigo);color:#fff;--tilt:-7deg">startup expert</span></span>
+        <span class="letter"><span class="glyph">h</span><span class="tag" style="background:#FF5A1F;color:#fff;--tilt:3deg">engineering whisperer</span></span>
+        <span class="letter"><span class="glyph">e</span><span class="tag" style="background:#00C2A8;color:#fff;--tilt:-2deg">currently vibe coding</span></span>
+        <span class="letter"><span class="glyph">r</span><span class="tag" style="background:var(--violet);color:#fff;--tilt:6deg">co-founder?!</span></span>
+        <span class="letter"><span class="glyph">i</span><span class="tag" style="background:var(--magenta);color:#fff;--tilt:-5deg">NJ native</span></span>
+        <span class="letter"><span class="glyph">n</span><span class="tag" style="background:#C8F135;color:var(--charcoal);--tilt:2deg">sci-fi lover</span></span>
+        <span class="letter"><span class="glyph">e</span><span class="tag" style="background:var(--indigo);color:#fff;--tilt:-6deg">boy mom</span></span>
       </span>
-
       <span class="word" aria-hidden="true">
-        <span class="letter"><span class="glyph">R</span><span class="tag" style="background:var(--orange-red);color:var(--cream);--tilt:4deg">forza ferrari</span></span>
+        <span class="letter"><span class="glyph">R</span><span class="tag" style="background:#FF5A1F;color:#fff;--tilt:4deg">forza ferrari</span></span>
         <span class="letter"><span class="glyph">o</span><span class="tag" style="background:var(--cream);color:var(--charcoal);--tilt:-3deg">I voted! 🗳️</span></span>
-        <span class="letter"><span class="glyph">o</span><span class="tag" style="background:var(--magenta);color:var(--cream);--tilt:6deg">skis &gt; snowboards</span></span>
-        <span class="letter"><span class="glyph">t</span><span class="tag" style="background:var(--teal);color:var(--cream);--tilt:-5deg">say hi 👋</span></span>
+        <span class="letter"><span class="glyph">o</span><span class="tag" style="background:var(--magenta);color:#fff;--tilt:6deg">skis &gt; snowboards</span></span>
+        <span class="letter"><span class="glyph">t</span><span class="tag" style="background:#00C2A8;color:#fff;--tilt:-5deg">say hi 👋</span></span>
       </span>
-  </h1>
-
-  <div class="bio" id="bio">
-    <p class="bio__short">Product, AI, and Experience Design Expert</p>
-    <button type="button" class="bio__prompt" id="bio-expand">
-      Give me the long-winded version
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-    </button>
-    <div class="bio__long-wrap">
-      <div class="bio__long">
-        <p>For over a decade, I've been championing product and UX design at Bay Area startups. I entered the world of product design early, receiving my bachelor's degree in Human-Computer Interaction, and have devoted my entire career to <strong>shaping how people engage with technology</strong> 🤖</p>
-        <p>I'm the type of <strong>design leader who always stays connected to the work</strong>, and even though my title says Director, I prefer to call myself an <strong>experience designer</strong> ✨ My role goes far beyond crafting screens or managing people — it's about orchestrating a journey for someone to take when they interact with my products. It's about creating cohesion, meaning, and delight across the whole experience, and while I love the creativity of designing beautiful, functional interfaces in Figma (cue the "oohs" and "ahhs"), my favorite part of what I do is <strong>often behind the scenes</strong> 😱</p>
-        <p>It's in designing seamless workflows that often go unnoticed, building systems that empower product teams to communicate, fostering cultures where people thrive, and <strong>making products people want to use</strong>. It's about bringing order to chaos, elegance to the everyday, and expression to what often goes unsaid.</p>
-        <p>And in the <strong>messy, complex, and intangible challenges of this field</strong>, I believe experience design has the power to make a true impact on the world 🌸</p>
-        <button type="button" class="bio__collapse" id="bio-collapse">Okay that's enough</button>
-      </div>
-    </div>
-  </div>
-
-  <p class="hint" id="hint">
-    <span class="hint__tap">(tap each letter)</span>
-  </p>
-
-  <!-- placeholder for a video introduction — swap this whole block for a
-       <video>/embed once the video exists. -->
-  <section class="video-intro" aria-label="Video introduction (coming soon)">
-    <div class="video-intro__frame">
-      <span class="video-intro__play" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/></svg></span>
-      <span class="video-intro__label">video intro — coming soon</span>
-    </div>
+    </h1>
+    <p class="hero__sub">I'm a Product, AI, and Experience Design Expert</p>
+    <a class="cta" href="#companies" style="--tilt:-3deg">Tell me more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
-  <!-- content/order/colors match the Figma "cards" frame exactly.
-       Mighty/Manta/Leadership are same-site pages, so they navigate normally
-       (no target="_blank"). Word Vomit, Resume, and Writing all point off-site
-       (wordvomit.xyz, a Squarespace-hosted PDF, and the Bear Blog respectively). -->
-  <main class="routes" id="work" aria-label="Where to go next">
-    <!-- Manta + Mighty are the flagship work, so they get their own bigger
-         row with each company's real logo. -->
-    <div class="routes__featured">
-      <a class="route route--featured route--fan-left" href="/manta/" style="--accent-vivid:var(--blue);--accent-pastel:var(--blue-pastel);--tilt:-2deg">
-        <img class="route__fan-img fan-1" src="/assets/hover-phone-1.png" alt="" aria-hidden="true">
-        <img class="route__fan-img fan-2" src="/assets/hover-phone-2.png" alt="" aria-hidden="true">
-        <img class="route__fan-img fan-3" src="/assets/hover-phone-3.png" alt="" aria-hidden="true">
-        <span class="route__logo"><img src="/assets/logos/manta-cares.svg" alt="Manta Cares"></span>
-        <span class="route__tag">work</span>
-        <span class="route__title">Manta Cares</span>
-        <span class="route__desc">Helping patients and caregivers navigate cancer diagnosis.</span>
-        <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-      </a>
-      <a class="route route--featured route--fan-right" href="/mighty/" style="--accent-vivid:var(--purple);--accent-pastel:var(--purple-pastel);--tilt:2deg">
-        <img class="route__fan-img fan-1" src="/assets/hover-phone-1.png" alt="" aria-hidden="true">
-        <img class="route__fan-img fan-2" src="/assets/hover-phone-2.png" alt="" aria-hidden="true">
-        <img class="route__fan-img fan-3" src="/assets/hover-phone-3.png" alt="" aria-hidden="true">
-        <span class="route__logo"><img src="/assets/logos/mighty-networks.svg" alt="Mighty Networks"></span>
-        <span class="route__tag">work</span>
-        <span class="route__title">Mighty Networks</span>
-        <span class="route__desc">Creating people magic, one community at a time.</span>
-        <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-      </a>
+  <!-- ============ companies ============ -->
+  <section class="section" id="companies">
+    <h2 class="section__title">I've been designing at consumer obsessed startups for 15 years.</h2>
+    <div class="companies__row">
+      <div class="company" style="--tilt:-3deg" tabindex="0">
+        <div class="company__badge">
+          <img class="company__logo company__logo--simply company__logo--white" src="assets/logos/simplyhired-white.svg" alt="Simply Hired">
+          <div class="company__logo company__logo--color" aria-hidden="true">
+            <img class="company__logo-layer" style="inset:0" src="assets/logos/simplyhired-bg.svg" alt="">
+            <img class="company__logo-layer" style="inset:0" src="assets/logos/simplyhired-color.svg" alt="">
+          </div>
+        </div>
+        <p class="company__piece company__caption company__caption--simply">I grew a lot in this role, learning a lot about how companies operate.</p>
+        <img class="company__piece company__arrow company__connector--simply" src="assets/logos/simplyhired-arrow.svg" alt="" aria-hidden="true">
+        <p class="company__piece company__name company__name--simply">Simply Hired</p>
+      </div>
+      <div class="company" style="--tilt:2deg" tabindex="0">
+        <div class="company__badge">
+          <img class="company__logo company__logo--launch company__logo--white" src="assets/logos/launch-white.svg" alt="Launch Design">
+          <div class="company__logo company__logo--color" aria-hidden="true">
+            <img class="company__logo-layer" style="inset:0" src="assets/logos/launch-bg.svg" alt="">
+            <img class="company__logo-layer" style="inset:0" src="assets/logos/launch-color.svg" alt="">
+          </div>
+        </div>
+        <p class="company__piece company__caption company__caption--launch">I started at this small UX firm straight out of undergrad.</p>
+        <img class="company__piece company__arrow company__connector--launch" src="assets/logos/launch-arrow.svg" alt="" aria-hidden="true">
+        <p class="company__piece company__name company__name--launch">Launch Design</p>
+      </div>
+      <div class="company" style="--tilt:-2deg" tabindex="0">
+        <div class="company__badge">
+          <img class="company__logo company__logo--manta company__logo--white" src="assets/logos/manta-white.svg" alt="Manta Cares">
+          <div class="company__logo company__logo--color" aria-hidden="true">
+            <img class="company__logo-layer" style="inset:0" src="assets/logos/manta-bg.svg" alt="">
+            <img class="company__logo-layer" style="inset:0" src="assets/logos/manta-color.svg" alt="">
+          </div>
+        </div>
+        <p class="company__piece company__caption company__caption--manta">My latest role, founding designer, creating an app to help cancer patients navigate their diagnosis.</p>
+        <img class="company__piece company__arrow company__connector--manta" src="assets/logos/manta-arrow.svg" alt="" aria-hidden="true">
+        <p class="company__piece company__name company__name--manta">Manta Cares</p>
+      </div>
+      <div class="company" style="--tilt:3deg" tabindex="0">
+        <div class="company__badge">
+          <img class="company__logo company__logo--mighty company__logo--white" src="assets/logos/mighty-white.svg" alt="Mighty Networks">
+          <div class="company__logo company__logo--color" aria-hidden="true">
+            <img class="company__logo-layer" style="inset:0" src="assets/logos/mighty-bg.svg" alt="">
+            <img class="company__logo-layer" style="inset:0" src="assets/logos/mighty-color.svg" alt="">
+          </div>
+        </div>
+        <p class="company__piece company__caption company__caption--mighty">I spent 10 YEARS building this product and team &mdash; I know it like the back of my hand.</p>
+        <img class="company__piece company__arrow company__connector--mighty" src="assets/logos/mighty-arrow.svg" alt="" aria-hidden="true">
+        <p class="company__piece company__name company__name--mighty">Mighty Networks</p>
+      </div>
+      <div class="company" style="--tilt:-4deg" tabindex="0">
+        <div class="company__badge">
+          <img class="company__logo company__logo--copper company__logo--white" src="assets/logos/copper-white.svg" alt="Copper CRM">
+          <div class="company__logo company__logo--color" aria-hidden="true">
+            <img class="company__logo-layer" style="inset:0" src="assets/logos/copper-bg.svg" alt="">
+            <img class="company__logo-layer" style="inset:0" src="assets/logos/copper-color.svg" alt="">
+          </div>
+        </div>
+        <p class="company__piece company__caption company__caption--copper">I was part of the founding design team here when it was still called &ldquo;Prosperworks&rdquo;</p>
+        <img class="company__piece company__arrow company__connector--copper" src="assets/logos/copper-arrow.svg" alt="" aria-hidden="true">
+        <p class="company__piece company__name company__name--copper">Copper CRM</p>
+      </div>
     </div>
-    <div class="routes__grid">
-      <a class="route" href="https://static1.squarespace.com/static/649378526c54e630f4b17c1a/t/6a56af8dda4aaa7c4e2ef8d4/1784065933655/KatherineRootResume_2026.pdf" target="_blank" rel="noopener noreferrer" style="--accent-vivid:var(--lime);--accent-pastel:var(--lime-pastel);--tilt:-3deg;--tag-ink:var(--accent-ink)">
-        <span class="route__tag">work</span>
-        <span class="route__title">Resume</span>
-        <span class="route__desc">All the nitty gritty details.</span>
-        <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-      </a>
-      <a class="route" href="/leadership/" style="--accent-vivid:var(--orange);--accent-pastel:var(--orange-pastel);--tilt:3deg">
-        <span class="route__tag">work</span>
-        <span class="route__title">Design Leadership</span>
-        <span class="route__desc">Notes on building and leading design teams.</span>
-        <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-      </a>
-      <a class="route" href="https://www.wordvomit.xyz" target="_blank" rel="noopener noreferrer" style="--accent-vivid:var(--green);--accent-pastel:var(--green-pastel);--tilt:-2deg">
-        <span class="route__tag">vibe coding</span>
-        <span class="route__title">Word Vomit</span>
-        <span class="route__desc">The number one app for your many existential millennial woes.</span>
-        <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-      </a>
-      <a class="route" href="https://midnightcrisis.bearblog.dev/blog/" target="_blank" rel="noopener noreferrer" style="--accent-vivid:var(--pink);--accent-pastel:var(--pink-pastel);--tilt:2deg">
-        <span class="route__tag">fun</span>
-        <span class="route__title">Writing</span>
-        <span class="route__desc">Thoughts, essays, notes, etc.</span>
-        <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-      </a>
-      <a class="route" href="/votecenter/" style="--accent-vivid:var(--teal);--accent-pastel:var(--teal-pastel);--tilt:-3deg">
-        <span class="route__tag">volunteer</span>
-        <span class="route__title">Vote Center Lead</span>
-        <span class="route__desc">Running a polling location on election day — civic infrastructure needs good UX too.</span>
-        <span class="route__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-      </a>
-    </div>
-  </main>
-
-  <!-- One unified set of career highlights, not split by company. Manta
-       figures match the stat cards on /manta/; Mighty figures are the
-       cleanest, most-cited-without-caveats numbers from Mighty Metrics.md —
-       figures flagged in that doc as self-reported/not independently
-       audited (engagement %s, headcount, revenue) are left out. -->
-  <section class="stats" aria-label="By the numbers">
-    <h2 class="stats__title">By the Numbers</h2>
-    <ul class="stat-list">
-      <li class="stat" style="--accent-vivid:var(--orange);--accent-pastel:var(--orange-pastel)">
-        <span class="stat__value">15 years</span>
-        <span class="stat__label">Building and leading product design teams</span>
-      </li>
-      <li class="stat" style="--accent-vivid:var(--teal);--accent-pastel:var(--teal-pastel)">
-        <span class="stat__value">5x</span>
-        <span class="stat__label">Growth in HopeAI usage after a redesign of how patients find support</span>
-      </li>
-      <li class="stat" style="--accent-vivid:var(--blue);--accent-pastel:var(--blue-pastel)">
-        <span class="stat__value">88–96%</span>
-        <span class="stat__label">Onboarding conversion, built for a moment with zero patience for friction</span>
-      </li>
-      <li class="stat" style="--accent-vivid:var(--violet);--accent-pastel:var(--violet-pastel)">
-        <span class="stat__value">1,408</span>
-        <span class="stat__label">Patients reached through redesigned intake and care flows</span>
-      </li>
-      <li class="stat" style="--accent-vivid:var(--pink);--accent-pastel:var(--pink-pastel)">
-        <span class="stat__value">4.84/5</span>
-        <span class="stat__label">iOS App Store rating across ~66,000 ratings, on an app I helped ship</span>
-      </li>
-      <li class="stat" style="--accent-vivid:var(--indigo);--accent-pastel:var(--indigo-pastel)">
-        <span class="stat__value">#1</span>
-        <span class="stat__label">G2 ranking in online community management software, out of 20+ platforms</span>
-      </li>
-    </ul>
+    <a class="cta" href="#strategy" style="--tilt:2deg">Wow cool <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
-  <!-- Real LinkedIn recommendations (linkedin.com/in/katherineroot/details/recommendations),
-       trimmed to one verbatim, contiguous sentence each — not paraphrased. -->
-  <section class="kind-words" aria-label="Kind words from colleagues">
-    <h2 class="kind-words__title">Kind Words</h2>
-    <div class="kind-words__row">
-      <div class="kind-words__card" id="kw-card-prev">
-        <blockquote class="kind-words__quote" id="kw-quote-prev"></blockquote>
-        <cite class="kind-words__cite">
-          <span class="kind-words__name" id="kw-name-prev"></span>
-          <span class="kind-words__role" id="kw-role-prev"></span>
-        </cite>
-      </div>
-      <div class="kind-words__card" id="kw-card-current">
-        <blockquote class="kind-words__quote" id="kw-quote-current"></blockquote>
-        <cite class="kind-words__cite">
-          <span class="kind-words__name" id="kw-name-current"></span>
-          <span class="kind-words__role" id="kw-role-current"></span>
-        </cite>
-      </div>
-      <div class="kind-words__card" id="kw-card-next">
-        <blockquote class="kind-words__quote" id="kw-quote-next"></blockquote>
-        <cite class="kind-words__cite">
-          <span class="kind-words__name" id="kw-name-next"></span>
-          <span class="kind-words__role" id="kw-role-next"></span>
-        </cite>
+  <!-- ============ strategy ============ -->
+  <section class="section" id="strategy">
+    <h2 class="section__title">I combine design strategy with business acumen to help companies succeed.</h2>
+    <div class="cards">
+      <a class="card card--fan-left" href="https://www.katherineroot.com/case-studies-fae" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">
+        <img class="card__fan-img fan-1" src="/assets/screens/mighty-1.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-2" src="/assets/screens/mighty-2.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-3" src="/assets/screens/mighty-4-1.png" alt="" aria-hidden="true">
+        <span class="card__panel">
+          <span class="card__tag">CASE STUDY</span>
+          <span class="card__title">First App Experience</span>
+          <span class="card__desc">For years the experience of downloading the Mighty Networks app was crusty and abandoned, forever deemed a P2 not worth updating. Here I explore the value of creating a great first impression, and the role design plays in selling your brand successfully.</span>
+          <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </span>
+      </a>
+      <div class="card card--soon" style="--tilt:2deg">
+        <span class="card__panel">
+          <span class="card__tag">COMING SOON</span>
+          <span class="card__title">Manta's Brand Identity</span>
+          <span class="card__desc">Defining an ICP for Manta Cares, and merging two very different business strategies into a product cancer patients actually needed.</span>
+        </span>
       </div>
     </div>
-    <div class="kind-words__controls">
-      <button type="button" class="kind-words__arrow" id="kw-prev" aria-label="Previous recommendation">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-      </button>
-      <div class="kind-words__dots" id="kw-dots"></div>
-      <button type="button" class="kind-words__arrow" id="kw-next" aria-label="Next recommendation">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
-    </div>
+    <a class="cta" href="#people" style="--tilt:-4deg">Uh huh <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
-  <section class="say-hi" id="contact" aria-label="Contact">
-    <h2 class="say-hi__title">Say hi sometime</h2>
+  <!-- ============ people ============ -->
+  <section class="section" id="people">
+    <h2 class="section__title">My work is grounded in empathy and understanding. Always.</h2>
+    <div class="cards">
+      <a class="card card--fan-left" href="/manta/appointment-prep/" style="--tilt:2deg">
+        <img class="card__fan-img fan-1" src="/assets/screens/manta-1.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-2" src="/assets/screens/manta-2.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-3" src="/assets/screens/manta-3.png" alt="" aria-hidden="true">
+        <span class="card__panel">
+          <span class="card__tag">CASE STUDY</span>
+          <span class="card__title">Designing for the Hardest Moment of Someone's Life</span>
+          <span class="card__desc">Ask our users to name the hardest moment in their cancer journey and many describe the same scene: a rushed visit with an oncologist and a blur of words they don't understand. This is how we designed for that moment.</span>
+          <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </span>
+      </a>
+      <a class="card card--fan-right" href="https://www.katherineroot.com/case-studies-people-magic" target="_blank" rel="noopener noreferrer" style="--tilt:-3deg">
+        <img class="card__fan-img fan-1" src="/assets/screens/mighty-5.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-2" src="/assets/screens/mighty-7.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-3" src="/assets/screens/mighty-8.png" alt="" aria-hidden="true">
+        <span class="card__panel">
+          <span class="card__tag">CASE STUDY</span>
+          <span class="card__title">Unlocking People Magic</span>
+          <span class="card__desc">As a B2B2C company, Mighty Networks has to balance catering not just to Hosts, but to their members. If you build for the members, the Hosts will follow &mdash; so how do you make that experience truly magical?</span>
+          <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </span>
+      </a>
+    </div>
+    <a class="cta" href="#leadership" style="--tilt:3deg">Interesting <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- ============ leadership ============ -->
+  <section class="section" id="leadership">
+    <h2 class="section__title">That empathy also allows me to build thriving teams, systems, and cultures.</h2>
+    <div class="cards">
+      <div class="card card--soon" style="--tilt:-2deg">
+        <span class="card__panel">
+          <span class="card__tag">COMING SOON</span>
+          <span class="card__title">Building Remote Culture</span>
+          <span class="card__desc">Scaling the design team at Mighty from 2 members to 10, all while navigating the new waters of working remotely &mdash; and building a collaborative, creative environment online.</span>
+        </span>
+      </div>
+      <div class="card card--soon" style="--tilt:3deg">
+        <span class="card__panel">
+          <span class="card__tag">COMING SOON</span>
+          <span class="card__title">Make Mighty Cool</span>
+          <span class="card__desc">How do you build a product organization that not only understands the value of design, but actively contributes to delightful interactions? An initiative to get full org buy-in on the power of design details.</span>
+        </span>
+      </div>
+    </div>
+    <a class="cta" href="#screens" style="--tilt:-2deg">Show me some screens <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- ============ screens ============ -->
+  <section class="section" id="screens">
+    <h2 class="section__title">Oh and I make things look pretty ✨</h2>
+    <div class="screens-gallery">
+    <div class="screens__row embla">
+      <div class="embla__viewport" id="screens-viewport">
+        <div class="embla__container">
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-1.png" alt="Manta Cares Find Your Map"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-2.png" alt="Manta Cares iOS Widgets"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-3.png" alt="Manta Cares Dashboard"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-4.png" alt="Manta Cares Map Partial"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-5.png" alt="Manta Cares Map Popup Info"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-6.png" alt="Manta Cares Hope AI"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-7.png" alt="Manta Cares Map Full"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-8.png" alt="Manta Cares Nav"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-1.png" alt="Mighty Networks Splash Screen"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-2.png" alt="Mighty Networks Find Community"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-3.png" alt="Mighty Networks Interests"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-4.png" alt="Mighty Networks Network List"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-4-1.png" alt="Mighty Networks Feed"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-5.png" alt="Mighty Networks Profile"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-6.png" alt="Mighty Networks Member List"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-7.png" alt="Mighty Networks Member Bubbles"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-8.png" alt="Mighty Networks Expanded Bubble"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-9.png" alt="Mighty Networks Nav"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-10.png" alt="Mighty Networks Subscribe"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-11.png" alt="Mighty Networks Livewell"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-12.png" alt="Mighty Networks Body Soul"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-13.png" alt="Mighty Networks Optimistic Entrepreneur"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/mighty-14.png" alt="Mighty Networks Modern Creator"></div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <a class="cta" href="#testimonials" style="--tilt:4deg">SO PRETTY <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- click any pretty-screens image to open it larger here -->
+  <dialog id="screens-lightbox">
+    <button type="button" id="screens-lightbox-close" aria-label="Close">&times;</button>
+    <img id="screens-lightbox-img" src="" alt="">
+  </dialog>
+
+  <!-- ============ testimonials ============ -->
+  <section class="section" id="testimonials">
+    <h2 class="section__title">Don't want to take my word for it?<br/>Hear from my co-workers.</h2>
+    <div class="kind-words">
+      <div class="embla" role="region" aria-label="Kind words from co-workers">
+        <div class="embla__viewport" id="kw-viewport">
+          <div class="embla__container">
+            <blockquote class="embla__slide kind-words__card" tabindex="0">
+              <p class="kind-words__quote">She's just all-around great to work with: a creative but sensible voice during ideation, a doer who's ready to roll up her sleeves wherever needed, and someone willing to make decisions and cut through the endless &ldquo;what ifs.&rdquo;</p>
+              <cite class="kind-words__cite">
+                <span class="kind-words__name">Elisabeth Boonin</span>
+                <span class="kind-words__role">Head of Engineering @ Manta Cares</span>
+              </cite>
+            </blockquote>
+            <blockquote class="embla__slide kind-words__card" tabindex="0">
+              <p class="kind-words__quote">She will be a true asset to any team, valued for her keen eye for design, sense of humor, and ability to see the big picture.</p>
+              <cite class="kind-words__cite">
+                <span class="kind-words__name">Erin Landis</span>
+                <span class="kind-words__role">Clinical Content Manager @ Manta Cares</span>
+              </cite>
+            </blockquote>
+            <blockquote class="embla__slide kind-words__card" tabindex="0">
+              <p class="kind-words__quote">Katherine is everything you'd hope for in a design manager &mdash; supportive, thoughtful, and a true advocate for her team.</p>
+              <cite class="kind-words__cite">
+                <span class="kind-words__name">Giada Sun</span>
+                <span class="kind-words__role">Product Designer @ Mighty Networks</span>
+              </cite>
+            </blockquote>
+            <blockquote class="embla__slide kind-words__card" tabindex="0">
+              <p class="kind-words__quote">Katherine is driven, hardworking, curious, and fun-spirited. She brings the kind of positivity that teams thrive on.</p>
+              <cite class="kind-words__cite">
+                <span class="kind-words__name">Christopher Edlin</span>
+                <span class="kind-words__role">Lead Technical Recruiter @ Mighty Networks</span>
+              </cite>
+            </blockquote>
+            <blockquote class="embla__slide kind-words__card" tabindex="0">
+              <p class="kind-words__quote">Katherine is that rare combination of natural leader, top-notch designer, and reliable teammate &mdash; the kind of person you jump at the chance to work with.</p>
+              <cite class="kind-words__cite">
+                <span class="kind-words__name">Mike Beverley</span>
+                <span class="kind-words__role">Sr. Director of Software Engineering @ Mighty Networks</span>
+              </cite>
+            </blockquote>
+            <blockquote class="embla__slide kind-words__card" tabindex="0">
+              <p class="kind-words__quote">Because of Katherine, I learned a lot about what makes a great design lead truly outstanding.</p>
+              <cite class="kind-words__cite">
+                <span class="kind-words__name">Bruno Ribeiro</span>
+                <span class="kind-words__role">Product Designer @ Mighty Networks</span>
+              </cite>
+            </blockquote>
+            <blockquote class="embla__slide kind-words__card" tabindex="0">
+              <p class="kind-words__quote">She struck a perfect balance of giving me the freedom to run with projects, making them my own, and helping guide the project with thought provoking questions and discussions.</p>
+              <cite class="kind-words__cite">
+                <span class="kind-words__name">John Welch</span>
+                <span class="kind-words__role">Product Designer @ Mighty Networks</span>
+              </cite>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a class="cta" href="#tldr" style="--tilt:-3deg">Gimme the TLDR <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- ============ tldr ============ -->
+  <section class="section" id="tldr">
+    <h2 class="section__title">The TLDR?<br/><span class="section__title--regular">I do design because I love it, and I bring that passion to all of the work that I do 💖</span></h2>
+    <a class="cta" href="#say-hi" style="--tilt:2deg">Let's talk <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- ============ say hi ============ -->
+  <section class="section" id="say-hi">
+    <h2 class="section__title">Feel free to say hi some time.<br/>I'd love to chat 👋</h2>
     <div class="say-hi__icons">
       <a class="say-hi__icon say-hi__icon--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="--tilt:-2deg"><span aria-hidden="true">in</span></a>
       <a class="say-hi__icon" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="--tilt:2deg">
@@ -690,42 +658,40 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
       </a>
     </div>
+    <a class="cta" href="#footer" style="--tilt:3deg">Is this the end?</a>
   </section>
 
-  <footer class="site-footer">
-    <img class="site-footer__glow-img is-night" src="/assets/glow-night.svg" alt="" aria-hidden="true">
-    <img class="site-footer__glow-img is-morning" src="/assets/glow-morning.svg" alt="" aria-hidden="true">
-    <img class="site-footer__glow-img is-afternoon" src="/assets/glow-afternoon.svg" alt="" aria-hidden="true">
-    <img class="site-footer__glow-img is-evening" src="/assets/glow-evening.svg" alt="" aria-hidden="true">
-    <button type="button" class="site-footer__toggle" id="time-toggle">
-      <span id="time-toggle-icon"></span>
-    </button>
+  <!-- ============ footer ============ -->
+  <footer class="site-footer" id="footer">
+    <div class="site-footer__heading">
+      <p class="site-footer__name">Katherine Root</p>
+      <p class="site-footer__tag">Product, AI, and Experience Design Expert</p>
+    </div>
+    <div class="site-footer__links">
+      <a href="/assets/KatherineRootResume2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">Resume</a>
+      <a href="/casestudies/index.html" style="--tilt:3deg">Case Studies</a>
+      <a href="/sideprojects/index.html" style="--tilt:-4deg">Side Projects</a>
+    </div>
+    <div class="say-hi__icons">
+      <a class="say-hi__icon say-hi__icon--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="--tilt:-2deg"><span aria-hidden="true">in</span></a>
+      <a class="say-hi__icon" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="--tilt:2deg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+      </a>
+      <a class="say-hi__icon" href="mailto:keroot@gmail.com" aria-label="Email" style="--tilt:-3deg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+      </a>
+    </div>
   </footer>
 
-<script src="/assets/time-toggle.js"></script>
 <script>
-  // Header is hidden while the hero name is on screen, and appears once
-  // you've scrolled past it. Home page only — no header on other pages.
-  (function () {
-    var header = document.querySelector('.header');
-    var hero = document.querySelector('.name');
-    if (!header || !hero) return;
-    function update() {
-      var threshold = hero.offsetTop + hero.offsetHeight;
-      header.classList.toggle('is-visible', window.scrollY > threshold);
-    }
-    update();
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-  })();
-</script>
-<script>
+// --- hero letter-flip: same interaction as the live site (hover flips a
+// letter and shows its tag; touch taps one letter active at a time;
+// reduced-motion keeps the name static) ---
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var noHover = window.matchMedia('(hover: none)').matches;
-  if (reduce) return; // static name, nothing to animate
+  if (reduce) return;
 
-  // Touch / no-hover devices can't hover, so flip on tap instead.
   if (noHover) {
     var letters = Array.prototype.slice.call(document.querySelectorAll('.letter'));
     letters.forEach(function (letter) {
@@ -735,19 +701,16 @@
         if (!wasActive) letter.classList.add('is-active');
       });
     });
-    // Tapping anywhere outside the name deselects whichever letter was active.
     document.addEventListener('click', function (e) {
       if (!e.target.closest('.name')) {
         letters.forEach(function (l) { l.classList.remove('is-active'); });
       }
     });
   } else {
-    // Non-touch: hover already flips the letter, so a click on top of that
-    // just adds a quick bounce for tactile click feedback.
     Array.prototype.slice.call(document.querySelectorAll('.letter')).forEach(function (letter) {
       letter.addEventListener('click', function () {
         letter.classList.remove('is-bouncing');
-        void letter.offsetWidth; // force reflow so the animation can restart on rapid clicks
+        void letter.offsetWidth;
         letter.classList.add('is-bouncing');
       });
       letter.addEventListener('animationend', function () {
@@ -757,217 +720,87 @@
   }
 })();
 </script>
+<script src="https://unpkg.com/embla-carousel/embla-carousel.umd.js"></script>
+<script src="https://unpkg.com/embla-carousel-autoplay/embla-carousel-autoplay.umd.js"></script>
 <script>
+// --- Kind Words gallery: Embla Carousel's "loop" example
+// (embla-carousel.com/docs/examples/predefined#loop), via CDN. loop:true
+// gives real infinite looping natively — no clone nodes or scroll-position
+// math needed. Autoplay is the official Embla plugin (5s, pauses on
+// hover/focus, resumes after — doesn't die after one interaction).
+// Dragging is Embla's built-in pointer drag; clicking an off-center slide
+// centers it via scrollTo(). ---
 (function () {
-  // The "long-winded version" prompt reveals on hover — on touch devices
-  // there's no hover, so a tap on the short bio reveals it instead, and a
-  // tap anywhere else dismisses it (same fallback pattern as the flip-name).
-  var bio = document.getElementById('bio');
-  var expandBtn = document.getElementById('bio-expand');
-  var collapseBtn = document.getElementById('bio-collapse');
-  var short = bio.querySelector('.bio__short');
-  if (!bio || !expandBtn || !collapseBtn) return;
+  var viewport = document.getElementById('kw-viewport');
+  if (!viewport || !window.EmblaCarousel) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  var noHover = window.matchMedia('(hover: none)').matches;
-  if (noHover) {
-    short.addEventListener('click', function () {
-      bio.classList.toggle('is-touch-revealed');
-    });
-    document.addEventListener('click', function (e) {
-      if (!e.target.closest('#bio')) bio.classList.remove('is-touch-revealed');
-    });
-  }
-
-  expandBtn.addEventListener('click', function () {
-    bio.classList.add('is-expanded');
-    bio.classList.remove('is-touch-revealed');
+  var autoplay = window.EmblaCarouselAutoplay && EmblaCarouselAutoplay({
+    delay: 5000,
+    stopOnInteraction: false,
+    stopOnMouseEnter: true,
+    stopOnFocusIn: true
   });
-  collapseBtn.addEventListener('click', function () {
-    bio.classList.remove('is-expanded');
+
+  var emblaApi = EmblaCarousel(viewport, {
+    loop: true,
+    align: 'center'
+  }, autoplay ? [autoplay] : []);
+
+  if (reduce && autoplay) autoplay.stop();
+
+  emblaApi.slideNodes().forEach(function (slide, index) {
+    slide.addEventListener('click', function () {
+      if (index !== emblaApi.selectedScrollSnap()) emblaApi.scrollTo(index);
+    });
+    slide.addEventListener('keydown', function (e) {
+      if ((e.key === 'Enter' || e.key === ' ') && index !== emblaApi.selectedScrollSnap()) {
+        e.preventDefault();
+        emblaApi.scrollTo(index);
+      }
+    });
   });
 })();
 </script>
 <script>
+// --- Pretty screens gallery: Embla's "drag-free" example
+// (embla-carousel.com/docs/examples/predefined#drag-free) — momentum-
+// based free dragging instead of the loop/snap-to-center behavior Kind
+// Words uses. No autoplay/click-to-center here either; it's a browse-
+// at-your-own-pace gallery of real product shots. ---
 (function () {
-  // Real LinkedIn recommendations (linkedin.com/in/katherineroot/details/recommendations/),
-  // trimmed to one verbatim, contiguous sentence each.
-  var recs = [
-    { quote: `She’s just all-around great to work with: a creative but sensible voice during ideation, a doer who’s ready to roll up her sleeves wherever needed, and someone willing to make decisions and cut through the endless “what ifs.”`, name: 'Elisabeth Boonin', role: 'Serial Confounder' },
-    { quote: `She will be a true asset to any team, valued for her keen eye for design, sense of humor, and ability to see the big picture.`, name: 'Erin Landis', role: 'Strategic Advisor to Scholarly Societies & Publishers' },
-    { quote: `Katherine is everything you’d hope for in a design manager — supportive, thoughtful, and a true advocate for her team.`, name: 'Giada Sun', role: 'Product Designer @ Mighty Networks' },
-    { quote: `Katherine is driven, hardworking, curious, and fun-spirited. She brings the kind of positivity that teams thrive on.`, name: 'Christopher Edlin', role: 'Manager, Support Account Team @ Ping Identity' },
-    { quote: `Katherine is that rare combination of natural leader, top-notch designer, and reliable teammate — the kind of person you jump at the chance to work with.`, name: 'Mike Beverley', role: 'VP of Software Engineering @ AoPS' },
-    { quote: `Because of Katherine, I learned a lot about what makes a great design lead truly outstanding.`, name: 'Bruno Ribeiro', role: 'Applied AI & Mobile App Engineer' },
-    { quote: `She struck a perfect balance of giving me the freedom to run with projects, making them my own, and helping guide the project with thought provoking questions and discussions.`, name: 'John Welch', role: 'Product Manager' }
-  ];
+  var viewport = document.getElementById('screens-viewport');
+  if (!viewport || !window.EmblaCarousel) return;
+  EmblaCarousel(viewport, { dragFree: true });
+})();
+</script>
+<script>
+// --- Pretty screens lightbox: click any image to open it larger in a
+// native <dialog> (free Escape-to-close + focus trap). Embla already
+// suppresses the click event that would otherwise fire at the end of a
+// drag, so this only opens on a genuine click/tap, never a released
+// drag. Clicking the backdrop or the close button closes it. ---
+(function () {
+  var dialog = document.getElementById('screens-lightbox');
+  var lightboxImg = document.getElementById('screens-lightbox-img');
+  var closeBtn = document.getElementById('screens-lightbox-close');
+  if (!dialog || !lightboxImg || !closeBtn) return;
 
-  // Three real card elements, each carrying a "slot" (-1/0/+1 = peek-left/
-  // center/peek-right) that drives its position and opacity. Advancing
-  // shifts every card's slot by one and animates straight there — actual
-  // movement, not a text crossfade. A card that lands 2+ slots out is
-  // off-screen, so it gets repainted with the next recommendation and
-  // snapped (no transition) to the slot it re-enters from — a 3-element
-  // circular buffer standing in for a full track of 7 cards.
-  var cards = ['prev', 'current', 'next'].map(function (key) {
-    return {
-      el: document.getElementById('kw-card-' + key),
-      quote: document.getElementById('kw-quote-' + key),
-      name: document.getElementById('kw-name-' + key),
-      role: document.getElementById('kw-role-' + key),
-      slot: 0,
-      dataIndex: 0
-    };
-  });
-  var dotsWrap = document.getElementById('kw-dots');
-  var prevBtn = document.getElementById('kw-prev');
-  var nextBtn = document.getElementById('kw-next');
-  var section = document.querySelector('.kind-words');
-  if (!cards[1].quote || !dotsWrap) return;
-
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var PEEK_OPACITY = 0.35;
-  var GAP = 24;
-  var activeIndex = 0;
-  var busy = false;
-  var timer;
-
-  recs.forEach(function (_, i) {
-    var dot = document.createElement('button');
-    dot.type = 'button';
-    dot.className = 'kind-words__dot' + (i === 0 ? ' is-active' : '');
-    dot.setAttribute('aria-label', 'Show recommendation ' + (i + 1) + ' of ' + recs.length);
-    dot.addEventListener('click', function () {
-      stopAuto();
-      var forward = (i - activeIndex + recs.length) % recs.length;
-      var backward = (activeIndex - i + recs.length) % recs.length;
-      advanceSteps(forward <= backward ? 1 : -1, Math.min(forward, backward));
-    });
-    dotsWrap.appendChild(dot);
-  });
-
-  function paintCard(card) {
-    var rec = recs[((card.dataIndex % recs.length) + recs.length) % recs.length];
-    card.quote.textContent = rec.quote;
-    card.name.textContent = rec.name;
-    card.role.textContent = rec.role;
-  }
-
-  function stepPx() {
-    return (cards[1].el.offsetWidth || 620) + GAP;
-  }
-
-  function targetOpacity(slot) {
-    return slot === 0 ? 1 : (Math.abs(slot) === 1 ? PEEK_OPACITY : 0);
-  }
-
-  function applyA11y(card) {
-    var isPeek = Math.abs(card.slot) === 1;
-    card.el.classList.toggle('is-peek', isPeek);
-    if (isPeek) {
-      card.el.setAttribute('role', 'button');
-      card.el.setAttribute('tabindex', '0');
-      card.el.setAttribute('aria-label', card.slot === -1 ? 'Show previous recommendation' : 'Show next recommendation');
-    } else {
-      card.el.removeAttribute('role');
-      card.el.removeAttribute('tabindex');
-      card.el.removeAttribute('aria-label');
-    }
-  }
-
-  function positionCard(card, animate) {
-    if (!animate) card.el.classList.add('kw-no-transition');
-    card.el.style.transform = 'translateX(calc(-50% + ' + (card.slot * stepPx()) + 'px))';
-    card.el.style.opacity = targetOpacity(card.slot);
-    applyA11y(card);
-    if (!animate) {
-      void card.el.offsetWidth;
-      card.el.classList.remove('kw-no-transition');
-    }
-  }
-
-  // A recycled card has slid fully off-screen and gone invisible — rather
-  // than have it pop straight into its new peek slot, snap it there at
-  // opacity 0 (imperceptible, since it's already invisible) and then let
-  // it fade up to its resting opacity. It's genuinely new to the visible
-  // set at that point, so a fade-on reads better than a hard cut.
-  function recycleCard(card, direction) {
-    card.slot = direction;
-    card.dataIndex = activeIndex + direction;
-    paintCard(card);
-    applyA11y(card);
-    if (reduce) { positionCard(card, false); return; }
-    card.el.classList.add('kw-no-transition');
-    card.el.style.transform = 'translateX(calc(-50% + ' + (card.slot * stepPx()) + 'px))';
-    card.el.style.opacity = 0;
-    void card.el.offsetWidth;
-    card.el.classList.remove('kw-no-transition');
-    requestAnimationFrame(function () {
-      card.el.style.opacity = targetOpacity(card.slot);
-    });
-  }
-
-  function updateDots() {
-    Array.prototype.forEach.call(dotsWrap.children, function (d, i) {
-      d.classList.toggle('is-active', i === activeIndex);
-    });
-  }
-
-  function advance(direction) {
-    if (busy) return;
-    busy = true;
-    var animate = !reduce;
-    cards.forEach(function (card) {
-      card.slot -= direction;
-      positionCard(card, animate);
-    });
-    activeIndex = (activeIndex + direction + recs.length) % recs.length;
-    updateDots();
-    setTimeout(function () {
-      var recycled = null;
-      cards.forEach(function (card) { if (Math.abs(card.slot) >= 2) recycled = card; });
-      if (recycled) recycleCard(recycled, direction);
-      busy = false;
-    }, animate ? 460 : 0);
-  }
-
-  function advanceSteps(direction, steps) {
-    if (steps <= 0) return;
-    advance(direction);
-    if (steps > 1) setTimeout(function () { advanceSteps(direction, steps - 1); }, reduce ? 0 : 480);
-  }
-
-  cards.forEach(function (card) {
-    card.el.addEventListener('click', function () {
-      if (card.slot === -1) { stopAuto(); advance(-1); }
-      else if (card.slot === 1) { stopAuto(); advance(1); }
-    });
-    card.el.addEventListener('keydown', function (e) {
-      if ((e.key === 'Enter' || e.key === ' ') && Math.abs(card.slot) === 1) {
-        e.preventDefault();
-        stopAuto();
-        advance(card.slot);
-      }
+  document.querySelectorAll('.screens__slide img').forEach(function (img) {
+    img.addEventListener('click', function () {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      dialog.showModal();
     });
   });
 
-  function startAuto() {
-    if (reduce) return;
-    stopAuto();
-    timer = setInterval(function () { advance(1); }, 6000);
-  }
-  function stopAuto() { clearInterval(timer); }
-
-  prevBtn.addEventListener('click', function () { stopAuto(); advance(-1); });
-  nextBtn.addEventListener('click', function () { stopAuto(); advance(1); });
-  section.addEventListener('mouseenter', stopAuto);
-  section.addEventListener('mouseleave', startAuto);
-
-  cards[0].slot = -1; cards[0].dataIndex = -1;
-  cards[1].slot = 0;  cards[1].dataIndex = 0;
-  cards[2].slot = 1;  cards[2].dataIndex = 1;
-  cards.forEach(function (card) { paintCard(card); positionCard(card, false); });
-  updateDots();
-  startAuto();
+  closeBtn.addEventListener('click', function () { dialog.close(); });
+  dialog.addEventListener('click', function (e) {
+    if (e.target === dialog) dialog.close();
+  });
+  dialog.addEventListener('close', function () {
+    lightboxImg.src = '';
+  });
 })();
 </script>
 </body>
