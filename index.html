@@ -240,13 +240,13 @@
      distinct from the live cards' solid translucent panel, not just dimmer. */
   .card--soon{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%F0%9F%99%85%E2%80%8D%E2%99%80%EF%B8%8F</text></svg>") 16 16,default}
   .card--soon .card__panel{background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.3);
-        filter:grayscale(.6);min-height:326px}
+        filter:grayscale(.6)}
   .card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:14px;font-weight:600;
         padding:5px 14px;border-radius:100px;transition:background-color .3s ease,color .3s ease}
   .card--soon .card__tag{background:rgba(255,255,255,.25);color:rgba(255,255,255,.8)}
-  .card__title{font-size:clamp(22px,2.6vw,32px);font-weight:600;margin:0;line-height:1.25;min-height:2.5em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card__title{font-size:clamp(22px,2.6vw,32px);font-weight:600;margin:0}
   .card--soon .card__title{color:rgba(255,255,255,.7)}
-  .card__desc{font-size:17px;line-height:1.5;margin:0;opacity:.9;transition:opacity .3s ease;min-height:6em;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .card__desc{font-size:17px;line-height:1.5;margin:0;opacity:.9;transition:opacity .3s ease}
   .card--soon .card__desc{opacity:.55}
   .card__arrow{margin-top:auto;line-height:0}
   .card__arrow svg{width:26px;height:26px}
@@ -339,6 +339,11 @@
   .embla:active{cursor:grabbing}
   .embla__viewport{overflow:hidden;padding-bottom:20px}
   .embla__container{display:flex;gap:24px;touch-action:pan-y pinch-zoom}
+  /* smaller gap between Kind Words cards specifically — scoped here rather
+     than on the shared .embla__container rule above so the pretty-screens
+     gallery (which reuses the same Embla markup/classes) keeps its own
+     24px gap untouched. */
+  .kind-words .embla__container{gap:12px}
   .kind-words__card{flex:0 0 min(620px,86vw);min-width:0;min-height:280px;
         border-radius:22px;background:#fff;color:#000;margin:0;
         padding:24px;display:flex;flex-direction:column;justify-content:center;gap:24px;
@@ -346,8 +351,9 @@
   /* Embla's loop math only accounts for flex `gap` between adjacent DOM
      siblings — the wrap seam (last slide back to the first) has no
      sibling relationship to inherit it from, so it renders with zero
-     gap unless the last slide carries its own matching margin. */
-  .kind-words__card.embla__slide:last-child{margin-right:24px}
+     gap unless the last slide carries its own matching margin (must match
+     .kind-words .embla__container's gap above, not the shared 24px). */
+  .kind-words__card.embla__slide:last-child{margin-right:12px}
   .kind-words__card:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
   .kind-words__quote{font-size:20px;line-height:29px;margin:0;font-weight:400}
   .kind-words__cite{font-style:normal;display:flex;flex-direction:column;gap:4px}
@@ -356,6 +362,19 @@
   @media (max-width:700px){
     .embla__viewport{padding-inline:20px}
     .kind-words__card{flex-basis:100%}
+    /* force "Katherine" / "Root" onto their own stacked lines rather than
+       relying on flex-wrap to happen to break there, and size up now that
+       each word gets a full-width line to itself instead of sharing one. */
+    .name{flex-direction:column;align-items:center}
+    .glyph{font-size:clamp(60px,18vw,100px)}
+    /* company logos: single stacked column instead of wrapped rows, each
+       logo sized up since it no longer has to share a row with 2-3 others. */
+    .companies__row{flex-direction:column}
+    .company__logo--simply{height:clamp(90px,24vw,130px)}
+    .company__logo--launch{width:clamp(160px,42vw,260px)}
+    .company__logo--manta{width:clamp(95px,25vw,150px);height:clamp(95px,25vw,150px)}
+    .company__logo--mighty{width:clamp(150px,40vw,240px)}
+    .company__logo--copper{width:clamp(95px,25vw,150px);height:clamp(95px,25vw,150px)}
   }
 
   /* --- say hi: same 3 contact icons as the live site, re-skinned to
@@ -388,9 +407,10 @@
   /* --- secret menu: an invisible hotspot tucked in the very top-right
      corner. On desktop it's completely hidden until you hover it, at
      which point a hand-drawn arrow + note point back at the corner —
-     click opens the same links as the footer. On touch there's no
-     hover to discover it by, so the hint stays faintly visible instead
-     of being truly hidden. --- */
+     click opens the same links as the footer. On touch there's no hover,
+     so the hint stays hidden until the corner is actually tapped (tied
+     to the same .is-open state as the panel, via JS below) rather than
+     being visible up front. --- */
   .secret-menu{position:fixed;top:0;right:0;z-index:60}
   .secret-menu__trigger{position:absolute;top:0;right:0;width:84px;height:84px;
         background:none;border:none;padding:0;margin:0;cursor:pointer;
@@ -403,7 +423,7 @@
     .secret-menu__trigger:focus-visible .secret-menu__hint{opacity:1}
   }
   @media (hover:none){
-    .secret-menu__hint{opacity:.85}
+    .secret-menu.is-open .secret-menu__hint{opacity:1}
   }
   .secret-menu__arrow{width:34px;height:34px;color:#fff;display:block;
         filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
