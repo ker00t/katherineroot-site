@@ -138,19 +138,28 @@
   .cards{display:flex;gap:25px;flex-wrap:wrap;justify-content:center;max-width:1280px}
   .card{--tilt:-2deg;position:relative;z-index:0;background:rgba(255,255,255,.1);border-radius:22px;width:min(620px,100%);
         min-height:280px;padding:34px;text-align:left;display:flex;flex-direction:column;gap:16px;
-        text-decoration:none;color:#fff;transition:transform .3s var(--spring)}
-  a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
+        text-decoration:none;color:#fff;
+        transition:transform .3s var(--spring),background-color .3s ease,color .3s ease}
+  /* on hover the card flips to a solid white panel (instead of the
+     resting translucent-on-color look) — tag/title/desc/arrow all
+     recolor from white-on-color to dark-ink/brand-color-on-white so
+     everything stays legible against the new background. */
+  a.card:hover,a.card:focus-visible{
+        transform:translateY(-6px) rotate(var(--tilt));
+        background:#fff;color:var(--charcoal);outline:none}
+  a.card:hover .card__tag,a.card:focus-visible .card__tag{background:#f455a7;color:#fff}
+  a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
   /* "coming soon" cards read as genuinely disabled: flattened to a dashed
      outline on almost no fill, desaturated, and a not-allowed cursor —
      distinct from the live cards' solid translucent panel, not just dimmer. */
   .card--soon{background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.3);
         filter:grayscale(.6);cursor:not-allowed}
   .card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:14px;font-weight:600;
-        padding:5px 14px;border-radius:100px}
+        padding:5px 14px;border-radius:100px;transition:background-color .3s ease,color .3s ease}
   .card--soon .card__tag{background:rgba(255,255,255,.25);color:rgba(255,255,255,.8)}
   .card__title{font-size:clamp(22px,2.6vw,32px);font-weight:600;margin:0}
   .card--soon .card__title{color:rgba(255,255,255,.7)}
-  .card__desc{font-size:17px;line-height:1.5;margin:0;opacity:.9}
+  .card__desc{font-size:17px;line-height:1.5;margin:0;opacity:.9;transition:opacity .3s ease}
   .card--soon .card__desc{opacity:.55}
   .card__arrow{margin-top:auto;line-height:0}
   .card__arrow svg{width:26px;height:26px}
@@ -472,14 +481,14 @@
               <p class="kind-words__quote">She's just all-around great to work with: a creative but sensible voice during ideation, a doer who's ready to roll up her sleeves wherever needed, and someone willing to make decisions and cut through the endless &ldquo;what ifs.&rdquo;</p>
               <cite class="kind-words__cite">
                 <span class="kind-words__name">Elisabeth Boonin</span>
-                <span class="kind-words__role">Serial Confounder</span>
+                <span class="kind-words__role">Head of Engineering @ Manta Cares</span>
               </cite>
             </blockquote>
             <blockquote class="embla__slide kind-words__card" tabindex="0">
               <p class="kind-words__quote">She will be a true asset to any team, valued for her keen eye for design, sense of humor, and ability to see the big picture.</p>
               <cite class="kind-words__cite">
                 <span class="kind-words__name">Erin Landis</span>
-                <span class="kind-words__role">Strategic Advisor to Scholarly Societies &amp; Publishers</span>
+                <span class="kind-words__role">Clinical Content Manager @ Manta Cares</span>
               </cite>
             </blockquote>
             <blockquote class="embla__slide kind-words__card" tabindex="0">
@@ -493,28 +502,28 @@
               <p class="kind-words__quote">Katherine is driven, hardworking, curious, and fun-spirited. She brings the kind of positivity that teams thrive on.</p>
               <cite class="kind-words__cite">
                 <span class="kind-words__name">Christopher Edlin</span>
-                <span class="kind-words__role">Manager, Support Account Team @ Ping Identity</span>
+                <span class="kind-words__role">Lead Technical Recruiter @ Mighty Networks</span>
               </cite>
             </blockquote>
             <blockquote class="embla__slide kind-words__card" tabindex="0">
               <p class="kind-words__quote">Katherine is that rare combination of natural leader, top-notch designer, and reliable teammate &mdash; the kind of person you jump at the chance to work with.</p>
               <cite class="kind-words__cite">
                 <span class="kind-words__name">Mike Beverley</span>
-                <span class="kind-words__role">VP of Software Engineering @ AoPS</span>
+                <span class="kind-words__role">Sr. Director of Software Engineering @ Mighty Networks</span>
               </cite>
             </blockquote>
             <blockquote class="embla__slide kind-words__card" tabindex="0">
               <p class="kind-words__quote">Because of Katherine, I learned a lot about what makes a great design lead truly outstanding.</p>
               <cite class="kind-words__cite">
                 <span class="kind-words__name">Bruno Ribeiro</span>
-                <span class="kind-words__role">Applied AI &amp; Mobile App Engineer</span>
+                <span class="kind-words__role">Product Designer @ Mighty Networks</span>
               </cite>
             </blockquote>
             <blockquote class="embla__slide kind-words__card" tabindex="0">
               <p class="kind-words__quote">She struck a perfect balance of giving me the freedom to run with projects, making them my own, and helping guide the project with thought provoking questions and discussions.</p>
               <cite class="kind-words__cite">
                 <span class="kind-words__name">John Welch</span>
-                <span class="kind-words__role">Product Manager</span>
+                <span class="kind-words__role">Product Designer @ Mighty Networks</span>
               </cite>
             </blockquote>
           </div>
