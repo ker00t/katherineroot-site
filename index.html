@@ -460,15 +460,15 @@
         transition:transform .4s var(--spring)}
   .secret-menu.is-open .secret-menu__panel{transform:translateX(0);pointer-events:auto}
   .secret-menu__panel a{color:var(--charcoal);text-decoration:none;font-weight:600;
-        font-size:clamp(24px,3vw,32px);padding:10px 0;transition:transform .2s var(--spring)}
+        font-size:clamp(24px,3vw,32px);padding:10px 0;transition:transform .3s var(--spring)}
   .secret-menu__panel a:hover,.secret-menu__panel a:focus-visible{
-        transform:translateX(-6px);outline:none}
+        transform:translateY(-6px) rotate(var(--tilt));outline:none}
   .secret-menu__socials{display:flex;gap:14px;margin-top:auto;padding-top:32px}
   .secret-menu__social{width:54px;height:54px;border:3px solid var(--charcoal);border-radius:15px;
         display:flex;align-items:center;justify-content:center;color:var(--charcoal);
-        text-decoration:none;transition:transform .2s var(--spring)}
+        text-decoration:none;transition:transform .3s var(--spring)}
   .secret-menu__social:hover,.secret-menu__social:focus-visible{
-        transform:translateY(-4px);outline:none}
+        transform:translateY(-6px) rotate(var(--tilt));outline:none}
   .secret-menu__social svg{width:22px;height:22px}
   .secret-menu__social--linkedin{font-size:19px;font-weight:700}
 
@@ -864,16 +864,16 @@
     </button>
     <div class="secret-menu__scrim" id="secret-menu-scrim"></div>
     <nav class="secret-menu__panel" id="secret-menu-panel" aria-label="Secret menu">
-      <a href="/">Home</a>
-      <a href="/assets/KatherineRootResume2026.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
-      <a href="/casestudies/index.html">Case Studies</a>
-      <a href="/sideprojects/index.html">Side Projects</a>
+      <a href="/" style="--tilt:-2deg">Home</a>
+      <a href="/assets/KatherineRootResume2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:2deg">Resume</a>
+      <a href="/casestudies/index.html" style="--tilt:-3deg">Case Studies</a>
+      <a href="/sideprojects/index.html" style="--tilt:3deg">Side Projects</a>
       <div class="secret-menu__socials">
-        <a class="secret-menu__social secret-menu__social--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><span aria-hidden="true">in</span></a>
-        <a class="secret-menu__social" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <a class="secret-menu__social secret-menu__social--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="--tilt:-2deg"><span aria-hidden="true">in</span></a>
+        <a class="secret-menu__social" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="--tilt:2deg">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
         </a>
-        <a class="secret-menu__social" href="mailto:keroot@gmail.com" aria-label="Email">
+        <a class="secret-menu__social" href="mailto:keroot@gmail.com" aria-label="Email" style="--tilt:-3deg">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
         </a>
       </div>
