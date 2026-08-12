@@ -139,13 +139,8 @@
      center at rest, each fans out to its own spot on hover/focus */
   .company__piece{position:absolute;left:50%;top:50%;pointer-events:none;opacity:0;
            transform:translate(-50%,-50%) scale(.4);transform-origin:center center;
-           /* exit transition only — delayed so the piece stays fully visible
-              for a beat after the cursor leaves the badge, giving it time to
-              travel the gap to .company__name (the one piece that's actually
-              clickable) before anything starts fading. Entering hover
-              overrides this back to an instant 0s delay below. */
-           transition:opacity .35s var(--spring) .4s,transform .45s var(--spring) .4s}
-  .company:hover .company__piece,.company:focus-within .company__piece{opacity:1;transition-delay:0s}
+           transition:opacity .35s var(--spring),transform .45s var(--spring)}
+  .company:hover .company__piece,.company:focus-within .company__piece{opacity:1}
   .company__caption{color:#fff;font-size:15px;line-height:1.35;width:200px;margin:0}
   /* the only fanned-out piece that's a real click target (see the <a
      class="company"> wrapping everything) — pointer-events:auto here (against
