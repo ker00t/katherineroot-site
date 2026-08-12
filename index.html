@@ -3,69 +3,41 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/assets/favicon.png" type="image/png">
 <title>Katherine Root | Experience Designer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
 <style>
   /* --- v2 preview: a from-scratch homepage following the Figma "portfolio"
      (v2) mock — 10 full-bleed sections in one scrolling story, closing on a
-     gradient footer. Self-contained like the current root index.html (own
-     style/script, no site.css). No time-of-day theming here: per the Figma
-     annotation on the hero, the background instead slowly cycles through a
-     curated set of bright hues, always paired with the fixed neon-green CTA
-     color. Kept: the hero letter-flip and every tilt-hover interaction from
-     the current site — reused verbatim where the component is identical
+     gradient footer. No time-of-day theming here: per the Figma annotation
+     on the hero, the background instead slowly cycles through a curated
+     set of bright hues, always paired with the fixed neon-green CTA color.
+     Kept: the hero letter-flip and every tilt-hover interaction from the
+     current site — reused verbatim where the component is identical
      (letter-flip, say-hi icons). Kind Words is a native horizontal
-     scroll-snap gallery here rather than the live site's JS carousel. */
+     scroll-snap gallery here rather than the live site's JS carousel.
+     Shared tokens/resets/back-link/say-hi/footer/etc. now live in
+     /assets/site.css — this block is just what's unique to the homepage. */
   :root{
-    --magenta:#FF2E93; --blue:#0074AF; --indigo:#1B45E8;
-    --violet:#7B2FF7; --purple:#A614FE; --charcoal:#17140F; --cream:#FFF1D6;
-    --lime:#bdf300;
-    --accent:var(--lime);
-    --spring: cubic-bezier(.34,1.56,.64,1);
+    /* letter-flip-only tokens, not used anywhere else on the site */
     --lift: -8px;
     --dur: .5s;
   }
-  *{box-sizing:border-box}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
            overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-  /* html's own background is what shows in the mobile rubber-band overscroll
-     area beyond the document edges — set to the footer's solid green so
-     pulling up past the bottom shows green, not the page's rotating hue. */
-  html{background:var(--lime)}
-  body{margin:0;color:#fff;font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
-       -webkit-font-smoothing:antialiased;background:#f455a7;
-       animation:bgCycle 200s ease-in-out infinite}
-  @keyframes bgCycle{
-    0%,6%{background-color:#f455a7}
-    20%,26%{background-color:#E81BBC}
-    40%,46%{background-color:var(--purple)}
-    60%,66%{background-color:var(--violet)}
-    80%,86%{background-color:var(--blue)}
-    100%{background-color:#f455a7}
-  }
-  a{color:inherit}
-  img{max-width:100%}
 
   /* --- section shell: every section fills the viewport (annotation on the
      "companies" frame — applies site-wide, not just there), full-bleed,
      stacked in one story with a CTA at the bottom that scrolls to the next. */
-  html{scroll-behavior:smooth}
   .section{min-height:100vh;display:flex;flex-direction:column;align-items:center;
            justify-content:center;gap:clamp(40px,7vw,80px);
            padding:clamp(48px,8vw,64px) clamp(20px,6vw,64px);text-align:center}
   .section__title{font-size:clamp(32px,6vw,80px);font-weight:600;letter-spacing:-.03em;
            line-height:1.1;margin:0;max-width:1340px}
   .section__title--regular{font-weight:400}
-
-  .cta{--tilt:-2deg;display:inline-flex;align-items:center;gap:10px;
-       background:var(--lime);color:#000;font-size:clamp(14px,1.4vw,16px);font-weight:400;
-       padding:clamp(12px,1.6vw,16px) clamp(20px,2.6vw,32px);border-radius:70px;
-       text-decoration:none;white-space:nowrap;
-       transition:transform .3s var(--spring)}
-  .cta:hover,.cta:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
-  .cta svg{width:16px;height:16px;flex:none}
 
   /* reusable down/right chevron — same glyph as the current site's
      .route__arrow, just rotated per context instead of a separate asset */
@@ -203,46 +175,13 @@
     .company__tap-label svg{width:16px;height:16px;flex:none}
   }
 
-  /* --- case-study cards: strategy / people / leadership sections. Not-yet-
-     live cards (matching the real site's "coming soon" cards) get a muted
-     tag and no arrow/link. --- */
+  /* --- case-study cards: strategy / people / leadership sections. The
+     card design itself (.card/.card__panel/tag/title/desc/arrow,
+     .card--soon) is fully shared site-wide now — see /assets/site.css.
+     What's left here is this page's own .cards container and the
+     fan-hover phone mockups below, an optional extra on top of the
+     shared card design that only the homepage uses. --- */
   .cards{display:flex;gap:25px;flex-wrap:wrap;justify-content:center;max-width:1280px}
-  .card{--tilt:-2deg;position:relative;display:block;width:min(620px,100%);
-        text-decoration:none;color:#fff;transition:transform .3s var(--spring)}
-  a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
-  /* the actual visible panel is a separate element *after* the fan images
-     in DOM order (see .card__fan-img below) — negative z-index on a card
-     child only sinks it below the card's own *content*, not below the
-     card's own background (an opaque background doesn't occlude a
-     descendant just because that descendant has z-index:-1). Two
-     same-stacking-level siblings where the later one is opaque is what
-     actually makes the panel cover the phones where they overlap, while
-     leaving the parts that extend past the panel's edges visible. */
-  .card__panel{position:relative;background:rgba(255,255,255,.1);border-radius:22px;
-        min-height:280px;padding:34px;text-align:left;display:flex;flex-direction:column;gap:16px;
-        transition:background-color .3s ease,color .3s ease}
-  /* on hover the panel flips to solid white (instead of the resting
-     translucent-on-color look) — tag/title/desc/arrow all recolor from
-     white-on-color to dark-ink/brand-color-on-white so everything stays
-     legible against the new background. */
-  a.card:hover .card__panel,a.card:focus-visible .card__panel{background:#fff;color:var(--charcoal)}
-  a.card:hover .card__tag,a.card:focus-visible .card__tag{background:#f455a7;color:#fff}
-  a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
-  /* "coming soon" cards read as genuinely disabled: flattened to a dashed
-     outline on almost no fill, desaturated, and a "no" gesture cursor —
-     distinct from the live cards' solid translucent panel, not just dimmer. */
-  .card--soon{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%F0%9F%99%85%E2%80%8D%E2%99%80%EF%B8%8F</text></svg>") 16 16,default}
-  .card--soon .card__panel{background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.3);
-        filter:grayscale(.6)}
-  .card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:14px;font-weight:600;
-        padding:5px 14px;border-radius:100px;transition:background-color .3s ease,color .3s ease}
-  .card--soon .card__tag{background:rgba(255,255,255,.25);color:rgba(255,255,255,.8)}
-  .card__title{font-size:clamp(22px,2.6vw,32px);font-weight:600;margin:0}
-  .card--soon .card__title{color:rgba(255,255,255,.7)}
-  .card__desc{font-size:17px;line-height:1.5;margin:0;opacity:.9;transition:opacity .3s ease}
-  .card--soon .card__desc{opacity:.55}
-  .card__arrow{margin-top:auto;line-height:0}
-  .card__arrow svg{width:26px;height:26px}
 
   /* --- card fan-hover: same pop-from-the-corner phone fan as the live
      site's company-hover on Manta/Mighty, ported verbatim (same image
@@ -352,6 +291,62 @@
   .kind-words__cite{font-style:normal;display:flex;flex-direction:column;gap:4px}
   .kind-words__name{font-weight:600;font-size:16px;color:#f455a7}
   .kind-words__role{font-size:14px;color:rgba(0,0,0,.6)}
+
+  /* --- company hover, medium-width breakpoint: the wide-desktop fan-out
+     offsets above put the caption/arrow far enough from the badge that on
+     a narrower desktop window (e.g. with devtools docked open, or a
+     smaller laptop screen) they start reaching into the NEXT company's
+     badge. Below this width, pull every piece in tighter and narrow the
+     caption box so nothing reaches a neighbor. --- */
+  @media (max-width:900px){
+    .company__caption{width:220px}
+    .company:hover .company__caption--simply,.company:focus-within .company__caption--simply{
+          transform:translate(calc(-18px - 50%),calc(-85px - 50%)) rotate(-9.41deg) scale(1)}
+    .company:hover .company__connector--simply,.company:focus-within .company__connector--simply{
+          transform:translate(calc(61px - 50%),calc(-47px - 50%)) rotate(-2.84deg) scale(1)}
+    .company:hover .company__name--simply,.company:focus-within .company__name--simply{
+          transform:translate(calc(10px - 50%),calc(71px - 50%)) rotate(-9.91deg) scale(1)}
+
+    .company:hover .company__caption--launch,.company:focus-within .company__caption--launch{
+          transform:translate(calc(10px - 50%),calc(-75px - 50%)) rotate(1.81deg) scale(1)}
+    .company:hover .company__connector--launch,.company:focus-within .company__connector--launch{
+          transform:translate(calc(85px - 50%),calc(-36px - 50%)) rotate(-190.62deg) scaleY(-1) scaleX(-1) scale(1)}
+    .company:hover .company__name--launch,.company:focus-within .company__name--launch{
+          transform:translate(calc(4px - 50%),calc(56px - 50%)) rotate(2.37deg) scale(1)}
+
+    .company:hover .company__caption--manta,.company:focus-within .company__caption--manta{
+          transform:translate(calc(0px - 50%),calc(-92px - 50%)) rotate(0deg) scale(1)}
+    .company:hover .company__connector--manta,.company:focus-within .company__connector--manta{
+          transform:translate(calc(-52px - 50%),calc(-12px - 50%)) rotate(-42deg) scaleX(-1) scale(1)}
+    .company:hover .company__name--manta,.company:focus-within .company__name--manta{
+          transform:translate(calc(3px - 50%),calc(70px - 50%)) rotate(0deg) scale(1)}
+
+    .company:hover .company__caption--mighty,.company:focus-within .company__caption--mighty{
+          transform:translate(calc(-18px - 50%),calc(-100px - 50%)) rotate(5.9deg) scale(1)}
+    .company:hover .company__connector--mighty,.company:focus-within .company__connector--mighty{
+          transform:translate(calc(-80px - 50%),calc(-25px - 50%)) rotate(-6.13deg) scale(1)}
+    .company:hover .company__name--mighty,.company:focus-within .company__name--mighty{
+          transform:translate(calc(-9px - 50%),calc(45px - 50%)) rotate(6.79deg) scale(1)}
+
+    .company:hover .company__caption--copper,.company:focus-within .company__caption--copper{
+          transform:translate(calc(0px - 50%),calc(-100px - 50%)) rotate(-3.7deg) scale(1)}
+    .company:hover .company__connector--copper,.company:focus-within .company__connector--copper{
+          transform:translate(calc(84px - 50%),calc(-68px - 50%)) rotate(-153.23deg) scaleY(-1) scaleX(-1) scale(1)}
+    .company:hover .company__name--copper,.company:focus-within .company__name--copper{
+          transform:translate(calc(0px - 50%),calc(89px - 50%)) rotate(0deg) scale(1)}
+  }
+
+  /* the row's flex-wrap gap math briefly tightens badge spacing in this
+     narrower sub-range (not simply a smooth shrink from the 900px tier
+     above), so a couple of the fanned-out connectors need pulling in
+     further here specifically to avoid grazing a neighboring badge. */
+  @media (max-width:830px){
+    .company:hover .company__connector--simply,.company:focus-within .company__connector--simply{
+          transform:translate(calc(48px - 50%),calc(-50px - 50%)) rotate(-2.84deg) scale(1)}
+    .company:hover .company__connector--manta,.company:focus-within .company__connector--manta{
+          transform:translate(calc(-18px - 50%),calc(-2px - 50%)) rotate(-42deg) scaleX(-1) scale(1)}
+  }
+
   @media (max-width:700px){
     .embla__viewport{padding-inline:20px}
     .kind-words__card{flex-basis:100%}
@@ -370,45 +365,22 @@
     .company__logo--copper{width:clamp(95px,25vw,150px);height:clamp(95px,25vw,150px)}
     /* case-study cards (strategy/people/leadership sections) side-scroll
        horizontally instead of stacking/wrapping vertically — same
-       fixed-width/no-shrink treatment as casestudies/manta/mighty. */
+       fixed-width/no-shrink treatment as casestudies/manta/mighty (that
+       .card sizing itself is shared — see /assets/site.css). */
     .cards{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;
           -webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding-bottom:8px}
-    .card{flex:0 0 min(300px,80vw);width:auto;scroll-snap-align:start}
   }
 
-  /* --- say hi: same 3 contact icons as the live site, re-skinned to
-     circular white-bordered chips. --- */
-  .say-hi__icons{display:flex;gap:18px;justify-content:center}
-  .say-hi__icon{--tilt:-1deg;width:82px;height:82px;border-radius:16px;border:2px solid #fff;
-        display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;
-        transition:transform .3s var(--spring),background .25s ease,color .2s ease,border-color .25s ease}
-  .say-hi__icon:hover,.say-hi__icon:focus-visible{transform:translateY(-6px) rotate(var(--tilt));
-        background:var(--lime);color:#000;border-color:var(--lime);outline:none}
-  .say-hi__icon svg{width:32px;height:32px}
-  .say-hi__icon--linkedin{font-size:32px;font-weight:700;letter-spacing:-.02em}
-
-  /* --- footer: gradient close, giant repeated name, 3 stacked links, then
-     the same social icons as say-hi. No opaque base of its own —
-     genuinely transparent at the top so the page's animated background
-     shows through and fades into solid lime at the bottom, matching the
-     Figma gradient (rgba(189,243,0,0) -> #bdf300). --- */
-  .site-footer{background:linear-gradient(180deg,rgba(189,243,0,0) 0%,var(--lime) 100%);
-        padding:clamp(64px,10vw,120px) 24px clamp(48px,8vw,80px);
-        display:flex;flex-direction:column;align-items:center;gap:40px;text-align:center}
-  .site-footer__heading{display:flex;flex-direction:column;gap:6px}
-  .site-footer__name{font-size:clamp(48px,11vw,150px);font-weight:600;letter-spacing:-.04em;margin:0}
-  .site-footer__tag{font-size:clamp(15px,1.8vw,22px);margin:0;opacity:.9}
-  .site-footer__links{display:flex;flex-direction:column;gap:6px}
-  .site-footer__links a{--tilt:-2deg;font-size:clamp(28px,4.5vw,56px);font-weight:600;letter-spacing:-.03em;
-        text-decoration:none;transition:transform .3s var(--spring)}
-  .site-footer__links a:hover,.site-footer__links a:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
+  /* say-hi icons and site-footer are fully shared with the rest of the
+     site at this same (larger) size — see /assets/site.css. */
 
   @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto}
-    body{animation:none;background-color:#f455a7}
+    /* html/body reset and .say-hi__icon/.site-footer__links a are handled
+       by the shared reduced-motion block in /assets/site.css — this just
+       adds the homepage-only animated pieces. */
     .card__fan-img{display:none}
     .letter,.glyph,.tag,.cta,.card,.company,.company__badge,.company__logo,
-    .say-hi__icon,.site-footer__links a,.screens__slide img,#screens-lightbox-close{transition:none !important}
+    .screens__slide img,#screens-lightbox-close{transition:none !important}
     .letter:hover .glyph,.letter.is-active .glyph{transform:none;color:#fff}
   }
 </style>
@@ -530,13 +502,17 @@
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </a>
-      <div class="card card--soon" style="--tilt:2deg">
+      <a class="card card--fan-right" href="/casestudies/manta/brand-evolution/" style="--tilt:2deg">
+        <img class="card__fan-img fan-1" src="/assets/screens/manta-1.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-2" src="/assets/screens/manta-2.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-3" src="/assets/screens/manta-3.png" alt="" aria-hidden="true">
         <span class="card__panel">
-          <span class="card__tag">COMING SOON</span>
-          <span class="card__title">Manta's Brand Identity</span>
-          <span class="card__desc">Defining an ICP for Manta Cares, and merging two very different business strategies into a product cancer patients actually needed.</span>
+          <span class="card__tag">CASE STUDY</span>
+          <span class="card__title">Maturing Manta's Brand</span>
+          <span class="card__desc">I took on evolving the Manta Cares brand from a scrappy startup look into something a frightened person could trust at a glance, without losing the warmth that made us worth trusting in the first place.</span>
+          <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
-      </div>
+      </a>
     </div>
     <a class="cta" href="#people" style="--tilt:-4deg">Uh huh <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
@@ -551,8 +527,8 @@
         <img class="card__fan-img fan-3" src="/assets/screens/manta-3.png" alt="" aria-hidden="true">
         <span class="card__panel">
           <span class="card__tag">CASE STUDY</span>
-          <span class="card__title">Designing for the Hardest Moment of Someone's Life</span>
-          <span class="card__desc">Ask our users to name the hardest moment in their cancer journey and many describe the same scene: a rushed visit with an oncologist and a blur of words they don't understand. This is how we designed for that moment.</span>
+          <span class="card__title">The Eight Minute Appointment</span>
+          <span class="card__desc">A rushed visit with an oncologist is the hardest moment in the whole journey. Here's how we designed a before/during/after ritual to meet it.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </a>
@@ -723,7 +699,7 @@
   <!-- ============ footer ============ -->
   <footer class="site-footer" id="footer">
     <div class="site-footer__heading">
-      <p class="site-footer__name">Katherine Root</p>
+      <a href="/" class="site-footer__name">Katherine Root</a>
       <p class="site-footer__tag">Product, AI, and Experience Design Expert</p>
     </div>
     <div class="site-footer__links">

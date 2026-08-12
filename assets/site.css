@@ -1,0 +1,197 @@
+/* ============================================================
+   site.css — shared design language across katherineroot.com
+   Centralized from the identical/near-identical <style> blocks that
+   had accumulated across all 12 pages (root index + case study
+   pages + casestudies/sideprojects index pages). Where a shared
+   component's values diverged between pages, the homepage
+   (index.html) version was kept as the source of truth here, and
+   the pages that need a different value carry a small local
+   override in their own <style> block (documented there).
+   Genuinely page-specific / one-off CSS (homepage's hero/companies/
+   screens/testimonials sections, per-page article content, etc.)
+   is NOT here — it stays inline on the page that uses it.
+   ============================================================ */
+
+/* --- design tokens --- */
+:root{
+  --magenta:#FF2E93; --blue:#0074AF; --indigo:#1B45E8;
+  --violet:#7B2FF7; --purple:#A614FE; --charcoal:#17140F; --cream:#FFF1D6;
+  --lime:#bdf300;
+  --accent:var(--lime);
+  --spring: cubic-bezier(.34,1.56,.64,1);
+}
+
+/* --- base resets / page shell --- */
+*{box-sizing:border-box}
+html{background:var(--lime);scroll-behavior:smooth}
+body{margin:0;color:#fff;font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+     -webkit-font-smoothing:antialiased;background:#f455a7;
+     animation:bgCycle 200s ease-in-out infinite}
+@keyframes bgCycle{
+  0%,6%{background-color:#f455a7}
+  20%,26%{background-color:#E81BBC}
+  40%,46%{background-color:var(--purple)}
+  60%,66%{background-color:var(--violet)}
+  80%,86%{background-color:var(--blue)}
+  100%{background-color:#f455a7}
+}
+a{color:inherit}
+img{max-width:100%}
+
+/* --- back-link: circular back button, every subpage (not homepage) --- */
+.back-link{position:fixed;top:24px;left:24px;z-index:10}
+.back-link a{--tilt:-3deg;display:flex;align-items:center;justify-content:center;
+      width:48px;height:48px;border-radius:50%;border:2px solid #fff;color:#fff;
+      text-decoration:none;transition:transform .3s var(--spring),background-color .2s ease,color .2s ease}
+.back-link a:hover,.back-link a:focus-visible{transform:translateY(-4px) rotate(var(--tilt));
+      background:var(--lime);color:#000;border-color:var(--lime);outline:none}
+.back-link svg{width:22px;height:22px}
+
+/* --- page-head: base is the article-page variant (used by all 9 case
+   study pages, identical on every one); the two list pages
+   (casestudies/index.html, sideprojects/index.html) need a wider
+   max-width, different bottom padding, and bigger title/intro sizes —
+   each carries a small local override for just those properties. --- */
+.page-head{max-width:760px;margin:0 auto;padding:clamp(120px,16vw,180px) clamp(20px,6vw,64px) clamp(40px,7vw,56px);
+      text-align:center}
+.page-head__eyebrow{display:inline-block;background:#fff;color:#f455a7;font-size:13px;font-weight:600;
+      padding:6px 16px;border-radius:100px;margin-bottom:20px}
+.page-head__title{font-size:clamp(36px,7vw,72px);font-weight:600;letter-spacing:-.03em;margin:0 0 16px;line-height:1.05}
+.page-head__intro{font-size:clamp(17px,2.1vw,21px);opacity:.9;margin:0;line-height:1.55}
+
+/* --- construction notice: sits between the page-head and the article on
+   every case study page, flagging that the write-up is still a draft.
+   Reuses the "coming soon" dashed-panel look so it reads as an
+   intentional, on-brand flag rather than an error state. --- */
+.construction-notice{max-width:720px;margin:0 auto clamp(40px,7vw,64px);padding:0 clamp(20px,6vw,64px)}
+.construction-notice__box{background:rgba(255,255,255,.1);border:1.5px dashed rgba(255,255,255,.4);
+      border-radius:22px;padding:24px 28px;text-align:center}
+.construction-notice__title{font-size:19px;font-weight:600;margin:0 0 8px;letter-spacing:-.01em}
+.construction-notice__desc{font-size:15px;line-height:1.5;opacity:.85;margin:0}
+
+/* --- article: long-form case-study typography, identical across all
+   9 case study pages wherever each rule is actually used. --- */
+.article{max-width:720px;margin:0 auto;padding:0 clamp(20px,6vw,64px) clamp(48px,8vw,80px);
+      text-align:left;font-size:18px;line-height:1.7}
+.article h2{font-size:clamp(24px,3vw,32px);font-weight:600;letter-spacing:-.02em;margin:48px 0 16px}
+.article h3{font-size:clamp(19px,2.2vw,22px);font-weight:600;margin:36px 0 12px;color:var(--lime)}
+.article p{margin:0 0 20px;opacity:.95}
+.article strong{font-weight:600;color:#fff}
+.article ul{margin:0 0 20px;padding-left:22px}
+.article li{margin-bottom:10px;opacity:.95}
+.article blockquote{margin:32px 0;padding:20px 24px;border-left:4px solid var(--lime);
+      background:rgba(255,255,255,.08);border-radius:0 16px 16px 0;font-size:17px;line-height:1.6}
+.article blockquote cite{display:block;margin-top:10px;font-size:14px;opacity:.7;font-style:normal}
+.article__img{border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);margin:32px 0;display:block}
+.article__img-row{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin:32px 0}
+.article__img-row img{height:280px;width:auto;border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.article__video{border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);margin:32px auto;display:block;max-height:640px}
+.article__caption{text-align:center;font-size:14px;opacity:.65;margin:-20px 0 32px;font-style:italic}
+
+/* meta byline + "Principle N" eyebrow above an h2 (Manta case studies) */
+.article__meta{font-size:13px;opacity:.65;margin:0 0 clamp(32px,6vw,48px)}
+.article__eyebrow{display:block;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--lime);margin:clamp(36px,6vw,52px) 0 6px}
+.article__eyebrow + h2{margin-top:0}
+
+/* --- article nav: "more case studies" links at the bottom (Manta pages) --- */
+.article__nav{max-width:720px;margin:0 auto;padding:clamp(24px,5vw,40px) clamp(20px,6vw,64px) clamp(64px,10vw,112px)}
+.article__nav-label{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.65;margin:0 0 14px}
+.article__nav-links{display:flex;flex-direction:column;gap:10px}
+.article__nav-links a{--tilt:-2deg;text-decoration:none;font-size:15px;font-weight:600;color:#fff;
+      display:inline-flex;align-items:center;gap:6px;transition:transform .18s var(--spring),color .18s ease}
+.article__nav-links a:hover,.article__nav-links a:focus-visible{transform:translateX(4px);color:var(--lime);outline:none}
+
+/* --- cta pill button + its wrapper (Mighty case-study pages) — sized
+   per the homepage's version (clamp-based, plus the svg-icon rule the
+   homepage's chevron-bearing CTAs need); the subpages that use a
+   fixed-size pill instead carry a small local font-size/padding
+   override. --- */
+.article-cta{max-width:720px;margin:0 auto;padding:0 clamp(20px,6vw,64px) clamp(64px,10vw,100px);text-align:center}
+.cta{--tilt:-2deg;display:inline-flex;align-items:center;gap:10px;
+     background:var(--lime);color:#000;font-size:clamp(14px,1.4vw,16px);font-weight:400;
+     padding:clamp(12px,1.6vw,16px) clamp(20px,2.6vw,32px);border-radius:70px;
+     text-decoration:none;white-space:nowrap;
+     transition:transform .3s var(--spring)}
+.cta:hover,.cta:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
+.cta svg{width:16px;height:16px;flex:none}
+
+/* --- say-hi__icons: the contact-icon row, only ever used inside
+   .site-footer now (every page uses the exact same footer as the
+   homepage, contact icons included — there is no more standalone
+   "Say hi sometime" section anywhere on the site). --- */
+.say-hi__icons{display:flex;gap:18px;justify-content:center}
+.say-hi__icon{--tilt:-1deg;width:82px;height:82px;border-radius:16px;border:2px solid #fff;
+      display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;
+      transition:transform .3s var(--spring),background .25s ease,color .2s ease,border-color .25s ease}
+.say-hi__icon:hover,.say-hi__icon:focus-visible{transform:translateY(-6px) rotate(var(--tilt));
+      background:var(--lime);color:#000;border-color:var(--lime);outline:none}
+.say-hi__icon svg{width:32px;height:32px}
+.say-hi__icon--linkedin{font-size:32px;font-weight:700;letter-spacing:-.02em}
+
+/* --- footer: gradient close, giant linked name, stacked links, contact
+   icons. Identical on every page — the homepage's version is the only
+   version, per the site's "every page shares the exact same footer"
+   rule; clicking the name always returns to the homepage. --- */
+.site-footer{background:linear-gradient(180deg,rgba(189,243,0,0) 0%,var(--lime) 100%);
+      padding:clamp(64px,10vw,120px) 24px clamp(48px,8vw,80px);
+      display:flex;flex-direction:column;align-items:center;gap:40px;text-align:center}
+.site-footer__heading{display:flex;flex-direction:column;gap:6px}
+.site-footer__name{font-size:clamp(48px,11vw,150px);font-weight:600;letter-spacing:-.04em;margin:0;text-decoration:none}
+.site-footer__tag{font-size:clamp(15px,1.8vw,22px);margin:0;opacity:.9}
+.site-footer__links{display:flex;flex-direction:column;gap:6px}
+.site-footer__links a{--tilt:-2deg;font-size:clamp(28px,4.5vw,56px);font-weight:600;letter-spacing:-.03em;
+      text-decoration:none;transition:transform .3s var(--spring)}
+.site-footer__links a:hover,.site-footer__links a:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
+
+/* --- cards: the homepage's card design (strategy/people/leadership
+   sections), now shared verbatim by every page with cards
+   (casestudies/index.html, sideprojects/index.html). Not-yet-live cards
+   read as genuinely disabled — dashed outline, near-zero fill,
+   desaturated, "no" gesture cursor — distinct from the live cards' solid
+   translucent panel that flips to white on hover, not just dimmer.
+   The homepage's own fan-hover phone-mockup images
+   (.card__fan-img/.card--fan-left/.card--fan-right) are an optional
+   extra on top of this shared design and stay local to index.html — not
+   every card has matching per-item screenshots to fan out.
+   The .cards container itself differs per page (different wrapping
+   markup/padding) and stays local to each. --- */
+.card{--tilt:-2deg;position:relative;display:block;width:min(620px,100%);
+      text-decoration:none;color:#fff;transition:transform .3s var(--spring)}
+a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
+.card__panel{position:relative;background:rgba(255,255,255,.1);border-radius:22px;
+      min-height:280px;padding:34px;text-align:left;display:flex;flex-direction:column;gap:16px;
+      transition:background-color .3s ease,color .3s ease}
+a.card:hover .card__panel,a.card:focus-visible .card__panel{background:#fff;color:var(--charcoal)}
+a.card:hover .card__tag,a.card:focus-visible .card__tag{background:#f455a7;color:#fff}
+a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
+.card--soon{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%F0%9F%99%85%E2%80%8D%E2%99%80%EF%B8%8F</text></svg>") 16 16,default}
+.card--soon .card__panel{background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.3);
+      filter:grayscale(.6)}
+.card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:14px;font-weight:600;
+      padding:5px 14px;border-radius:100px;transition:background-color .3s ease,color .3s ease}
+.card--soon .card__tag{background:rgba(255,255,255,.25);color:rgba(255,255,255,.8)}
+.card__title{font-size:clamp(22px,2.6vw,32px);font-weight:600;margin:0}
+.card--soon .card__title{color:rgba(255,255,255,.7)}
+.card__desc{font-size:17px;line-height:1.5;margin:0;opacity:.9;transition:opacity .3s ease}
+.card--soon .card__desc{opacity:.55}
+.card__arrow{margin-top:auto;line-height:0}
+.card__arrow svg{width:26px;height:26px}
+@media (max-width:700px){
+  /* case-study cards side-scroll horizontally on mobile instead of
+     stacking/wrapping vertically — cards keep a fixed width (flex-shrink
+     disabled) so the row overflows and scrolls rather than squeezing. */
+  .cards{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+        scroll-snap-type:x proximity;padding-bottom:8px}
+  .card{flex:0 0 min(300px,80vw);width:auto;scroll-snap-align:start}
+}
+
+/* --- reduced motion: base set of components shared by (almost) every
+   page. Pages with additional animated components (the homepage's
+   hero/company/etc., or a page's .cta/.article__nav-links/.card) add
+   their own small supplemental block for just those extra selectors. --- */
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  body{animation:none;background-color:#f455a7}
+  .back-link a,.say-hi__icon,.site-footer__links a{transition:none !important}
+}
