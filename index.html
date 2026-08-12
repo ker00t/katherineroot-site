@@ -415,7 +415,29 @@
   }
 
   /* say-hi icons and site-footer are fully shared with the rest of the
-     site at this same (larger) size — see /assets/site.css. */
+     site at this same (larger) size — see /assets/site.css. On every
+     other page the footer name links back home; here — since we're
+     already home — it instead just scrolls back to the top, with a
+     hover tag (same fade/tilt language as the hero letter tags above)
+     hinting at that on mouse devices. */
+  .site-footer__name{position:relative}
+  .site-footer__name-tag{--tilt:-3deg;position:absolute;left:50%;bottom:100%;margin-bottom:16px;
+        white-space:nowrap;font-size:15px;font-weight:600;letter-spacing:normal;padding:8px 18px;border-radius:999px;
+        background:var(--lime);color:var(--charcoal);
+        opacity:0;pointer-events:none;
+        transform:translateX(-50%) translateY(10px) scale(.75) rotate(var(--tilt));
+        transition:opacity .3s var(--spring),transform .3s var(--spring)}
+  /* invisible bridge across the gap between the name and the tag above
+     it, so moving the mouse from one to the other doesn't drop :hover
+     partway through and cause the tag to fade back out before you reach
+     it — inherits pointer-events from .site-footer__name-tag itself. */
+  .site-footer__name-tag::before{content:"";position:absolute;left:0;right:0;bottom:-16px;height:16px}
+  @media (hover:hover){
+    .site-footer__name:hover .site-footer__name-tag,
+    .site-footer__name:focus-visible .site-footer__name-tag{
+          opacity:1;pointer-events:auto;
+          transform:translateX(-50%) translateY(0) scale(1) rotate(var(--tilt))}
+  }
 
   @media (prefers-reduced-motion: reduce){
     /* html/body reset and .say-hi__icon/.site-footer__links a are handled
@@ -541,7 +563,7 @@
         <span class="card__panel">
           <span class="card__tag">CASE STUDY</span>
           <span class="card__title">First App Experience</span>
-          <span class="card__desc">For years the experience of downloading the Mighty Networks app was crusty and abandoned, forever deemed a P2 not worth updating. Here I explore the value of creating a great first impression, and the role design plays in selling your brand successfully.</span>
+          <span class="card__desc">For years the experience of downloading the Mighty Networks app was crusty and abandoned, forever deemed a P2 not worth updating. Here I explore the business value of a great first impression, and how to showcase that value visually.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </a>
@@ -552,7 +574,7 @@
         <span class="card__panel">
           <span class="card__tag">CASE STUDY</span>
           <span class="card__title">Maturing Manta's Brand</span>
-          <span class="card__desc">I took on evolving the Manta Cares brand from a scrappy startup look into something a frightened person could trust at a glance, without losing the warmth that made us worth trusting in the first place.</span>
+          <span class="card__desc">I took on evolving the Manta Cares brand from "scrappy startup" to "we'll always be here for you", without losing the identity that people had already come to know us for.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </a>
@@ -565,8 +587,8 @@
     <h2 class="section__title">My work is grounded in empathy and understanding. Always.</h2>
     <div class="cards">
       <a class="card card--fan-left" href="/casestudies/manta/appointment-prep/" style="--tilt:2deg">
-        <img class="card__fan-img fan-1" src="/assets/screens/manta-1.png" alt="" aria-hidden="true">
-        <img class="card__fan-img fan-2" src="/assets/screens/manta-2.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-1" src="/assets/screens/manta-6.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-2" src="/assets/screens/manta-5.png" alt="" aria-hidden="true">
         <img class="card__fan-img fan-3" src="/assets/screens/manta-3.png" alt="" aria-hidden="true">
         <span class="card__panel">
           <span class="card__tag">CASE STUDY</span>
@@ -742,7 +764,7 @@
   <!-- ============ footer ============ -->
   <footer class="site-footer" id="footer">
     <div class="site-footer__heading">
-      <a href="/" class="site-footer__name">Katherine Root</a>
+      <a href="#" class="site-footer__name" aria-label="Back to the top">Katherine Root<span class="site-footer__name-tag" aria-hidden="true">Back to the top!</span></a>
       <p class="site-footer__tag">Product, AI, and Experience Design Expert</p>
     </div>
     <div class="site-footer__links">
