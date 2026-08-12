@@ -200,9 +200,9 @@
   a.card:hover .card__tag,a.card:focus-visible .card__tag{background:#f455a7;color:#fff}
   a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
   /* "coming soon" cards read as genuinely disabled: flattened to a dashed
-     outline on almost no fill, desaturated, and a not-allowed cursor —
+     outline on almost no fill, desaturated, and a "no" gesture cursor —
      distinct from the live cards' solid translucent panel, not just dimmer. */
-  .card--soon{cursor:not-allowed}
+  .card--soon{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%F0%9F%99%85%E2%80%8D%E2%99%80%EF%B8%8F</text></svg>") 16 16,default}
   .card--soon .card__panel{background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.3);
         filter:grayscale(.6)}
   .card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:14px;font-weight:600;
@@ -617,7 +617,7 @@
 
   <!-- ============ testimonials ============ -->
   <section class="section" id="testimonials">
-    <h2 class="section__title">Don't want to take my word for it?<br/>Hear from my co-workers.</h2>
+    <h2 class="section__title">Don't want to take my word for it?<br/>Ask my co-workers.</h2>
     <div class="kind-words">
       <div class="embla" role="region" aria-label="Kind words from co-workers">
         <div class="embla__viewport" id="kw-viewport">
@@ -675,7 +675,7 @@
         </div>
       </div>
     </div>
-    <a class="cta" href="#tldr" style="--tilt:-3deg">Gimme the TLDR <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+    <a class="cta" href="#tldr" style="--tilt:-3deg">What's the one liner <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
   <!-- ============ tldr ============ -->
