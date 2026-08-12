@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Side Projects | Katherine Root</title>
+<title>Unlocking People Magic | Katherine Root</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&display=swap" rel="stylesheet">
 <style>
-  /* --- subpage shell: same tokens/animated background/footer as the new
-     root index.html, scaled down to a single focused page instead of the
-     full 10-section story. Reused verbatim on casestudies/. --- */
+  /* --- case-study article shell: same as /mighty/first-app-experience/.
+     Content moved verbatim from katherineroot.com/case-studies-people-magic
+     (previously an off-site link from the homepage's people card). --- */
   :root{
     --magenta:#FF2E93; --blue:#0074AF; --indigo:#1B45E8;
     --violet:#7B2FF7; --purple:#A614FE; --charcoal:#17140F; --cream:#FFF1D6;
@@ -31,6 +31,7 @@
     100%{background-color:#f455a7}
   }
   a{color:inherit}
+  img{max-width:100%}
 
   .back-link{position:fixed;top:24px;left:24px;z-index:10}
   .back-link a{--tilt:-3deg;display:flex;align-items:center;justify-content:center;
@@ -40,28 +41,30 @@
         background:var(--lime);color:#000;border-color:var(--lime);outline:none}
   .back-link svg{width:22px;height:22px}
 
-  .page-head{max-width:900px;margin:0 auto;padding:clamp(120px,16vw,180px) clamp(20px,6vw,64px) clamp(48px,8vw,72px);
+  .page-head{max-width:760px;margin:0 auto;padding:clamp(120px,16vw,180px) clamp(20px,6vw,64px) clamp(40px,7vw,56px);
         text-align:center}
-  .page-head__title{font-size:clamp(40px,8vw,88px);font-weight:600;letter-spacing:-.03em;margin:0 0 16px}
-  .page-head__intro{font-size:clamp(17px,2.2vw,22px);opacity:.9;margin:0;line-height:1.5}
+  .page-head__eyebrow{display:inline-block;background:#fff;color:#f455a7;font-size:13px;font-weight:600;
+        padding:6px 16px;border-radius:100px;margin-bottom:20px}
+  .page-head__title{font-size:clamp(36px,7vw,72px);font-weight:600;letter-spacing:-.03em;margin:0 0 16px;line-height:1.05}
+  .page-head__intro{font-size:clamp(17px,2.1vw,21px);opacity:.9;margin:0;line-height:1.55}
 
-  .cards{display:flex;gap:25px;flex-wrap:wrap;justify-content:center;max-width:1280px;
-        margin:0 auto;padding:0 clamp(20px,6vw,64px) clamp(64px,10vw,120px)}
-  .card{--tilt:-2deg;position:relative;display:block;width:min(380px,100%);
-        text-decoration:none;color:#fff;transition:transform .3s var(--spring)}
-  .card:hover,.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
-  .card__panel{background:rgba(255,255,255,.1);border-radius:22px;min-height:200px;
-        padding:30px;text-align:left;display:flex;flex-direction:column;gap:14px;
-        transition:background-color .3s ease,color .3s ease}
-  .card:hover .card__panel,.card:focus-visible .card__panel{background:#fff;color:var(--charcoal)}
-  .card:hover .card__tag,.card:focus-visible .card__tag{background:#f455a7;color:#fff}
-  .card:hover .card__desc,.card:focus-visible .card__desc{opacity:.7}
-  .card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:13px;font-weight:600;
-        padding:5px 14px;border-radius:100px;transition:background-color .3s ease,color .3s ease}
-  .card__title{font-size:clamp(20px,2.4vw,26px);font-weight:600;margin:0}
-  .card__desc{font-size:16px;line-height:1.5;margin:0;opacity:.9;transition:opacity .3s ease}
-  .card__arrow{margin-top:auto;line-height:0}
-  .card__arrow svg{width:24px;height:24px}
+  .article{max-width:720px;margin:0 auto;padding:0 clamp(20px,6vw,64px) clamp(48px,8vw,80px);
+        text-align:left;font-size:18px;line-height:1.7}
+  .article h2{font-size:clamp(24px,3vw,32px);font-weight:600;letter-spacing:-.02em;margin:48px 0 16px}
+  .article h3{font-size:clamp(19px,2.2vw,22px);font-weight:600;margin:36px 0 4px;color:var(--lime)}
+  .article .idea-label{display:block;font-size:14px;font-weight:600;letter-spacing:.04em;
+        text-transform:uppercase;opacity:.7;margin:36px 0 2px}
+  .article p{margin:0 0 20px;opacity:.95}
+  .article strong{font-weight:600;color:#fff}
+  .article blockquote{margin:32px 0;padding:20px 24px;border-left:4px solid var(--lime);
+        background:rgba(255,255,255,.08);border-radius:0 16px 16px 0;font-size:17px;line-height:1.6}
+
+  .article-cta{max-width:720px;margin:0 auto;padding:0 clamp(20px,6vw,64px) clamp(64px,10vw,100px);text-align:center}
+  .cta{--tilt:2deg;display:inline-flex;align-items:center;gap:10px;
+       background:var(--lime);color:#000;font-size:16px;font-weight:400;
+       padding:14px 28px;border-radius:70px;text-decoration:none;white-space:nowrap;
+       transition:transform .3s var(--spring)}
+  .cta:hover,.cta:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
 
   .say-hi{max-width:700px;margin:0 auto;padding:0 clamp(20px,6vw,64px) clamp(80px,12vw,140px);text-align:center}
   .say-hi__title{font-size:clamp(24px,3.4vw,36px);font-weight:600;margin:0 0 32px}
@@ -88,48 +91,46 @@
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto}
     body{animation:none;background-color:#f455a7}
-    .back-link a,.card,.card__panel,.card__tag,.card__desc,.say-hi__icon,.site-footer__links a{transition:none !important}
+    .back-link a,.cta,.say-hi__icon,.site-footer__links a{transition:none !important}
   }
 </style>
 </head>
 <body>
 
   <div class="back-link">
-    <a href="/" aria-label="Back to home">
+    <a href="/mighty/" aria-label="Back to Mighty Networks">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
     </a>
   </div>
 
   <div class="page-head">
-    <h1 class="page-head__title">Side Projects</h1>
-    <p class="page-head__intro">The stuff I build for fun, outside of the day job — mostly vibe-coded, always a little chaotic.</p>
+    <span class="page-head__eyebrow">CASE STUDY</span>
+    <h1 class="page-head__title">Unlocking People Magic</h1>
+    <p class="page-head__intro">As a B2B2C company, Mighty Networks has to balance catering not just to our Hosts, but to their members. In my experience, if you build for the members, the Hosts will follow &mdash; so how do we make their experience truly magical?</p>
   </div>
 
-  <div class="cards">
-    <a class="card" href="https://www.wordvomit.xyz" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">
-      <span class="card__panel">
-        <span class="card__tag">vibe coding</span>
-        <span class="card__title">Word Vomit</span>
-        <span class="card__desc">The number one app for your many existential millennial woes.</span>
-        <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
-      </span>
-    </a>
-    <a class="card" href="https://www.wordvomit.xyz" target="_blank" rel="noopener noreferrer" style="--tilt:2deg">
-      <span class="card__panel">
-        <span class="card__tag">vibe coding</span>
-        <span class="card__title">Simple Solitaire</span>
-        <span class="card__desc">So I can play Solitaire one handed on my phone.</span>
-        <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
-      </span>
-    </a>
-    <a class="card" href="https://midnightcrisis.bearblog.dev/blog/" target="_blank" rel="noopener noreferrer" style="--tilt:-3deg">
-      <span class="card__panel">
-        <span class="card__tag">Writing</span>
-        <span class="card__title">Midnight Crisis</span>
-        <span class="card__desc">A place to capture my thoughts, essays, notes, etc.</span>
-        <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
-      </span>
-    </a>
+  <article class="article">
+    <h2>The Premise</h2>
+    <blockquote>At the heart of the Mighty Networks platform lies the idea of "people magic" &mdash; a spark that makes members feel seen, appreciated, and authentically connected.</blockquote>
+    <p>Yet for all the talk about people magic, it's often missing in the small, day-to-day moments of using the product. Part of my role as Director of Design is to constantly look for ways to deliver on the promise of meaningful human connection, rather than just talk about it. In this case study, I collect and explore a rolling list of little moments I've defined over the years.</p>
+
+    <span class="idea-label">Idea #1</span>
+    <h3>A Modern Member List</h3>
+    <p>We already have a "people explorer," but simply showing faces doesn't automatically spark connection. I refreshed this feature by reducing clutter and organizing members into smaller, more intentional groups. Tapping on a face reveals a modern profile with a mini bio about the person, and a selection of quick, low-barrier actions.</p>
+    <p>These small, targeted interactions invite people to connect over shared interests or experiences, rather than leaving them to guess how or why they should reach out. Over time, we aim to introduce a "meet others like this person" feature to keep that thread of connection strong, helping members naturally build their network.</p>
+
+    <span class="idea-label">Idea #2</span>
+    <h3>Say Thanks for Recognitions</h3>
+    <p>A recognition should be effortless and feel fantastic &mdash; both for the giver and the receiver. But writing a full message of thanks can be intimidating, especially when the space feels blank and formal. To solve this, I envision a frictionless way to react in-chat or send a quick AI-suggested message, preserving the good vibes of getting recognized without burdening users with the dreaded "blank page" problem.</p>
+    <p>This design also taps into shared values and familiar faces &mdash; small moments that make gratitude feel magical and keep the momentum going.</p>
+
+    <span class="idea-label">Ideas #3, #4, #5, #6&hellip;</span>
+    <h3>On Their Way 😉</h3>
+    <p>Finding these magical moments in a product experience is the never ending work of a designer &mdash; they're the kinds of things that keep me up in the middle of the night. Keep checking back here to see what new ideas are on my mind lately!</p>
+  </article>
+
+  <div class="article-cta">
+    <a class="cta" href="/mighty/">More Mighty Networks case studies</a>
   </div>
 
   <section class="say-hi" aria-label="Contact">
