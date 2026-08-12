@@ -22,14 +22,15 @@
   .page-head__title{font-size:clamp(40px,8vw,88px)}
   .page-head__intro{font-size:clamp(17px,2.2vw,22px);line-height:1.5}
 
-  .group{max-width:1280px;margin:0 auto;padding:clamp(48px,8vw,72px) clamp(20px,6vw,64px) 0}
+  .group{max-width:1280px;margin:0 auto;padding:clamp(48px,8vw,72px) clamp(20px,6vw,64px) 0;text-align:center}
   .group__title{font-size:clamp(26px,4vw,40px);font-weight:600;letter-spacing:-.02em;margin:0 0 10px}
-  .group__intro{font-size:clamp(16px,1.8vw,19px);opacity:.85;margin:0 0 32px;max-width:640px;line-height:1.5}
+  .group__intro{font-size:clamp(16px,1.8vw,19px);opacity:.85;margin:0 auto 32px;max-width:640px;line-height:1.5}
   .group__intro a{text-decoration:underline;text-underline-offset:3px}
 
   /* this page's own card-grid wrapper (differs per page); .card/
-     .card__panel/etc. themselves are shared — see site.css */
-  .cards{display:flex;gap:25px;flex-wrap:wrap}
+     .card__panel/etc. themselves are shared — see site.css. Centered
+     row, matching sideprojects/index.html's card grid. */
+  .cards{display:flex;gap:25px;flex-wrap:wrap;justify-content:center}
   .card__panel{height:100%}
 
   @media (prefers-reduced-motion: reduce){

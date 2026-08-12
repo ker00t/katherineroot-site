@@ -126,39 +126,82 @@
   .company__arrow{width:26px;height:auto}
 
   .company:hover .company__caption--simply,.company:focus-within .company__caption--simply{
-        transform:translate(calc(32px - 50%),calc(-145px - 50%)) rotate(-9.41deg) scale(1)}
+        transform:translate(calc(-18px - 50%),calc(-85px - 50%)) rotate(-9.4deg) scale(1); width:170px;}
   .company:hover .company__connector--simply,.company:focus-within .company__connector--simply{
-        transform:translate(calc(81px - 50%),calc(-67px - 50%)) rotate(19.16deg) scale(1)}
+        transform:translate(calc(61px - 50%),calc(-47px - 50%)) rotate(-2.84deg) scale(1)}
   .company:hover .company__name--simply,.company:focus-within .company__name--simply{
-        transform:translate(calc(20px - 50%),calc(91px - 50%)) rotate(-12.91deg) scale(1)}
+        transform:translate(calc(10px - 50%),calc(71px - 50%)) rotate(-9.91deg) scale(1)}
 
   .company:hover .company__caption--launch,.company:focus-within .company__caption--launch{
-        transform:translate(calc(10px - 50%),calc(-121px - 50%)) rotate(4.81deg) scale(1)}
+        transform:translate(calc(10px - 50%),calc(-75px - 50%)) rotate(1.81deg) scale(1); width:170px;}
   .company:hover .company__connector--launch,.company:focus-within .company__connector--launch{
-        transform:translate(calc(137px - 50%),calc(-70px - 50%)) rotate(-130.62deg) scaleY(-1) scale(1)}
+        transform:translate(calc(97px - 50%),calc(-50px - 50%)) rotate(-190.62deg) scaleY(-1) scaleX(-1) scale(1)}
   .company:hover .company__name--launch,.company:focus-within .company__name--launch{
-        transform:translate(calc(-6px - 50%),calc(76px - 50%)) rotate(5.37deg) scale(1)}
+        transform:translate(calc(4px - 50%),calc(56px - 50%)) rotate(2.37deg) scale(1)}
 
   .company:hover .company__caption--manta,.company:focus-within .company__caption--manta{
-        transform:translate(calc(0px - 50%),calc(159px - 50%)) rotate(0deg) scale(1)}
+        transform:translate(calc(0px - 50%),calc(-92px - 50%)) rotate(0deg) scale(1); width:250px;}
   .company:hover .company__connector--manta,.company:focus-within .company__connector--manta{
-        transform:translate(calc(110px - 50%),calc(66px - 50%)) rotate(0deg) scale(1)}
+        transform:translate(calc(-79px - 50%),calc(-29px - 50%)) rotate(-42deg) scaleX(-1) scale(1)}
   .company:hover .company__name--manta,.company:focus-within .company__name--manta{
-        transform:translate(calc(0px - 50%),calc(-120px - 50%)) rotate(0deg) scale(1)}
+        transform:translate(calc(3px - 50%),calc(70px - 50%)) rotate(0deg) scale(1)}
 
   .company:hover .company__caption--mighty,.company:focus-within .company__caption--mighty{
-        transform:translate(calc(4px - 50%),calc(-116px - 50%)) rotate(5.9deg) scale(1)}
+        transform:translate(calc(4px - 50%),calc(-76px - 50%)) rotate(5.9deg) scale(1); width:220px;}
   .company:hover .company__connector--mighty,.company:focus-within .company__connector--mighty{
-        transform:translate(calc(-140px - 50%),calc(-60px - 50%)) rotate(-6.13deg) scale(1)}
+        transform:translate(calc(-110px - 50%),calc(-30px - 50%)) rotate(-13.13deg) scale(1)}
   .company:hover .company__name--mighty,.company:focus-within .company__name--mighty{
-        transform:translate(calc(-13px - 50%),calc(68px - 50%)) rotate(6.79deg) scale(1)}
+        transform:translate(calc(0px - 50%),calc(52px - 50%)) rotate(2deg) scale(1)}
 
   .company:hover .company__caption--copper,.company:focus-within .company__caption--copper{
-        transform:translate(calc(0px - 50%),calc(-161px - 50%)) rotate(-3.7deg) scale(1)}
+        transform:translate(calc(-6px - 50%),calc(-91px - 50%)) rotate(-3.7deg) scale(1); width:220px;}
   .company:hover .company__connector--copper,.company:focus-within .company__connector--copper{
-        transform:translate(calc(118px - 50%),calc(-95px - 50%)) rotate(-93.23deg) scaleY(-1) scale(1)}
+        transform:translate(calc(88px - 50%),calc(-35px - 50%)) rotate(-203.23deg) scaleY(-1) scaleX(-1) scale(1)}
   .company:hover .company__name--copper,.company:focus-within .company__name--copper{
-        transform:translate(calc(0px - 50%),calc(121px - 50%)) rotate(0deg) scale(1)}
+        transform:translate(calc(7px - 50%),calc(71px - 50%)) rotate(-5deg) scale(1)}
+
+  /* --- large desktop: the logos/gaps above are all clamp()-capped by
+     ~1400px, so beyond that a wider window just adds empty margin around
+     an unchanging cluster — this tier is a seam to give the fan-out its
+     own arrow/caption/name positions at that size instead of reusing the
+     capped-cluster values verbatim. Currently just a copy of the default
+     tier above (no visual change yet) — adjust the offsets below. --- */
+  @media (min-width:1440px){
+    .company:hover .company__caption--simply,.company:focus-within .company__caption--simply{
+          transform:translate(calc(-18px - 50%),calc(-85px - 50%)) rotate(-9.4deg) scale(1); width:170px;}
+    .company:hover .company__connector--simply,.company:focus-within .company__connector--simply{
+          transform:translate(calc(61px - 50%),calc(-47px - 50%)) rotate(-2.84deg) scale(1)}
+    .company:hover .company__name--simply,.company:focus-within .company__name--simply{
+          transform:translate(calc(10px - 50%),calc(71px - 50%)) rotate(-9.91deg) scale(1)}
+
+    .company:hover .company__caption--launch,.company:focus-within .company__caption--launch{
+          transform:translate(calc(10px - 50%),calc(-75px - 50%)) rotate(1.81deg) scale(1); width:170px;}
+    .company:hover .company__connector--launch,.company:focus-within .company__connector--launch{
+          transform:translate(calc(97px - 50%),calc(-50px - 50%)) rotate(-190.62deg) scaleY(-1) scaleX(-1) scale(1)}
+    .company:hover .company__name--launch,.company:focus-within .company__name--launch{
+          transform:translate(calc(4px - 50%),calc(56px - 50%)) rotate(2.37deg) scale(1)}
+
+    .company:hover .company__caption--manta,.company:focus-within .company__caption--manta{
+          transform:translate(calc(0px - 50%),calc(-112px - 50%)) rotate(0deg) scale(1); width:250px;}
+    .company:hover .company__connector--manta,.company:focus-within .company__connector--manta{
+          transform:translate(calc(-99px - 50%),calc(-29px - 50%)) rotate(-42deg) scaleX(-1) scale(1)}
+    .company:hover .company__name--manta,.company:focus-within .company__name--manta{
+          transform:translate(calc(3px - 50%),calc(90px - 50%)) rotate(0deg) scale(1)}
+
+    .company:hover .company__caption--mighty,.company:focus-within .company__caption--mighty{
+          transform:translate(calc(4px - 50%),calc(-86px - 50%)) rotate(5.9deg) scale(1); width:220px;}
+    .company:hover .company__connector--mighty,.company:focus-within .company__connector--mighty{
+          transform:translate(calc(-130px - 50%),calc(-30px - 50%)) rotate(-3.13deg) scale(1)}
+    .company:hover .company__name--mighty,.company:focus-within .company__name--mighty{
+          transform:translate(calc(0px - 50%),calc(62px - 50%)) rotate(2deg) scale(1)}
+
+    .company:hover .company__caption--copper,.company:focus-within .company__caption--copper{
+          transform:translate(calc(-6px - 50%),calc(-111px - 50%)) rotate(-3.7deg) scale(1); width:220px;}
+    .company:hover .company__connector--copper,.company:focus-within .company__connector--copper{
+          transform:translate(calc(88px - 50%),calc(-35px - 50%)) rotate(-203.23deg) scaleY(-1) scaleX(-1) scale(1)}
+    .company:hover .company__name--copper,.company:focus-within .company__name--copper{
+          transform:translate(calc(15px - 50%),calc(91px - 50%)) rotate(-5deg) scale(1)}
+  }
 
   /* --- touch alternative: the fixed-px fan-out above is tuned for desktop
      spacing and has nowhere to go on a narrow screen, so on devices with no
@@ -347,7 +390,7 @@
           transform:translate(calc(-18px - 50%),calc(-2px - 50%)) rotate(-42deg) scaleX(-1) scale(1)}
   }
 
-  @media (max-width:700px){
+  @media (max-width:768px){
     .embla__viewport{padding-inline:20px}
     .kind-words__card{flex-basis:100%}
     /* force "Katherine" / "Root" onto their own stacked lines rather than
@@ -426,7 +469,7 @@
             <img class="company__logo-layer" style="inset:0" src="assets/logos/simplyhired-color.svg" alt="">
           </div>
         </div>
-        <p class="company__piece company__caption company__caption--simply">I grew a lot in this role, learning a lot about how companies operate.</p>
+        <p class="company__piece company__caption company__caption--simply">I grew a lot in this early role learning about how companies run.</p>
         <img class="company__piece company__arrow company__connector--simply" src="assets/logos/simplyhired-arrow.svg" alt="" aria-hidden="true">
         <p class="company__piece company__name company__name--simply">Simply Hired</p>
         <span class="company__tap-label" aria-hidden="true">Simply Hired</span>
