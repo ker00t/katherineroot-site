@@ -306,7 +306,7 @@
   .kind-words__card{flex:0 0 min(620px,86vw);min-width:0;min-height:280px;
         border-radius:22px;background:#fff;color:#000;margin:0;
         padding:24px;display:flex;flex-direction:column;justify-content:center;gap:24px;
-        text-align:center;cursor:pointer}
+        text-align:center;cursor:pointer;transform-origin:center center}
   /* Embla's loop math only accounts for flex `gap` between adjacent DOM
      siblings — the wrap seam (last slide back to the first) has no
      sibling relationship to inherit it from, so it renders with zero
@@ -760,6 +760,28 @@
       }
     });
   });
+
+  // --- emphasize the centered card: scale + fade every slide by its
+  // live distance from the viewport's center, recomputed on every
+  // 'scroll' tick (not just on snap) so it stays smooth through drags
+  // and autoplay alike, not just a snap-to-snap jump. ---
+  if (!reduce) {
+    var slides = emblaApi.slideNodes();
+    var emphasize = function () {
+      var viewportRect = viewport.getBoundingClientRect();
+      var center = viewportRect.left + viewportRect.width / 2;
+      var half = viewportRect.width / 2;
+      slides.forEach(function (slide) {
+        var r = slide.getBoundingClientRect();
+        var dist = Math.min(Math.abs((r.left + r.width / 2) - center) / half, 1);
+        slide.style.transform = 'scale(' + (1 - dist * 0.14).toFixed(3) + ')';
+        slide.style.opacity = (1 - dist * 0.65).toFixed(3);
+      });
+    };
+    emblaApi.on('scroll', emphasize);
+    emblaApi.on('reInit', emphasize);
+    emphasize();
+  }
 })();
 </script>
 <script>
