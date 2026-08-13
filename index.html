@@ -231,6 +231,30 @@
     .company__tap-label svg{width:16px;height:16px;flex:none}
   }
 
+  /* --- strategy numbers: a row of 3 stat callouts (Figma "numbers"
+     component, node 105:23023), sitting between the strategy section's
+     title and its case-study cards. Plain text directly on the section's
+     own pink background — no card panel — with a lime headline stat, a
+     dimmer secondary prefix/suffix sized relative to it (matches the
+     Figma spec's smaller/60%-opacity "#" and "/5" pieces), and a thin
+     divider between columns that becomes a horizontal rule once the row
+     stacks on mobile. --- */
+  .numbers{display:flex;gap:24px;width:100%;max-width:1280px}
+  .numbers__item{flex:1;display:flex;flex-direction:column;align-items:center;
+        gap:16px;padding:0 24px}
+  .numbers__item+.numbers__item{border-left:1px solid rgba(255,255,255,.25)}
+  .numbers__stat{margin:0;font-weight:600;font-size:clamp(48px,6.5vw,80px);
+        line-height:1;color:var(--lime);white-space:nowrap}
+  .numbers__stat-sub{font-size:.75em;color:rgba(255,255,255,.6)}
+  .numbers__desc{margin:0;font-size:20px;line-height:1.45;color:#fff;max-width:352px}
+  .numbers__desc a{color:inherit;text-decoration:underline}
+  @media (max-width:768px){
+    .numbers{flex-direction:column;gap:32px}
+    .numbers__item{padding:0}
+    .numbers__item+.numbers__item{border-left:none;border-top:1px solid rgba(255,255,255,.25);
+          padding-top:32px}
+  }
+
   /* --- case-study cards: strategy / people / leadership sections. The
      card design itself (.card/.card__panel/tag/title/desc/arrow,
      .card--soon) is fully shared site-wide now — see /assets/site.css.
@@ -597,6 +621,20 @@
   <!-- ============ strategy ============ -->
   <section class="section" id="strategy">
     <h2 class="section__title">I combine design strategy with business acumen to help companies succeed.</h2>
+    <div class="numbers">
+      <div class="numbers__item">
+        <p class="numbers__stat"><span class="numbers__stat-sub">#</span>1</p>
+        <p class="numbers__desc"><a href="https://www.g2.com/categories/online-community-management" target="_blank" rel="noopener noreferrer">G2 ranking</a> for Mighty Networks in online community management, praised for it's intuitive interface</p>
+      </div>
+      <div class="numbers__item">
+        <p class="numbers__stat">4.9<span class="numbers__stat-sub">/5</span></p>
+        <p class="numbers__desc">Average store rating for apps I've designed and released, across iOS and Android</p>
+      </div>
+      <div class="numbers__item">
+        <p class="numbers__stat">5x</p>
+        <p class="numbers__desc">Product engagement for Manta Cares after designing and releasing their <a href="https://pages.mantacares.com/hope" target="_blank" rel="noopener noreferrer">flagship AI feature</a></p>
+      </div>
+    </div>
     <div class="cards-scroll">
     <div class="cards">
       <a class="card card--fan-left" href="/casestudies/mighty/first-app-experience/" style="--tilt:-2deg">
