@@ -12,6 +12,18 @@
 
   var noHover = window.matchMedia('(hover: none)').matches;
 
+  // Clicking a menu link navigates to a new page whose freshly-rendered
+  // hotspot/trigger can land right under the still-stationary cursor, so
+  // the new page's real CSS :hover applies the instant it paints — which
+  // used to play a transition (the icon fading in, the trigger lifting)
+  // that looked like "the menu animates on every page load". Transitions
+  // stay off (see .is-ready in site.css) until proof of a genuine
+  // in-page gesture — a real mouse move, or a touchstart, which is
+  // always a fresh deliberate tap rather than carried-over state.
+  function markReady() { menu.classList.add('is-ready'); }
+  document.addEventListener('mousemove', markReady, { once: true });
+  document.addEventListener('touchstart', markReady, { once: true });
+
   function isOpen() { return menu.classList.contains('is-open'); }
   function isRevealed() { return menu.classList.contains('is-revealed'); }
   function reveal() { menu.classList.add('is-revealed'); }
