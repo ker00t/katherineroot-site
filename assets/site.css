@@ -23,7 +23,7 @@
 
 /* --- base resets / page shell --- */
 *{box-sizing:border-box}
-html{background:var(--lime);scroll-behavior:smooth}
+html{background:var(--lime);scroll-behavior:smooth;overflow-x:hidden}
 body{margin:0;color:#fff;font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
      -webkit-font-smoothing:antialiased;background:#f455a7;
      animation:bgCycle 200s ease-in-out infinite}

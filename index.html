@@ -42,6 +42,112 @@
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
            overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
+  /* --- corner sparkle: a subtle decorative fixture at the very top of the
+     homepage only, not part of the shared site chrome. position:absolute
+     (anchored to the page, not the viewport) so it scrolls away with the
+     hero and is only visible at the very top of the page — deliberately
+     not position:fixed, which would keep it pinned on screen the whole
+     time you scroll. Just a slow opacity breathe, kept gentle so it reads
+     as ambient shimmer rather than something demanding attention. --- */
+  .corner-sparkle{position:absolute;top:-12px;right:-12px;width:clamp(120px,28vw,280px);height:auto;
+        z-index:1;pointer-events:none;
+        animation:sparkleBreathe 5s ease-in-out infinite}
+  @keyframes sparkleBreathe{
+    0%,100%{opacity:.7;transform:scale(1)}
+    50%{opacity:1;transform:scale(1.04)}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .corner-sparkle{animation:none;opacity:.85}
+  }
+
+  /* --- corner menu: brought back from secret-menu.snapshot.html at the
+     user's request, restyled with Lucide's real square-menu/x icons in
+     place of the old hand-drawn hamburger/X. Stays hover-gated (icon is
+     invisible until the corner is hovered) same as before; the old
+     always-on hand-drawn glow is dropped since .corner-sparkle now covers
+     that job, and the arrow+note hint is dropped too — this is meant to
+     read as a normal (if undiscoverable-until-hovered) menu trigger now,
+     not a scavenger-hunt easter egg. Click swaps the icon for a close X
+     and slides in the same full-height lime panel as before.
+     Hover-detection and click-detection are deliberately split: .hotspot
+     is a big invisible zone sized/positioned to match .corner-sparkle's
+     own footprint (so hovering anywhere over the sparkle reveals the
+     icon), while .secret-menu__trigger — the actual clickable button —
+     stays small, just around the icon itself, so hovering the sparkle
+     doesn't let you open the menu by clicking somewhere else in it. --- */
+  .secret-menu{position:fixed;inset:0;z-index:60;pointer-events:none}
+  .secret-menu__hotspot{position:fixed;top:-12px;right:-12px;z-index:2;
+        width:clamp(120px,28vw,280px);height:clamp(95px,22vw,222px);
+        pointer-events:auto}
+  .secret-menu__trigger{--tilt:-2deg;position:absolute;top:32px;right:32px;z-index:3;width:64px;height:64px;
+        display:flex;align-items:center;justify-content:center;
+        background:none;border:none;cursor:pointer;color:#fff;
+        pointer-events:auto;-webkit-tap-highlight-color:transparent;
+        transition:color .3s var(--spring),transform .3s var(--spring)}
+  .secret-menu__trigger:hover,.secret-menu__trigger:focus-visible{
+        transform:translateY(-6px) rotate(var(--tilt));outline:none}
+  .secret-menu.is-open .secret-menu__trigger{color:var(--charcoal)}
+  .secret-menu__icon{display:block;width:40px;height:40px;flex:none}
+  .secret-menu__icon--menu{opacity:0;transition:opacity .3s ease}
+  @media (hover:hover){
+    .secret-menu__hotspot:hover .secret-menu__icon--menu,
+    .secret-menu__trigger:focus-visible .secret-menu__icon--menu{opacity:1}
+  }
+  /* --- hint: Figma's "menu_text" node (arrow + "Oooh a secret menu!"),
+     positioned/rotated to match its exact coordinates there. Decorative
+     only — not interactive — and fades in slightly after the icon
+     itself (transition-delay) rather than in lockstep with it. --- */
+  .secret-menu__hint{position:absolute;top:16px;right:16px;width:56px;height:56px;
+        pointer-events:none;opacity:0;transition:opacity .3s ease .12s}
+  @media (hover:hover){
+    .secret-menu__hotspot:hover .secret-menu__hint,
+    .secret-menu__trigger:focus-visible ~ .secret-menu__hint{opacity:1}
+    .secret-menu.is-open .secret-menu__hint{opacity:0 !important}
+  }
+  .secret-menu__arrow{position:absolute;right:84px;bottom:-24px;width:15px;height:auto;
+        color:#fff;display:block;transform-origin:center;transform:rotate(-127.28deg);
+        filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+  .secret-menu__note{position:absolute;right:60px;bottom:-70px;white-space:nowrap;
+        color:#fff;font-weight:600;font-size:13px;text-align:center;
+        transform-origin:right center;transform:rotate(30deg);
+        filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+  .secret-menu__icon--close{display:none}
+  .secret-menu.is-open .secret-menu__icon--menu{display:none}
+  .secret-menu.is-open .secret-menu__icon--close{display:block;opacity:1}
+  .secret-menu__scrim{position:fixed;inset:0;z-index:0;background:rgba(0,0,0,.3);
+        opacity:0;pointer-events:none;transition:opacity .3s ease}
+  .secret-menu.is-open .secret-menu__scrim{opacity:1;pointer-events:auto}
+  .secret-menu__panel{position:fixed;top:0;right:0;bottom:0;z-index:1;
+        width:min(430px,88vw);background:var(--lime);
+        display:flex;flex-direction:column;align-items:center;
+        padding:144px 24px 56px;overflow-y:auto;
+        transform:translateX(100%);pointer-events:none;
+        transition:transform .4s var(--spring)}
+  .secret-menu.is-open .secret-menu__panel{transform:translateX(0);pointer-events:auto}
+  .secret-menu__panel a{color:var(--charcoal);text-decoration:none;font-weight:600;
+        font-size:clamp(24px,3vw,32px);padding:10px 0;transition:transform .3s var(--spring)}
+  .secret-menu__panel a:hover,.secret-menu__panel a:focus-visible{
+        transform:translateY(-6px) rotate(var(--tilt));outline:none}
+  /* --- socials: same size/shape/icon content as the footer's
+     .say-hi__icon (82px, 2px border, 16px radius, 32px glyphs) — kept as
+     its own class rather than literally reusing .say-hi__icon, since
+     that class's white-on-transparent/lime-fill-on-hover treatment is
+     tuned for the pink footer and would wash out against this panel's
+     lime background; charcoal keeps it legible while matching every
+     other dimension exactly. --- */
+  .secret-menu__socials{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:auto;padding-top:32px}
+  .secret-menu__social{width:82px;height:82px;border:2px solid var(--charcoal);border-radius:16px;
+        display:flex;align-items:center;justify-content:center;color:var(--charcoal);
+        text-decoration:none;transition:transform .3s var(--spring)}
+  .secret-menu__social:hover,.secret-menu__social:focus-visible{
+        transform:translateY(-6px) rotate(var(--tilt));outline:none}
+  .secret-menu__social svg{width:32px;height:32px}
+  .secret-menu__social--linkedin{font-size:32px;font-weight:700;letter-spacing:-.02em}
+  @media (prefers-reduced-motion: reduce){
+    .secret-menu__panel,.secret-menu__panel a,.secret-menu__scrim,
+    .secret-menu__trigger,.secret-menu__social{transition:none !important}
+  }
+
   /* --- section shell: every section fills the viewport (annotation on the
      "companies" frame — applies site-wide, not just there), full-bleed,
      stacked in one story with a CTA at the bottom that scrolls to the next. */
@@ -466,6 +572,8 @@
 </head>
 <body>
 
+  <img class="corner-sparkle" src="assets/sparkle.svg" alt="" aria-hidden="true">
+
   <!-- ============ hero ============ -->
   <section class="section hero" id="hero">
     <p class="hero__lead">Hi there! My name is</p>
@@ -778,7 +886,7 @@
   <!-- ============ footer ============ -->
   <footer class="site-footer" id="footer">
     <div class="site-footer__heading">
-      <a href="#" class="site-footer__name" aria-label="Back to the top">Katherine Root<span class="site-footer__name-tag" aria-hidden="true">Back to the top!</span></a>
+      <a href="#" class="site-footer__name" aria-label="Back to the top">Katherine Root<span class="site-footer__name-tag" aria-hidden="true">Beam me up, Scotty!</span></a>
       <p class="site-footer__tag">Product, AI, and Experience Design Expert</p>
     </div>
     <div class="site-footer__links">
@@ -797,6 +905,70 @@
     </div>
   </footer>
 
+  <div class="secret-menu" id="secret-menu">
+    <div class="secret-menu__hotspot">
+      <button type="button" class="secret-menu__trigger" id="secret-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Menu">
+        <svg class="secret-menu__icon secret-menu__icon--menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 8h10"/><path d="M7 12h10"/><path d="M7 16h10"/></svg>
+        <svg class="secret-menu__icon secret-menu__icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+      <span class="secret-menu__hint" aria-hidden="true">
+        <svg class="secret-menu__arrow" viewBox="0 0 29.6092 65.4687" fill="none" aria-hidden="true"><path d="M12.3348 2.5001C13.5861 3.49665 17.3401 8.30996 18.947 15.3174C21.4506 26.2357 20.3576 34.7503 19.3353 38.5803C17.3318 46.0872 13.0373 53.8052 9.82368 58.8199C8.60787 60.7171 8.11383 61.246 7.76214 59.0128C5.51817 44.7642 5.33372 39.2101 3.8277 37.1985C0.99444 33.4143 3.33182 49.2871 4.95249 55.2766C5.92629 58.8754 7.65428 61.4191 8.92251 62.4602C9.53363 62.9618 10.4744 63.0167 11.3209 62.9394C12.1675 62.8621 12.9924 62.5506 15.382 61.5274C17.7717 60.5042 21.7012 58.7787 27.1086 56.6411" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="secret-menu__note">Oooh a secret menu!</span>
+      </span>
+    </div>
+    <div class="secret-menu__scrim" id="secret-menu-scrim"></div>
+    <nav class="secret-menu__panel" id="secret-menu-panel" aria-label="Menu">
+      <a href="/" style="--tilt:-2deg">Home</a>
+      <a href="/assets/KatherineRootResume2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:2deg">Resume</a>
+      <a href="/casestudies/index.html" style="--tilt:-3deg">Case Studies</a>
+      <a href="/sideprojects/index.html" style="--tilt:3deg">Side Projects</a>
+      <div class="secret-menu__socials">
+        <a class="secret-menu__social secret-menu__social--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="--tilt:-2deg"><span aria-hidden="true">in</span></a>
+        <a class="secret-menu__social" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="--tilt:2deg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+        </a>
+        <a class="secret-menu__social" href="mailto:keroot@gmail.com" aria-label="Email" style="--tilt:-3deg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+<script>
+// --- corner menu: click the corner icon to toggle the full-height panel
+// open; click the scrim, click outside, or Escape closes it. Body scroll
+// is locked while open since the panel + scrim together cover the whole
+// viewport. ---
+(function () {
+  var menu = document.getElementById('secret-menu');
+  var trigger = document.getElementById('secret-menu-trigger');
+  var scrim = document.getElementById('secret-menu-scrim');
+  if (!menu || !trigger) return;
+
+  function isOpen() { return menu.classList.contains('is-open'); }
+  function open() {
+    menu.classList.add('is-open');
+    trigger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    menu.classList.remove('is-open');
+    trigger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  trigger.addEventListener('click', function () {
+    if (isOpen()) close(); else open();
+  });
+  if (scrim) scrim.addEventListener('click', close);
+  document.addEventListener('click', function (e) {
+    if (isOpen() && !menu.contains(e.target)) close();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && isOpen()) close();
+  });
+})();
+</script>
 <script>
 // --- hero letter-flip: same interaction as the live site (hover flips a
 // letter and shows its tag; touch taps one letter active at a time;
