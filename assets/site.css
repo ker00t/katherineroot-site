@@ -86,10 +86,11 @@ img{max-width:100%}
       cursor:zoom-in;transition:transform .25s var(--spring)}
 .article__img:hover,.article__img:focus-visible{transform:translateY(-4px)}
 .article__img-row{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin:32px 0}
-.article__img-row img{height:280px;width:auto;border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);
+.article__img-row img{height:280px;width:auto;max-width:100%;border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);
       cursor:zoom-in;transition:transform .25s var(--spring)}
 .article__img-row img:hover,.article__img-row img:focus-visible{transform:translateY(-4px)}
-.article__video{border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);margin:32px auto;display:block;max-height:640px}
+.article__video{border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);margin:32px auto;display:block;
+      max-width:100%;max-height:640px;height:auto}
 .article__caption{text-align:center;font-size:14px;opacity:.65;margin:-20px 0 32px;font-style:italic}
 
 /* --- article lightbox: click any case-study image to open it larger,
@@ -200,13 +201,40 @@ a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
 .card--soon .card__desc{opacity:.55}
 .card__arrow{margin-top:auto;line-height:0}
 .card__arrow svg{width:26px;height:26px}
+/* .cards-scroll wraps every .cards grid. It's inert (display:contents)
+   above mobile, so .cards lays out exactly as if the wrapper weren't
+   there. On mobile it becomes a real block box so .cards can break out
+   of any ancestor (.group's padding, a flex .section with
+   align-items:center, etc.) to the true viewport edge via 100vw — a
+   plain negative-margin cancel doesn't reach the edge when .cards is a
+   flex item of a centered flex parent, since it's then sized to its
+   content's max-content width regardless of margin. */
+.cards-scroll{display:contents}
+
 @media (max-width:768px){
+  .cards-scroll{display:block;width:100%}
   /* case-study cards side-scroll horizontally on mobile instead of
      stacking/wrapping vertically — cards keep a fixed width (flex-shrink
-     disabled) so the row overflows and scrolls rather than squeezing. */
+     disabled) so the row overflows and scrolls rather than squeezing.
+     width:100vw + negative-margin centering breaks .cards out to the
+     true viewport edge (independent of any ancestor's padding/flex
+     centering), and matching padding puts the resting-state inset back
+     — so the scrollable area itself reaches the edge, and cards can
+     scroll flush past it instead of stopping at a visible inset "bar"
+     short of the edge. */
   .cards{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
-        scroll-snap-type:x proximity;padding-bottom:8px}
+        scroll-snap-type:x proximity;padding-bottom:8px;
+        width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
+        padding-left:clamp(20px,6vw,64px);padding-right:clamp(20px,6vw,64px)}
   .card{flex:0 0 min(300px,80vw);width:auto;scroll-snap-align:start}
+  /* .article__img-row images are sized by a fixed height (280px) on
+     desktop so a row of side-by-side comparison shots lines up neatly.
+     On narrow viewports that fixed height's implied width usually
+     exceeds the screen, and max-width:100% capping the width alone
+     (with height still pinned at 280px) squashes/stretches the image
+     out of its aspect ratio — switching to width:100%;height:auto lets
+     it scale down proportionally instead. */
+  .article__img-row img{width:100%;height:auto}
 }
 
 /* --- reduced motion: base set of components shared by (almost) every

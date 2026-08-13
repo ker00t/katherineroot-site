@@ -52,17 +52,17 @@
   .corner-sparkle{position:absolute;top:0;right:0;width:clamp(120px,28vw,280px);height:auto;
         z-index:1;pointer-events:none;
         animation:sparkleBreathe 5s ease-in-out infinite}
-  /* the 12px "bleed past the corner" offset lives inside these transform
-     values (translate) rather than on top/right, since a transform never
-     contributes to the page's scrollable overflow area the way a
-     negative position offset does — keeps the visual bleed without ever
-     widening the document past the viewport. */
+  /* only bleeds off the TOP edge (translateY), never off the right —
+     a transform still inflates the page's scrollable overflow area same
+     as a negative position offset would (verified empirically), and a
+     rightward bleed here was the recurring source of the "green bar"
+     edge-overflow bug, so the X offset stays at 0. */
   @keyframes sparkleBreathe{
-    0%,100%{opacity:.7;transform:translate(12px,-12px) scale(1)}
-    50%{opacity:1;transform:translate(12px,-12px) scale(1.04)}
+    0%,100%{opacity:.7;transform:translate(0,-12px) scale(1)}
+    50%{opacity:1;transform:translate(0,-12px) scale(1.04)}
   }
   @media (prefers-reduced-motion: reduce){
-    .corner-sparkle{animation:none;opacity:.85;transform:translate(12px,-12px)}
+    .corner-sparkle{animation:none;opacity:.85;transform:translate(0,-12px)}
   }
 
   /* --- corner menu: brought back from secret-menu.snapshot.html at the
@@ -83,7 +83,7 @@
   .secret-menu{position:fixed;inset:0;z-index:60;pointer-events:none}
   .secret-menu__hotspot{position:fixed;top:0;right:0;z-index:2;
         width:clamp(120px,28vw,280px);height:clamp(95px,22vw,222px);
-        transform:translate(12px,-12px);
+        transform:translate(0,-12px);
         pointer-events:auto}
   .secret-menu__trigger{--tilt:-2deg;position:absolute;top:32px;right:32px;z-index:3;width:64px;height:64px;
         display:flex;align-items:center;justify-content:center;
@@ -99,6 +99,10 @@
     .secret-menu__hotspot:hover .secret-menu__icon--menu,
     .secret-menu__trigger:focus-visible .secret-menu__icon--menu{opacity:1}
   }
+  /* touch devices have no hover, so a first tap anywhere on the hotspot
+     reveals the icon (adds .is-revealed — see the script below) and a
+     second tap on the now-visible icon opens the menu. */
+  .secret-menu.is-revealed .secret-menu__icon--menu{opacity:1}
   /* --- hint: Figma's "menu_text" node (arrow + "Oooh a secret menu!"),
      positioned/rotated to match its exact coordinates there. Decorative
      only — not interactive — and fades in slightly after the icon
@@ -108,8 +112,9 @@
   @media (hover:hover){
     .secret-menu__hotspot:hover .secret-menu__hint,
     .secret-menu__trigger:focus-visible ~ .secret-menu__hint{opacity:1}
-    .secret-menu.is-open .secret-menu__hint{opacity:0 !important}
   }
+  .secret-menu.is-revealed .secret-menu__hint{opacity:1}
+  .secret-menu.is-open .secret-menu__hint{opacity:0 !important}
   .secret-menu__arrow{position:absolute;right:84px;bottom:-24px;width:15px;height:auto;
         color:#fff;display:block;transform-origin:center;transform:rotate(-127.28deg);
         filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
@@ -524,8 +529,13 @@
     .name{flex-direction:column;align-items:center}
     .glyph{font-size:clamp(66px,20vw,110px)}
     /* company logos: single stacked column instead of wrapped rows, each
-       logo sized up since it no longer has to share a row with 2-3 others. */
-    .companies__row{flex-direction:column}
+       logo sized up since it no longer has to share a row with 2-3 others.
+       The 100px top/bottom margin above is clearance for the desktop
+       hover fan-out reaching above/below the row — moot here since touch
+       devices never trigger that hover at all (see @media(hover:none)
+       below), so it's just dead space pushing the title and CTA away
+       from the column; shrink it back down to a normal gap. */
+    .companies__row{flex-direction:column;margin:24px 0}
     .company__logo--simply{height:clamp(90px,24vw,130px)}
     .company__logo--launch{width:clamp(160px,42vw,260px)}
     .company__logo--manta{width:clamp(95px,25vw,150px);height:clamp(95px,25vw,150px)}
@@ -534,9 +544,21 @@
     /* case-study cards (strategy/people/leadership sections) side-scroll
        horizontally instead of stacking/wrapping vertically — same
        fixed-width/no-shrink treatment as casestudies/manta/mighty (that
-       .card sizing itself is shared — see /assets/site.css). */
+       .card sizing itself is shared — see /assets/site.css). .cards is a
+       flex item of .section (align-items:center, not stretch), so a
+       plain negative margin can't reach the true viewport edge — with
+       flex-wrap:nowrap and non-shrinking cards, the item just sizes to
+       its content's max-content width regardless of margin. width:100vw
+       breaks it out to the true edge instead (its .cards-scroll wrapper
+       — see /assets/site.css — makes this safe against the align-items
+       centering), and matching padding puts the resting-state inset back
+       so cards can scroll flush past the edge rather than stopping at a
+       visible inset "bar" short of it. */
+    .cards-scroll{display:block;width:100%}
     .cards{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;
-          -webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding-bottom:8px}
+          -webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding-bottom:8px;
+          width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
+          padding-left:clamp(20px,6vw,64px);padding-right:clamp(20px,6vw,64px)}
   }
 
   /* say-hi icons and site-footer are fully shared with the rest of the
@@ -683,6 +705,7 @@
   <!-- ============ strategy ============ -->
   <section class="section" id="strategy">
     <h2 class="section__title">I combine design strategy with business acumen to help companies succeed.</h2>
+    <div class="cards-scroll">
     <div class="cards">
       <a class="card card--fan-left" href="/casestudies/mighty/first-app-experience/" style="--tilt:-2deg">
         <img class="card__fan-img fan-1" src="/assets/screens/mighty-1.png" alt="" aria-hidden="true">
@@ -707,12 +730,14 @@
         </span>
       </a>
     </div>
+    </div>
     <a class="cta" href="#people" style="--tilt:-4deg">Uh huh <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
   <!-- ============ people ============ -->
   <section class="section" id="people">
     <h2 class="section__title">My work is grounded in empathy and understanding. Always.</h2>
+    <div class="cards-scroll">
     <div class="cards">
       <a class="card card--fan-left" href="/casestudies/manta/appointment-prep/" style="--tilt:2deg">
         <img class="card__fan-img fan-1" src="/assets/screens/manta-6.png" alt="" aria-hidden="true">
@@ -737,12 +762,14 @@
         </span>
       </a>
     </div>
+    </div>
     <a class="cta" href="#leadership" style="--tilt:3deg">Interesting <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
   <!-- ============ leadership ============ -->
   <section class="section" id="leadership">
     <h2 class="section__title">That empathy also allows me to build thriving teams, systems, and cultures.</h2>
+    <div class="cards-scroll">
     <div class="cards">
       <div class="card card--soon" style="--tilt:-2deg">
         <span class="card__panel">
@@ -758,6 +785,7 @@
           <span class="card__desc">How do you build a product organization that not only understands the value of design, but actively contributes to delightful interactions? An initiative to get full org buy-in on the power of design details.</span>
         </span>
       </div>
+    </div>
     </div>
     <a class="cta" href="#screens" style="--tilt:-2deg">Show me some screens <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
@@ -949,9 +977,15 @@
   var menu = document.getElementById('secret-menu');
   var trigger = document.getElementById('secret-menu-trigger');
   var scrim = document.getElementById('secret-menu-scrim');
+  var hotspot = menu ? menu.querySelector('.secret-menu__hotspot') : null;
   if (!menu || !trigger) return;
 
+  var noHover = window.matchMedia('(hover: none)').matches;
+
   function isOpen() { return menu.classList.contains('is-open'); }
+  function isRevealed() { return menu.classList.contains('is-revealed'); }
+  function reveal() { menu.classList.add('is-revealed'); }
+  function unreveal() { menu.classList.remove('is-revealed'); }
   function open() {
     menu.classList.add('is-open');
     trigger.setAttribute('aria-expanded', 'true');
@@ -964,11 +998,23 @@
   }
 
   trigger.addEventListener('click', function () {
+    // touch devices have no hover, so the icon is invisible until a
+    // first tap reveals it — that first tap shouldn't also open the menu
+    if (noHover && !isRevealed()) { reveal(); return; }
     if (isOpen()) close(); else open();
   });
+  // a tap anywhere else on the (larger) hotspot also reveals, matching
+  // hover's "hovering the whole sparkle area shows the icon" behavior
+  if (hotspot && noHover) {
+    hotspot.addEventListener('click', function (e) {
+      if (trigger.contains(e.target)) return;
+      if (!isRevealed()) reveal();
+    });
+  }
   if (scrim) scrim.addEventListener('click', close);
   document.addEventListener('click', function (e) {
     if (isOpen() && !menu.contains(e.target)) close();
+    else if (noHover && isRevealed() && !isOpen() && !menu.contains(e.target)) unreveal();
   });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && isOpen()) close();
