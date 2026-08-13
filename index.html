@@ -20,7 +20,7 @@
 <meta name="twitter:image" content="https://www.katherineroot.com/assets/thumbnail.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
 <style>
   /* --- v2 preview: a from-scratch homepage following the Figma "portfolio"
@@ -246,13 +246,44 @@
   .numbers__stat{margin:0;font-weight:600;font-size:clamp(48px,6.5vw,80px);
         line-height:1;color:var(--lime);white-space:nowrap}
   .numbers__stat-sub{font-size:.75em;color:rgba(255,255,255,.6)}
-  .numbers__desc{margin:0;font-size:20px;line-height:1.45;color:#fff;max-width:352px}
+  .numbers__desc{margin:0;line-height:1.45;color:#fff;max-width:352px}
   .numbers__desc a{color:inherit;text-decoration:underline}
   @media (max-width:768px){
     .numbers{flex-direction:column;gap:32px}
     .numbers__item{padding:0}
     .numbers__item+.numbers__item{border-left:none;border-top:1px solid rgba(255,255,255,.25);
           padding-top:32px}
+  }
+
+  /* --- ai: the "How do I feel about AI?" section (Figma node 105:23071),
+     reusing .section__title for the heading and the shared .cta pill for
+     the CTA, same as every other section — just this section's own body
+     copy + reading-list links. --- */
+  #ai .ai__body{margin-top:-24px}
+  .ai__body{display:flex;flex-direction:column;gap:40px;max-width:1100px;
+        line-height:1.5;color:#fff;text-align:center}
+  .ai__body p{margin:0 auto;max-width:800px}
+  /* --- ai links: restyled per Figma node 105:23102 as a row of 3 cards
+     (was plain underlined text), reusing the case-study card's exact
+     hover treatment — lift+tilt on the link itself, translucent-white
+     panel to solid white + charcoal text on hover/focus (see .card /
+     .card__panel in /assets/site.css). --- */
+  .ai__links{display:flex;gap:10px}
+  .ai__link{--tilt:-2deg;flex:1;display:flex;flex-direction:column;align-items:center;
+        justify-content:center;gap:4px;min-height:160px;
+        padding:24px clamp(20px,4vw,64px);border-radius:22px;
+        background:rgba(255,255,255,.1);color:#fff;text-decoration:none;
+        transition:transform .3s var(--spring),background-color .3s ease,color .3s ease}
+  .ai__link:hover,.ai__link:focus-visible{
+        transform:translateY(-6px) rotate(var(--tilt));
+        background:#fff;color:var(--charcoal);outline:none}
+  .ai__link-title{margin:0;font-weight:600;font-size:20px;line-height:1.15;text-align:center;
+        transition:color .3s ease}
+  .ai__link:hover .ai__link-title,.ai__link:focus-visible .ai__link-title{color:#f455a7}
+  .ai__link-author{margin:0;font-weight:400;font-size:18px}
+  @media (max-width:768px){
+    .ai__links{flex-direction:column}
+    .ai__link{padding:24px 32px}
   }
 
   /* --- case-study cards: strategy / people / leadership sections. The
@@ -624,18 +655,18 @@
     <div class="numbers">
       <div class="numbers__item">
         <p class="numbers__stat"><span class="numbers__stat-sub">#</span>1</p>
-        <p class="numbers__desc"><a href="https://www.g2.com/categories/online-community-management" target="_blank" rel="noopener noreferrer">G2 ranking</a> for Mighty Networks in online community management, praised for it's intuitive interface</p>
+        <p class="numbers__desc desc"><a href="https://www.g2.com/categories/online-community-management" target="_blank" rel="noopener noreferrer">G2 ranking</a> for Mighty Networks in online community management, praised for it's intuitive interface</p>
       </div>
       <div class="numbers__item">
         <p class="numbers__stat">4.9<span class="numbers__stat-sub">/5</span></p>
-        <p class="numbers__desc">Average store rating for apps I've designed and released, across iOS and Android</p>
+        <p class="numbers__desc desc">Average store rating for apps I've designed and released, across iOS and Android</p>
       </div>
       <div class="numbers__item">
         <p class="numbers__stat">5x</p>
-        <p class="numbers__desc">Product engagement for Manta Cares after designing and releasing their <a href="https://pages.mantacares.com/hope" target="_blank" rel="noopener noreferrer">flagship AI feature</a></p>
+        <p class="numbers__desc desc">Product engagement for Manta Cares after designing and releasing their <a href="https://pages.mantacares.com/hope" target="_blank" rel="noopener noreferrer">flagship AI feature</a></p>
       </div>
     </div>
-    <div class="cards-scroll">
+   <!--<div class="cards-scroll">
     <div class="cards">
       <a class="card card--fan-left" href="/casestudies/mighty/first-app-experience/" style="--tilt:-2deg">
         <img class="card__fan-img fan-1" src="/assets/screens/mighty-1.png" alt="" aria-hidden="true">
@@ -644,7 +675,7 @@
         <span class="card__panel">
           <span class="card__tag">CASE STUDY</span>
           <span class="card__title">First App Experience</span>
-          <span class="card__desc">For years the experience of downloading the Mighty Networks app was crusty and abandoned, forever deemed a P2 not worth updating. Here I explore the business value of a great first impression, and how to showcase that value visually.</span>
+          <span class="card__desc desc">For years the experience of downloading the Mighty Networks app was crusty and abandoned, forever deemed a P2 not worth updating. Here I explore the business value of a great first impression, and how to showcase that value visually.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </a>
@@ -655,11 +686,11 @@
         <span class="card__panel">
           <span class="card__tag">CASE STUDY</span>
           <span class="card__title">Maturing Manta's Brand</span>
-          <span class="card__desc">I took on evolving the Manta Cares brand from "scrappy startup" to "we'll always be here for you", without losing the identity that people had already come to know us for.</span>
+          <span class="card__desc desc">I took on evolving the Manta Cares brand from "scrappy startup" to "we'll always be here for you", without losing the identity that people had already come to know us for.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </a>
-    </div>
+    </div>-->
     </div>
     <a class="cta" href="#people" style="--tilt:-4deg">Uh huh <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
@@ -676,7 +707,7 @@
         <span class="card__panel">
           <span class="card__tag">CASE STUDY</span>
           <span class="card__title">The Eight Minute Appointment</span>
-          <span class="card__desc">A rushed visit with an oncologist is the hardest moment in the whole journey. Here's how we designed a before/during/after ritual to meet it.</span>
+          <span class="card__desc desc">A rushed visit with an oncologist is the hardest moment in the whole journey. Here's how we designed a before/during/after ritual to meet it.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </a>
@@ -687,7 +718,7 @@
         <span class="card__panel">
           <span class="card__tag">CASE STUDY</span>
           <span class="card__title">Unlocking People Magic</span>
-          <span class="card__desc">As a B2B2C company, Mighty Networks has to balance catering not just to Hosts, but to their members. If you build for the members, the Hosts will follow &mdash; so how do you make that experience truly magical?</span>
+          <span class="card__desc desc">As a B2B2C company, Mighty Networks has to balance catering not just to Hosts, but to their members. If you build for the members, the Hosts will follow &mdash; so how do you make that experience truly magical?</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </a>
@@ -705,14 +736,14 @@
         <span class="card__panel">
           <span class="card__tag">COMING SOON</span>
           <span class="card__title">Building Remote Culture</span>
-          <span class="card__desc">Scaling the design team at Mighty from 2 members to 10, all while navigating the new waters of working remotely &mdash; and building a collaborative, creative environment online.</span>
+          <span class="card__desc desc">Scaling the design team at Mighty from 2 members to 10, all while navigating the new waters of working remotely &mdash; and building a collaborative, creative environment online.</span>
         </span>
       </div>
       <div class="card card--soon" style="--tilt:3deg">
         <span class="card__panel">
           <span class="card__tag">COMING SOON</span>
           <span class="card__title">Make Mighty Cool</span>
-          <span class="card__desc">How do you build a product organization that not only understands the value of design, but actively contributes to delightful interactions? An initiative to get full org buy-in on the power of design details.</span>
+          <span class="card__desc desc">How do you build a product organization that not only understands the value of design, but actively contributes to delightful interactions? An initiative to get full org buy-in on the power of design details.</span>
         </span>
       </div>
     </div>
@@ -823,7 +854,31 @@
         </div>
       </div>
     </div>
-    <a class="cta" href="#tldr" style="--tilt:-3deg">What's the one liner <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+    <a class="cta" href="#ai" style="--tilt:-3deg">But what about AI <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- ============ ai ============ -->
+  <section class="section" id="ai">
+    <h2 class="section__title">How do I feel about AI?</h2>
+    <div class="ai__body desc">
+      <p>Ah, the question of the hour. AI is incredible. It's allowing us all more freedom to express and explore our ideas in real time, and has the capacity to take a lot of burden out of our processes and workflows. In fact, I built this site using Claude Code. But it has its limitations, and there's still a lot of the creative process I prefer to do by hand. Whatever work you see from me, my ideas and fingerprints are still all over it, even if I used AI for help.</p>
+      <p>Here are some posts from other people that sum up my thoughts pretty well:</p>
+      <div class="ai__links">
+        <a class="ai__link" href="https://www.linkedin.com/pulse/you-need-time-stare-space-heidi-phelps-wzgfe/" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">
+          <p class="ai__link-title">You Need Time to Stare Into Space</p>
+          <p class="ai__link-author">Heidi Phelps</p>
+        </a>
+        <a class="ai__link" href="https://www.linkedin.com/pulse/design-paradox-ethan-eismann-r8dyc/" target="_blank" rel="noopener noreferrer" style="--tilt:2deg">
+          <p class="ai__link-title">The Design Paradox</p>
+          <p class="ai__link-author">Ethan Eismann</p>
+        </a>
+        <a class="ai__link" href="https://wattenberger.com/thoughts/our-interfaces-have-lost-their-senses/" target="_blank" rel="noopener noreferrer" style="--tilt:-3deg">
+          <p class="ai__link-title">Our Interfaces Have Lost Their Senses</p>
+          <p class="ai__link-author">Amelia Wattenberger</p>
+        </a>
+      </div>
+    </div>
+    <a class="cta" href="#tldr" style="--tilt:2deg">Anything else? <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
   <!-- ============ tldr ============ -->
