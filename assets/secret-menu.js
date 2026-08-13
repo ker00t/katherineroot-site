@@ -25,6 +25,10 @@
     menu.classList.remove('is-open');
     trigger.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
+    // touch devices: hide the icon again on close instead of leaving it
+    // revealed forever — back to the undiscovered state, same as a fresh
+    // page load, so the reveal has to be re-earned with another tap
+    if (noHover) unreveal();
   }
 
   trigger.addEventListener('click', function () {
