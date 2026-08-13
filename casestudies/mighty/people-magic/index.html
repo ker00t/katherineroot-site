@@ -118,6 +118,37 @@
     </div>
   </footer>
 
+  <div class="secret-menu" id="secret-menu">
+    <div class="secret-menu__hotspot">
+      <button type="button" class="secret-menu__trigger" id="secret-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Menu">
+        <svg class="secret-menu__icon secret-menu__icon--menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 8h10"/><path d="M7 12h10"/><path d="M7 16h10"/></svg>
+        <svg class="secret-menu__icon secret-menu__icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+      <span class="secret-menu__hint" aria-hidden="true">
+        <svg class="secret-menu__arrow" viewBox="0 0 29.6092 65.4687" fill="none" aria-hidden="true"><path d="M12.3348 2.5001C13.5861 3.49665 17.3401 8.30996 18.947 15.3174C21.4506 26.2357 20.3576 34.7503 19.3353 38.5803C17.3318 46.0872 13.0373 53.8052 9.82368 58.8199C8.60787 60.7171 8.11383 61.246 7.76214 59.0128C5.51817 44.7642 5.33372 39.2101 3.8277 37.1985C0.99444 33.4143 3.33182 49.2871 4.95249 55.2766C5.92629 58.8754 7.65428 61.4191 8.92251 62.4602C9.53363 62.9618 10.4744 63.0167 11.3209 62.9394C12.1675 62.8621 12.9924 62.5506 15.382 61.5274C17.7717 60.5042 21.7012 58.7787 27.1086 56.6411" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="secret-menu__note">Oooh a secret menu!</span>
+      </span>
+    </div>
+    <div class="secret-menu__scrim" id="secret-menu-scrim"></div>
+    <nav class="secret-menu__panel" id="secret-menu-panel" aria-label="Menu">
+      <a href="/" style="--tilt:-2deg">Home</a>
+      <a href="/assets/KatherineRootResume2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:2deg">Resume</a>
+      <a href="/casestudies/index.html" style="--tilt:-3deg">Case Studies</a>
+      <a href="/sideprojects/index.html" style="--tilt:3deg">Side Projects</a>
+      <div class="secret-menu__socials">
+        <a class="secret-menu__social secret-menu__social--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="--tilt:-2deg"><span aria-hidden="true">in</span></a>
+        <a class="secret-menu__social" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="--tilt:2deg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+        </a>
+        <a class="secret-menu__social" href="mailto:keroot@gmail.com" aria-label="Email" style="--tilt:-3deg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+
 <script src="/assets/lightbox.js" defer></script>
+<script src="/assets/secret-menu.js" defer></script>
 </body>
 </html>
