@@ -419,6 +419,15 @@
        below), so it's just dead space pushing the title and CTA away
        from the column; shrink it back down to a normal gap. */
     .companies__row{flex-direction:column;margin:24px 0}
+    /* reorder via flex `order` rather than touching the DOM, so desktop's
+       markup order (and tab order) stays untouched — only the mobile
+       stacked column reads top to bottom as: Manta, Mighty, Copper,
+       Launch, Simply Hired. */
+    .companies__row .company:has(.company__logo--manta){order:1}
+    .companies__row .company:has(.company__logo--mighty){order:2}
+    .companies__row .company:has(.company__logo--copper){order:3}
+    .companies__row .company:has(.company__logo--launch){order:4}
+    .companies__row .company:has(.company__logo--simply){order:5}
     .company__logo--simply{height:clamp(90px,24vw,130px)}
     .company__logo--launch{width:clamp(160px,42vw,260px)}
     .company__logo--manta{width:clamp(95px,25vw,150px);height:clamp(95px,25vw,150px)}
