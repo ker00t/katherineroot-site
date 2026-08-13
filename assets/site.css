@@ -87,8 +87,14 @@ img{max-width:100%}
    .secret-menu__trigger — the actual clickable button —
    stays small, just around the icon itself, so hovering the corner
    doesn't let you open the menu by clicking somewhere else in it. --- */
-.secret-menu{position:fixed;inset:0;z-index:60;pointer-events:none}
-.secret-menu__hotspot{position:fixed;top:0;right:0;z-index:2;
+/* .secret-menu itself and .secret-menu__hotspot are position:absolute
+   (not fixed) so the closed/idle trigger scrolls away with the page —
+   same as .corner-sparkle, and for the same reason: it should only be
+   reachable near the very top. .secret-menu__scrim/.secret-menu__panel
+   below carry their OWN independent position:fixed, so the open state
+   still correctly covers the full viewport regardless of this. */
+.secret-menu{position:absolute;inset:0;z-index:60;pointer-events:none}
+.secret-menu__hotspot{position:absolute;top:0;right:0;z-index:2;
       width:clamp(120px,28vw,280px);height:clamp(95px,22vw,222px);
       transform:translate(0,-12px);
       pointer-events:auto}
@@ -326,7 +332,12 @@ a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
 .card--soon .card__tag{background:rgba(255,255,255,.25);color:rgba(255,255,255,.8)}
 .card__title{font-size:clamp(22px,2.6vw,32px);font-weight:600;margin:0}
 .card--soon .card__title{color:rgba(255,255,255,.7)}
-.card__desc{font-size:17px;line-height:1.5;margin:0;opacity:.9;transition:opacity .3s ease}
+/* --- desc: shared body-copy size/weight for description-style text
+   (case-study card descriptions, stat callouts, the AI section's body
+   copy). Add alongside each element's own layout class rather than
+   replacing it — this only owns font-size/font-weight. --- */
+.desc{font-size:18px;font-weight:400}
+.card__desc{line-height:1.5;margin:0;opacity:.9;transition:opacity .3s ease}
 .card--soon .card__desc{opacity:.55}
 .card__arrow{margin-top:auto;line-height:0}
 .card__arrow svg{width:26px;height:26px}
