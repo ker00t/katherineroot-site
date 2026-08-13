@@ -47,6 +47,97 @@ img{max-width:100%}
       background:var(--lime);color:#000;border-color:var(--lime);outline:none}
 .back-link svg{width:22px;height:22px}
 
+/* --- corner menu: brought back from secret-menu.snapshot.html at the
+   user's request, restyled with Lucide's real square-menu/x icons in
+   place of the old hand-drawn hamburger/X, and shared site-wide (every
+   page gets the same trigger in the top-right corner, opening the same
+   full-height lime panel — see the matching HTML block + /assets/
+   secret-menu.js on each page). Stays hover-gated (icon is invisible
+   until the corner is hovered); a first tap reveals it on touch devices
+   (no hover), a second tap opens the menu — see secret-menu.js.
+   Hover-detection and click-detection are deliberately split: .hotspot
+   is a big invisible zone (sized to match the homepage's corner-sparkle
+   graphic, even on pages that don't have one, so the hover/tap target
+   stays generous) so hovering/tapping anywhere near the corner reveals
+   the icon, while .secret-menu__trigger — the actual clickable button —
+   stays small, just around the icon itself, so hovering the corner
+   doesn't let you open the menu by clicking somewhere else in it. --- */
+.secret-menu{position:fixed;inset:0;z-index:60;pointer-events:none}
+.secret-menu__hotspot{position:fixed;top:0;right:0;z-index:2;
+      width:clamp(120px,28vw,280px);height:clamp(95px,22vw,222px);
+      transform:translate(0,-12px);
+      pointer-events:auto}
+.secret-menu__trigger{--tilt:-2deg;position:absolute;top:32px;right:32px;z-index:3;width:64px;height:64px;
+      display:flex;align-items:center;justify-content:center;
+      background:none;border:none;cursor:pointer;color:#fff;
+      pointer-events:auto;-webkit-tap-highlight-color:transparent;
+      transition:color .3s var(--spring),transform .3s var(--spring)}
+.secret-menu__trigger:hover,.secret-menu__trigger:focus-visible{
+      transform:translateY(-6px) rotate(var(--tilt));outline:none}
+.secret-menu.is-open .secret-menu__trigger{color:var(--charcoal)}
+.secret-menu__icon{display:block;width:40px;height:40px;flex:none}
+.secret-menu__icon--menu{opacity:0;transition:opacity .3s ease}
+@media (hover:hover){
+  .secret-menu__hotspot:hover .secret-menu__icon--menu,
+  .secret-menu__trigger:focus-visible .secret-menu__icon--menu{opacity:1}
+}
+.secret-menu.is-revealed .secret-menu__icon--menu{opacity:1}
+/* --- hint: Figma's "menu_text" node (arrow + "Oooh a secret menu!"),
+   positioned/rotated to match its exact coordinates there. Decorative
+   only — not interactive — and fades in slightly after the icon
+   itself (transition-delay) rather than in lockstep with it. --- */
+.secret-menu__hint{position:absolute;top:16px;right:16px;width:56px;height:56px;
+      pointer-events:none;opacity:0;transition:opacity .3s ease .12s}
+@media (hover:hover){
+  .secret-menu__hotspot:hover .secret-menu__hint,
+  .secret-menu__trigger:focus-visible ~ .secret-menu__hint{opacity:1}
+}
+.secret-menu.is-revealed .secret-menu__hint{opacity:1}
+.secret-menu.is-open .secret-menu__hint{opacity:0 !important}
+.secret-menu__arrow{position:absolute;right:84px;bottom:-24px;width:15px;height:auto;
+      color:#fff;display:block;transform-origin:center;transform:rotate(-127.28deg);
+      filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+.secret-menu__note{position:absolute;right:60px;bottom:-70px;white-space:nowrap;
+      color:#fff;font-weight:600;font-size:13px;text-align:center;
+      transform-origin:right center;transform:rotate(30deg);
+      filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+.secret-menu__icon--close{display:none}
+.secret-menu.is-open .secret-menu__icon--menu{display:none}
+.secret-menu.is-open .secret-menu__icon--close{display:block;opacity:1}
+.secret-menu__scrim{position:fixed;inset:0;z-index:0;background:rgba(0,0,0,.3);
+      opacity:0;pointer-events:none;transition:opacity .3s ease}
+.secret-menu.is-open .secret-menu__scrim{opacity:1;pointer-events:auto}
+.secret-menu__panel{position:fixed;top:0;right:0;bottom:0;z-index:1;
+      width:min(430px,88vw);background:var(--lime);
+      display:flex;flex-direction:column;align-items:center;
+      padding:144px 24px 56px;overflow-y:auto;
+      transform:translateX(100%);pointer-events:none;
+      transition:transform .4s var(--spring)}
+.secret-menu.is-open .secret-menu__panel{transform:translateX(0);pointer-events:auto}
+.secret-menu__panel a{color:var(--charcoal);text-decoration:none;font-weight:600;
+      font-size:clamp(24px,3vw,32px);padding:10px 0;transition:transform .3s var(--spring)}
+.secret-menu__panel a:hover,.secret-menu__panel a:focus-visible{
+      transform:translateY(-6px) rotate(var(--tilt));outline:none}
+/* --- socials: same size/shape/icon content as the footer's
+   .say-hi__icon (82px, 2px border, 16px radius, 32px glyphs) — kept as
+   its own class rather than literally reusing .say-hi__icon, since
+   that class's white-on-transparent/lime-fill-on-hover treatment is
+   tuned for the pink footer and would wash out against this panel's
+   lime background; charcoal keeps it legible while matching every
+   other dimension exactly. --- */
+.secret-menu__socials{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:auto;padding-top:32px}
+.secret-menu__social{width:82px;height:82px;border:2px solid var(--charcoal);border-radius:16px;
+      display:flex;align-items:center;justify-content:center;color:var(--charcoal);
+      text-decoration:none;transition:transform .3s var(--spring)}
+.secret-menu__social:hover,.secret-menu__social:focus-visible{
+      transform:translateY(-6px) rotate(var(--tilt));outline:none}
+.secret-menu__social svg{width:32px;height:32px}
+.secret-menu__social--linkedin{font-size:32px;font-weight:700;letter-spacing:-.02em}
+@media (prefers-reduced-motion: reduce){
+  .secret-menu__panel,.secret-menu__panel a,.secret-menu__scrim,
+  .secret-menu__trigger,.secret-menu__social{transition:none !important}
+}
+
 /* --- page-head: base is the article-page variant (used by all 9 case
    study pages, identical on every one); the two list pages
    (casestudies/index.html, sideprojects/index.html) need a wider
