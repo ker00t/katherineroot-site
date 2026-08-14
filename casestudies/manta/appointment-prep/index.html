@@ -29,7 +29,8 @@
      footer size overrides (shrunk to the subpage-template scale) plus
      the one h2-margin reset this page's content needs. --- */
 
-  .article__meta + h2{margin-top:0}
+  .page-head{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center}
+
 
   @media (prefers-reduced-motion: reduce){
     .article__nav-links a{transition:none !important}
@@ -50,18 +51,16 @@
   <div class="page-head">
     <span class="page-head__eyebrow">CASE STUDY</span>
     <h1 class="page-head__title">The Eight-Minute Appointment</h1>
+    <p class="page-head__meta">Head of Design · Manta Cares · 2026</p>
     <p class="page-head__intro">Ask our users to name the hardest moment in their cancer journey and many describe the same scene: a rushed visit with an oncologist, a blur of words they don't understand, and the parking lot afterward where they realize they forgot to ask the one thing that mattered. This is how we designed for that moment.</p>
-  </div>
-
-  <div class="construction-notice">
     <div class="construction-notice__box">
       <p class="construction-notice__title">🚧 Under Construction 🚧</p>
       <p class="construction-notice__desc">Please bear with me while I get these draft case studies refined. They are a work in progress, but they are here in draft form to give you a general sense of my work while I finish up!</p>
     </div>
+    <a class="cta page-head__cta" href="#article" style="--tilt:-2deg">Read on <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg></a>
   </div>
 
-  <article class="article">
-    <p class="article__meta">Head of Design · Manta Cares · 2026</p>
+  <article class="article" id="article">
 
     <h2>The Problem</h2>
     <p>The constraint that shaped everything: a real appointment at a community clinic can be eight minutes long. The oncologist is moving fast. The patient is frightened, possibly just got hard news, and is trying to listen, remember, and ask good questions all at once — a near-impossible cognitive task. Whatever we built had to work inside those eight minutes and the anxious hours on either side of them, not in some idealized calm that doesn't exist.</p>

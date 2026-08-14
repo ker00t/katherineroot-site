@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<title>HopeAI | Katherine Root</title>
+<meta name="description" content="I designed HopeAI, Manta Cares' AI companion for cancer patients, end to end — scope, identity, voice, safety guardrails, and the product surfaces it lives in.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Katherine Root">
+<meta property="og:title" content="HopeAI | Katherine Root">
+<meta property="og:description" content="I designed HopeAI, Manta Cares' AI companion for cancer patients, end to end — scope, identity, voice, safety guardrails, and the product surfaces it lives in.">
+<meta property="og:url" content="https://www.katherineroot.com/casestudies/manta/hope-ai/">
+<meta property="og:image" content="https://www.katherineroot.com/assets/thumbnail.png">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="1080">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HopeAI | Katherine Root">
+<meta name="twitter:description" content="I designed HopeAI, Manta Cares' AI companion for cancer patients, end to end — scope, identity, voice, safety guardrails, and the product surfaces it lives in.">
+<meta name="twitter:image" content="https://www.katherineroot.com/assets/thumbnail.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,600;12..96,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  /* --- case-study article shell: shared tokens/animated background/
+     back-link/page-head/article typography/nav/say-hi/footer now live
+     in /assets/site.css. This page's own copy runs noticeably bigger
+     and lighter-weight than the shared defaults (Figma node 107:23147),
+     so most of what's left here is overriding those sizes/weights
+     specifically for this page, plus the wide "breakout" treatment its
+     hero and phone-mockup rows use to run wider than the article's
+     normal 720px reading column. --- */
+
+  /* full-viewport hero: the text block is vertically centered in
+     (100vh minus a 200px reserve), so the hero image immediately
+     following it in the document (see .article__breakout below) always
+     starts 200px before the fold — its top edge peeking into view
+     without scrolling, the rest revealed as you scroll past. */
+  .page-head{min-height:calc(100vh - 200px);
+        display:flex;flex-direction:column;justify-content:center;align-items:center}
+  .page-head__meta{font-size:18px;font-weight:700;margin:0 0 20px}
+  .page-head__intro{font-size:18px;font-weight:300;opacity:1;line-height:1.4}
+  .page-head__intro + .page-head__intro{margin-top:16px}
+  .page-head__cta{margin-top:clamp(20px,3vw,28px)}
+
+  /* the hero image sits flush at the very top of .article (no padding
+     before it), so the shared top fade runs behind the image itself
+     instead of resolving in blank space above it */
+  /* Figma's text column is a flat 700px (node 120:32816 etc.), wider
+     than the shared 720px max-width leaves once its 64px side padding
+     is subtracted (592px) — bump max-width so the content box itself
+     reaches 700px at the padding's widest (desktop) point. */
+  .article{font-weight:300;padding-top:0;max-width:828px}
+  /* the hero image's top 200px peeks above the fold (see .page-head's
+     min-height) — the fade shouldn't be visible until you've actually
+     scrolled, so it stays fully pink through that peeked region and
+     only starts transitioning to white just past it. */
+  .article::before{background:linear-gradient(to bottom,rgba(255,255,255,0) 0,rgba(255,255,255,0) 200px,#fff 300px,#fff calc(100% - 220px),rgba(255,255,255,0) 100%)}
+  .article h2{font-size:clamp(32px,6.5vw,64px);letter-spacing:-.02em;line-height:1;margin:80px 0 24px}
+  .article strong{font-weight:600}
+  .article ol{margin:0 0 20px;padding-left:22px}
+  .article ol li{margin-bottom:10px}
+
+  /* --- breakout: the hero screenshot and the two 3-phone rows all run
+     wider than the article's 720px column in Figma (up to ~1100px), so
+     they get their own full-bleed wrapper instead of being squeezed
+     into the reading column like a normal inline image. --- */
+  .article__breakout{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+  .article__breakout .article__img-row{max-width:1100px;margin:32px auto}
+  .article__breakout .article__img-row img{height:auto;width:326px;max-width:100%}
+
+  /* --- hope logo: the HopeAI compass mark (Figma node 108:23427) is a
+     stack of 19 separate vector layers with no single flat export, so
+     it's reproduced here as an absolutely-positioned composite using
+     Figma's exact per-layer inset percentages — verified pixel-for-pixel
+     against the Figma screenshot before committing. --- */
+  .hope-logo{position:relative;display:block;width:179px;height:179px}
+  .hope-logo div{position:absolute}
+  .hope-logo img{display:block;width:100%;height:100%}
+
+  @media (prefers-reduced-motion: reduce){
+    .page-head__cta{transition:none !important}
+  }
+</style>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+  <img class="corner-sparkle" src="/assets/sparkle.svg" alt="" aria-hidden="true">
+
+
+  <div class="back-link">
+    <a href="/casestudies/index.html" aria-label="Back to Manta Cares">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    </a>
+  </div>
+
+  <div class="page-head">
+    <span class="page-head__eyebrow">CASE STUDY</span>
+    <h1 class="page-head__title">HopeAI</h1>
+    <p class="page-head__meta">Manta Cares&nbsp;&nbsp;|&nbsp;&nbsp;Head of Design&nbsp;&nbsp;|&nbsp;&nbsp;2025-26</p>
+    <p class="page-head__intro">I designed HopeAI, an AI companion for cancer patients, end to end. I helped define what it should and should not be scoped to do, what it should look and sound like, and how it lives in harmony with the Manta Cares product and brand.</p>
+    <p class="page-head__intro">General release Feb 2026&nbsp;&nbsp;|&nbsp;&nbsp;1,400+ patients&nbsp;&nbsp;|&nbsp;&nbsp;8,000+ messages in five months&nbsp;&nbsp;|&nbsp;&nbsp;Weekly actives up ~5x and sustained&nbsp;&nbsp;|&nbsp;&nbsp;~38% adoption against a 60% team goal</p>
+    <a class="cta page-head__cta" href="#problem" style="--tilt:-2deg">Read on <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg></a>
+  </div>
+
+  <article class="article">
+    <div class="article__breakout">
+      <div class="article__img-row">
+        <img class="article__img" src="media/hero.png" alt="The HopeAI zero state, welcoming a patient with a compass mark, a message input, and starter prompts like &quot;Prep for an appointment&quot; and &quot;Talk about symptoms&quot;" style="width:1099px;max-width:100%">
+      </div>
+    </div>
+    <h2 id="problem">The Problem</h2>
+    <p>I joined Manta Cares as a seed-stage startup in 2025, while they were in the process of building a digital version of their physical cancer planner. The paper planner was built on the idea that you can balance your physical, emotional, and mental well-being during cancer treatment, and it had found a strong foothold in the cancer community.</p>
+    <p>As we digitized the planner and created our software product though, the mental and emotional side of the product was getting lost in translation. That was the heart and soul of the paper product, the piece that was otherwise missing from most patients' experiences, and it had been taken over by a sea of information and tracking features.</p>
+    <p>At the same time, we were focusing ourselves as a company around a very specific type of cancer patient: A woman in her sixties with breast cancer, treated at a community hospital, often without a specialized oncologist. She is not getting the care you'd get at a major academic center. She has questions she isn't getting answered in an eight-minute appointment. She is comfortable enough with a phone to text her grandkids and not much further.</p>
+    <p>For this patient, a conversation wasn't a surface level nice-to-have. It was the only place some of those questions were ever going to get asked.</p>
+
+    <h2>The Bet</h2>
+    <p>Separately, and less romantically, we were a software company in 2025 grappling with the question every software company was grappling with. Should we put AI in the product? Was there a place for it? Would we be adding it to help patients, or because it was the cool new technology of the moment? I think the honest answer is that both motives were in the room, but as Head of Design I intended to make sure we built what was right for our customers first and foremost.</p>
+    <p>So the bet I argued for was narrow: <strong>HopeAI would own the freeform, emotional, in-between-appointments part of the experience, and nothing that the structured product already did well.</strong> It would not diagnose. It would not replace our Cancer Maps. It would not become a general medical search engine.</p>
+    <p>I advocated for our AI to feel like a companion, not a robot. I drew on conversation and interview data to steer our language away from the technology and toward the outcome, using language like "Prep for an appointment," "Talk about symptoms," and "Compare treatment options." Nobody in our ICP woke up wanting to talk to an AI. They woke up wanting to know whether the pain in their side was normal.</p>
+
+    <h2>Giving Hope an Identity</h2>
+    <p>Once we decided to embark on the journey of building our AI, we needed to give it an identity. The name came to us quickly, deciding that "Hope" was the best guide to have when navigating cancer. We went back and forth on the details &mdash; Hope, Hope Cares, Hope.ai &mdash; and settled formally on HopeAI, Hope for short.</p>
+    <p>We also settled quickly on the visual of a compass, building on the motif of our cancer maps, in one of our brand purples so it's instantly recognizable in a sea of blue UI.</p>
+    <div class="hope-logo" role="img" aria-label="The HopeAI compass mark" style="margin:32px auto">
+      <div style="inset:4.27% 4.1% 5.56% 5.74%"><img src="media/logo-parts/ellipse5.svg" alt=""></div>
+      <div style="inset:21.49% 22.1% 19.55% 21.58%"><img src="media/logo-parts/vector.svg" alt=""></div>
+      <div style="inset:4% 4.1% 4.2% 4.1%"><img src="media/logo-parts/ellipse3stroke.svg" alt=""></div>
+      <div style="inset:32.96% 35.25% 32.06% 35.79%"><img src="media/logo-parts/vector1.svg" alt=""></div>
+      <div style="inset:0.72% 0.82% 0.92% 0.82%"><img src="media/logo-parts/ellipse1stroke.svg" alt=""></div>
+      <div style="inset:47.17% 46.72% 45.73% 46.17%"><img src="media/logo-parts/ellipse2.svg" alt=""></div>
+      <div style="inset:0 0.72% 0 1.58%"><img src="media/logo-parts/vector2.svg" alt=""></div>
+      <div style="inset:11.15% 11.6% 10.94% 12.51%"><img src="media/logo-parts/vector3.svg" alt=""></div>
+      <div style="inset:20.87% 21.44% 20.17% 22.25%"><img src="media/logo-parts/vector4.svg" alt=""></div>
+      <div style="inset:27.98% 53.87% 54.01% 28.79%"><img src="media/logo-parts/vector5.svg" alt=""></div>
+      <div style="inset:54.27% 27.96% 27.97% 54.86%"><img src="media/logo-parts/vector6.svg" alt=""></div>
+      <div style="inset:35.72% 27.98% 54.01% 66.86%"><img src="media/logo-parts/vector7.svg" alt=""></div>
+      <div style="inset:54.27% 65.89% 35.71% 28.78%"><img src="media/logo-parts/vector8.svg" alt=""></div>
+      <div style="inset:27.92% 38.54% 68.55% 54.41%"><img src="media/logo-parts/vector9.svg" alt=""></div>
+      <div style="inset:69.01% 53.97% 27.94% 39.97%"><img src="media/logo-parts/vector10.svg" alt=""></div>
+      <div style="inset:49.41% 81.3% 49.31% 13.12%"><img src="media/logo-parts/vector11.svg" alt=""></div>
+      <div style="inset:49.42% 12.24% 49.31% 82.21%"><img src="media/logo-parts/vector12.svg" alt=""></div>
+      <div style="inset:82.68% 48.87% 11.79% 49.82%"><img src="media/logo-parts/vector13.svg" alt=""></div>
+      <div style="inset:11.77% 48.97% 82.93% 49.76%"><img src="media/logo-parts/vector14.svg" alt=""></div>
+    </div>
+    <p>A fun aside &mdash; I also explored watercolor styling, and the idea of letting patients choose their own visual style to fit their mood or personality &mdash; the same instinct about control, pushed one step further. Neither shipped. Looking back I think that was the right call for launch, but it's still the exploration I'd most like to revive.</p>
+    <div class="article__breakout">
+      <div class="article__img-row">
+        <img class="article__img" src="media/hopeai_compassideas.png" alt="A grid of twelve compass icon explorations, ranging from simple line marks to watercolor illustrations in gears, flowers, wings, and wreaths" style="width:1100px;max-width:100%">
+      </div>
+    </div>
+    <p class="article__caption">Early explorations for Hope's compass mark</p>
+    <p>Visualizing how Hope would exist in the app was a different story. It needed to be present throughout the product, letting you go deeper on any topic, while staying available for whenever you had a question, felt something you wanted to talk about, or noticed a symptom you needed to log. It needed to feel like a guide who was there when you needed one and out of the way when you'd rather do a task yourself.</p>
+    <p>That last part wasn't a style preference. <strong>We found that maintaining a sense of control is a major motivator for cancer patients</strong> &mdash; for people whose bodies and calendars have both stopped being theirs, choosing when to be helped is not a small thing. A guide that interrupts is just one more thing happening to you.</p>
+    <p>So we carefully crafted Hope's story, one where it was there to guide you and help you understand what was next, and wove that throughout our company messaging.</p>
+    <div class="article__img-row">
+      <video class="article__video" src="media/appstorevideo.mp4" autoplay loop muted playsinline style="width:327px" aria-label="App Store preview video walking through the HopeAI app intro"></video>
+    </div>
+
+    <h2>Giving Hope a Voice</h2>
+    <p>Voice and tone mattered as much as the visual identity. To earn trust with cancer patients, and to be distinguishable from the general-purpose chatbots they could already use for free, Hope had to come from a place of real experience.</p>
+    <p>So we didn't write a persona. We based Hope's voice on the many user interviews we'd done with real cancer patients and survivors, then pressure-tested its responses with the cancer survivors on the Manta Cares team, including our CEO. Hope landed on a kind, understanding register, always starting from "I hear how hard this is, tell me more."</p>
+    <p>That said, a model tuned to be comforting is a model tuned to agree with you, and in a cancer product agreeableness is a safety problem, not a personality quirk.</p>
+    <p><strong>So Hope is warm about how it says something and unsentimental about what it says. It will sit with fear for as long as you want, and it will not tell you the scan will probably be fine.</strong></p>
+
+    <h2>Hope in Product</h2>
+    <p>When you come to Manta Cares you get two modes of interaction: structured and unstructured.</p>
+    <p>If you want structure, the product works the way it always has. You go to your Map to do a deep dive on research. You log something in your Symptom Tracker. You take notes at your appointment in the Appointment Notebook, then come back and look at your week.</p>
+    <p>If you want the unstructured version, you talk to Hope. And the reason that works is that Hope isn't a separate island, it's grounded in the content from our Cancer Maps, written by our Clinical Content Team, and your own data. Ask it where you are and it doesn't answer generically:</p>
+    <blockquote>Hey Katherine, you're currently in the Treatment zone of your Early Stage Hormone Positive Breast Cancer map. You pinned yourself at this station back on December 9th. Where you are right now: This station is about deciding whether to have systemic treatment before surgery (also called neoadjuvant therapy)&hellip;</blockquote>
+    <p>That specificity is the entire differentiator from a general chatbot, and it's why the Map work and the Hope work couldn't be designed separately. I designed two entry points for two different moments.</p>
+    <div class="article__breakout">
+      <div class="article__img-row">
+        <img class="article__img" src="media/hopeai_chat.png" alt="Three screens of the HopeAI chat experience: the zero state asking &quot;How can I help today?&quot;, a conversation about a new diagnosis with a patient-insight quote from a fellow survivor, and that same conversation saving suggested questions as a note titled &quot;Diagnosis Questions&quot;" style="width:1100px;max-width:100%">
+      </div>
+    </div>
+    <p>The <strong>full chat</strong> experience is where you go when the question is the reason you opened the app. It opens on a simple zero state &mdash; How can I help today? &mdash; with three starter prompts, an input, and your previous conversations underneath, so returning to a thread from last week is one tap rather than a re-explanation. Thinking states are shown, not hidden, so the wait has a reason attached to it.</p>
+    <div class="article__breakout">
+      <div class="article__img-row">
+        <img class="article__img" src="media/hopeai_widgets.png" alt="Three widget surfaces: a &quot;Dive deeper with Hope&quot; module embedded on a Map station, a Manta Cares dashboard offering to start a new HopeAI conversation, and an &quot;Ask Hope&quot; iOS home screen widget" style="width:1100px;max-width:100%">
+      </div>
+    </div>
+    <p>The <strong>widgets</strong> are where you go when the question arrives in the middle of something else &mdash; reading a station on your map, deciding what to do next on the dashboard, or even doing other things on your phone &mdash; and it lets you ask without losing your place. That's the "out of sight until you need it" principle made structural.</p>
+    <p>The bet on entry points paid off more clearly than anything else in the project: clicks into a Hope conversation from the dashboard grew from roughly 107 a month at launch to about 630 a month.</p>
+
+    <h2>Guardrails and Safety</h2>
+    <p>As a medical company we knew we needed real guardrails on HopeAI before it could go anywhere near a customer. Four design decisions carried most of the load here:</p>
+    <ul>
+      <li>A persistent line sits directly under the input, not buried in onboarding: "HopeAI is an AI partner, and does not offer medical advice. Always consult your doctor or health care team when making medical decisions."</li>
+      <li>Hope works from NCCN and ASCO clinical guidelines and Manta's own curated station content rather than the open internet, and we partnered with our in house Clinical Content team for accuracy.</li>
+      <li>A human is always one step away. Patients can escalate to a Manta advocate from inside the conversation, and Hope surfaces that route itself when it's uncertain, rather than improvising. Symptom messages are triaged, and anything severe gets a clear "this warrants a call now," out of the conversation and toward a person. Crisis-safety escalation fires whenever a message warrants it.</li>
+      <li>Every response can be marked with a thumbs up or down, which was our fastest signal on quality once real patients arrived. Weekly human review of sampled conversations backed it up.</li>
+    </ul>
+    <p><strong>In an AI product, the failure paths are the design. The happy path mostly writes itself.</strong></p>
+
+    <h2>The Launch</h2>
+    <p>We ran the launch as a staged rollout rather than a single launch day, with an explicit go/no-go gate between each phase &mdash; internal dogfooding, then a small beta with members, then a limited soft launch, then general availability. Each gate had the same four questions:</p>
+    <ol>
+      <li><strong>Are members getting tangible value?</strong></li>
+      <li><strong>Is Hope technically performing?</strong></li>
+      <li><strong>Is our quality bar holding?</strong></li>
+      <li><strong>Can we support the next phase?</strong></li>
+    </ol>
+    <p>What made the gates useful was writing the stop conditions down before we had any results to argue with. Consistent negative feedback, any dangerous medical advice, any compliance issue &mdash; those were red flags that stopped the launch, not tradeoffs to be negotiated once there was a date on the calendar.</p>
+    <p>We ran the launch as a cross-functional effort, coordinating comms across product, engineering, and partnerships, and HopeAI became generally available on February 11, 2026.</p>
+
+    <h2>The Results</h2>
+    <p>We set a 60% adoption target across product, engineering, and design. We reached about 38% &mdash; roughly two-thirds of the way there, and short of where we wanted to land. It isn't a design result either; it was a shared team goal with a lot of hands on it. The shape of the usage told me more than the headline number did.</p>
+    <p><strong>Depth held.</strong> About 13 messages per patient over five months. Half of conversations went past a single question, averaging four exchanges, and the most engaged patients came back for four to fifteen separate conversations. Depth was the number I cared about most, because a support tool that gets used once is a novelty.</p>
+    <p><strong>The growth was sustained, not a launch spike.</strong> Weekly actives went from around 30 to a steady 130&ndash;160 and stayed there after the launch attention faded.</p>
+    <p><strong>Hope worked as connective tissue.</strong> 67% of the resources it surfaced pointed back into the product rather than out of it &mdash; the Appointment Notebook came up in 82 conversations, the Symptom Tracker in 52 &mdash; with the remainder going to vetted nonprofits like CancerCare and Triage Cancer. That was the intent: not a destination, a way through.</p>
+    <p><strong>Patients uploaded 300+ medical documents into conversations.</strong> Handing over your records is a trust threshold most health products never clear. I'd caveat it &mdash; this came from a small group of early adopters, so I read it as a signal about how we framed security, not as evidence of adoption.</p>
+    <p>The change I didn't plan for was cultural. Before Hope, "should we use AI in our product" was a strategy argument nobody at Manta could win, because it was being had in the abstract. Afterward it was a design question with evidence attached: what does this specific patient need, at what moment, and does it fit within the bounds of Hope being an emotional companion and guide.</p>
+    <p>We came out of this project with a position I still hold &mdash; <strong>Manta Cares is not an AI-first company, it's a patient-first company, and that decides what gets built.</strong></p>
+  </article>
+
+  <!-- click any article image to open it larger here -->
+  <dialog id="article-lightbox">
+    <button type="button" id="article-lightbox-close" aria-label="Close">&times;</button>
+    <img id="article-lightbox-img" src="" alt="">
+  </dialog>
+
+  <footer class="site-footer" id="footer">
+    <div class="site-footer__heading">
+      <a href="/" class="site-footer__name">Katherine Root</a>
+      <p class="site-footer__tag">Product, AI, and Experience Design Expert</p>
+    </div>
+    <div class="site-footer__links">
+      <a href="/assets/KatherineRootResume2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">Resume</a>
+      <a href="/casestudies/index.html" style="--tilt:3deg">Case Studies</a>
+      <a href="/sideprojects/index.html" style="--tilt:-4deg">Side Projects</a>
+    </div>
+    <div class="say-hi__icons">
+      <a class="say-hi__icon say-hi__icon--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="--tilt:-2deg"><span aria-hidden="true">in</span></a>
+      <a class="say-hi__icon" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="--tilt:2deg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+      </a>
+      <a class="say-hi__icon" href="mailto:keroot@gmail.com" aria-label="Email" style="--tilt:-3deg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+      </a>
+    </div>
+  </footer>
+
+  <div class="secret-menu" id="secret-menu">
+    <div class="secret-menu__hotspot">
+      <button type="button" class="secret-menu__trigger" id="secret-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Menu">
+        <svg class="secret-menu__icon secret-menu__icon--menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 8h10"/><path d="M7 12h10"/><path d="M7 16h10"/></svg>
+        <svg class="secret-menu__icon secret-menu__icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+      <span class="secret-menu__hint" aria-hidden="true">
+        <svg class="secret-menu__arrow" viewBox="0 0 29.6092 65.4687" fill="none" aria-hidden="true"><path d="M12.3348 2.5001C13.5861 3.49665 17.3401 8.30996 18.947 15.3174C21.4506 26.2357 20.3576 34.7503 19.3353 38.5803C17.3318 46.0872 13.0373 53.8052 9.82368 58.8199C8.60787 60.7171 8.11383 61.246 7.76214 59.0128C5.51817 44.7642 5.33372 39.2101 3.8277 37.1985C0.99444 33.4143 3.33182 49.2871 4.95249 55.2766C5.92629 58.8754 7.65428 61.4191 8.92251 62.4602C9.53363 62.9618 10.4744 63.0167 11.3209 62.9394C12.1675 62.8621 12.9924 62.5506 15.382 61.5274C17.7717 60.5042 21.7012 58.7787 27.1086 56.6411" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="secret-menu__note">Oooh a secret menu!</span>
+      </span>
+    </div>
+    <div class="secret-menu__scrim" id="secret-menu-scrim"></div>
+    <nav class="secret-menu__panel" id="secret-menu-panel" aria-label="Menu">
+      <a href="/" style="--tilt:-2deg">Home</a>
+      <a href="/assets/KatherineRootResume2026.pdf" target="_blank" rel="noopener noreferrer" style="--tilt:2deg">Resume</a>
+      <a href="/casestudies/index.html" style="--tilt:-3deg">Case Studies</a>
+      <a href="/sideprojects/index.html" style="--tilt:3deg">Side Projects</a>
+      <div class="secret-menu__socials">
+        <a class="secret-menu__social secret-menu__social--linkedin" href="https://www.linkedin.com/in/katherineroot/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="--tilt:-2deg"><span aria-hidden="true">in</span></a>
+        <a class="secret-menu__social" href="https://www.instagram.com/cali.adventuring/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="--tilt:2deg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+        </a>
+        <a class="secret-menu__social" href="mailto:keroot@gmail.com" aria-label="Email" style="--tilt:-3deg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+
+<script src="/assets/lightbox.js" defer></script>
+<script src="/assets/secret-menu.js" defer></script>
+</body>
+</html>

@@ -187,44 +187,70 @@ img{max-width:100%}
    (casestudies/index.html, sideprojects/index.html) need a wider
    max-width, different bottom padding, and bigger title/intro sizes —
    each carries a small local override for just those properties. --- */
-.page-head{max-width:760px;margin:0 auto;padding:clamp(120px,16vw,180px) clamp(20px,6vw,64px) clamp(40px,7vw,56px);
+.page-head{max-width:1600px;margin:0 auto;padding:clamp(120px,16vw,180px) clamp(20px,6vw,64px) clamp(40px,7vw,56px);
       text-align:center}
 .page-head__eyebrow{display:inline-block;background:#fff;color:#f455a7;font-size:13px;font-weight:600;
       padding:6px 16px;border-radius:100px;margin-bottom:20px}
-.page-head__title{font-size:clamp(36px,7vw,72px);font-weight:600;letter-spacing:-.03em;margin:0 0 16px;line-height:1.05}
-.page-head__intro{font-size:clamp(17px,2.1vw,21px);opacity:.9;margin:0;line-height:1.55}
+.page-head__title{font-size:clamp(40px,8vw,88px);font-weight:600;letter-spacing:-.02em;margin:0 0 16px;line-height:1.05}
+.page-head__meta{font-size:18px;font-weight:700;margin:0 0 20px}
+.page-head__intro{font-size:18px;font-weight:300;opacity:.9;margin:0 auto;max-width:700px;line-height:1.4}
+.page-head__intro+.page-head__intro{margin-top:16px}
+.page-head__cta{margin-top:clamp(20px,3vw,28px)}
 
-/* --- construction notice: sits between the page-head and the article on
-   every case study page, flagging that the write-up is still a draft.
-   Reuses the "coming soon" dashed-panel look so it reads as an
-   intentional, on-brand flag rather than an error state. --- */
+/* --- construction notice: now sits inside .page-head itself (a flex
+   column), directly after the intro, so it's part of the hero and
+   stays above the fold rather than being scrolled past. --- */
 .construction-notice{max-width:720px;margin:0 auto clamp(40px,7vw,64px);padding:0 clamp(20px,6vw,64px)}
 .construction-notice__box{background:rgba(255,255,255,.1);border:1.5px dashed rgba(255,255,255,.4);
-      border-radius:22px;padding:24px 28px;text-align:center}
+      border-radius:22px;padding:24px 28px;text-align:center;
+      max-width:700px;margin:clamp(24px,4vw,32px) 0}
 .construction-notice__title{font-size:19px;font-weight:600;margin:0 0 8px;letter-spacing:-.01em}
 .construction-notice__desc{font-size:15px;line-height:1.5;opacity:.85;margin:0}
 
 /* --- article: long-form case-study typography, identical across all
-   9 case study pages wherever each rule is actually used. --- */
-.article{max-width:720px;margin:0 auto;padding:0 clamp(20px,6vw,64px) clamp(48px,8vw,80px);
-      text-align:left;font-size:18px;line-height:1.7}
-.article h2{font-size:clamp(24px,3vw,32px);font-weight:600;letter-spacing:-.02em;margin:48px 0 16px}
-.article h3{font-size:clamp(19px,2.2vw,22px);font-weight:600;margin:36px 0 12px;color:var(--lime)}
+   9 case study pages wherever each rule is actually used. Per Figma
+   (node 107:23147), the article's own background fades from the page's
+   rotating color to solid white at its top edge and fades back at its
+   bottom edge (revealing the rotating color again right before the
+   footer's own separate color→lime fade takes over) — a full-bleed
+   gradient layer behind the (still 720px-constrained) text column, so
+   text stays dark-on-white the whole way down. The top fade only needs
+   to be short — 100px, resolving within the article's own top padding —
+   since on pages with a hero image as the first child (e.g. hope-ai)
+   the opaque image itself covers the rest of the transition regardless
+   of what's happening behind it. The bottom fade runs longer (220px)
+   with matching bottom padding, so it always finishes in blank space
+   before the last paragraph, never crossing actual text. --- */
+.article{position:relative;max-width:828px;margin:0 auto;padding:100px clamp(20px,6vw,64px) 260px;
+      text-align:left;font-size:18px;line-height:1.7;color:var(--charcoal)}
+.article::before{content:'';position:absolute;top:0;left:50%;width:100vw;height:100%;
+      transform:translateX(-50%);z-index:0;pointer-events:none;
+      background:linear-gradient(to bottom,rgba(255,255,255,0) 0,#fff 100px,#fff calc(100% - 220px),rgba(255,255,255,0) 100%)}
+/* every direct child needs its own stacking position above the ::before
+   overlay — plain non-positioned blocks (like .identity-collage or an
+   .article__breakout wrapper) otherwise paint underneath it and go
+   invisible against the white fade, only reappearing once something
+   like a hover :transform accidentally promotes them above it. */
+.article>*{position:relative;z-index:1}
+.article{font-weight:300}
+.article h2{font-size:clamp(32px,6.5vw,64px);font-weight:600;letter-spacing:-.02em;line-height:1;margin:80px 0 24px}
+.article h2:first-child{margin-top:0}
+.article h3{font-size:clamp(19px,2.2vw,22px);font-weight:600;margin:36px 0 12px;color:#f455a7}
 .article p{margin:0 0 20px;opacity:.95}
-.article strong{font-weight:600;color:#fff}
+.article strong{font-weight:600}
 .article ul{margin:0 0 20px;padding-left:22px}
 .article li{margin-bottom:10px;opacity:.95}
 .article blockquote{margin:32px 0;padding:20px 24px;border-left:4px solid var(--lime);
-      background:rgba(255,255,255,.08);border-radius:0 16px 16px 0;font-size:17px;line-height:1.6}
+      background:rgba(0,0,0,.04);border-radius:0 16px 16px 0;font-size:17px;line-height:1.6}
 .article blockquote cite{display:block;margin-top:10px;font-size:14px;opacity:.7;font-style:normal}
-.article__img{border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);margin:32px 0;display:block;
+.article__img{border-radius:16px;margin:32px 0;display:block;
       cursor:zoom-in;transition:transform .25s var(--spring)}
 .article__img:hover,.article__img:focus-visible{transform:translateY(-4px)}
 .article__img-row{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin:32px 0}
-.article__img-row img{height:280px;width:auto;max-width:100%;border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);
+.article__img-row img{height:280px;width:auto;max-width:100%;border-radius:16px;
       cursor:zoom-in;transition:transform .25s var(--spring)}
 .article__img-row img:hover,.article__img-row img:focus-visible{transform:translateY(-4px)}
-.article__video{border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.3);margin:32px auto;display:block;
+.article__video{border-radius:16px;margin:32px auto;display:block;
       max-width:100%;max-height:640px;height:auto}
 .article__caption{text-align:center;font-size:14px;opacity:.65;margin:-20px 0 32px;font-style:italic}
 
@@ -250,7 +276,7 @@ img{max-width:100%}
 /* meta byline + "Principle N" eyebrow above an h2 (Manta case studies) */
 .article__meta{font-size:13px;opacity:.65;margin:0 0 clamp(32px,6vw,48px)}
 .article__eyebrow{display:block;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
-      color:var(--lime);margin:clamp(36px,6vw,52px) 0 6px}
+      color:#f455a7;margin:clamp(36px,6vw,52px) 0 6px}
 .article__eyebrow + h2{margin-top:0}
 
 /* --- article nav: "more case studies" links at the bottom (Manta pages) --- */

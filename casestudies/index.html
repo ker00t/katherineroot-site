@@ -41,9 +41,22 @@
   .group__intro a{text-decoration:underline;text-underline-offset:3px}
 
   /* this page's own card-grid wrapper (differs per page); .card/
-     .card__panel/etc. themselves are shared — see site.css. Centered
-     row, matching sideprojects/index.html's card grid. */
-  .cards{display:flex;gap:25px;flex-wrap:wrap;justify-content:center}
+     .card__panel/etc. themselves are shared — see site.css. Unlike
+     sideprojects/index.html's wrapped, centered grid, each company's
+     row here is a horizontally scrolling carousel at every breakpoint
+     (not just mobile) — cards keep their normal 620px width and never
+     wrap, so the row overflows and scrolls. .group itself is centered
+     with its own max-width (not full viewport width), so a plain
+     negative-margin breakout only reaches .group's edges, not the true
+     viewport edge — width:100vw does, same technique the homepage's
+     .cards uses. Extra top/bottom padding (beyond the breakout's own
+     horizontal padding) gives room for each card's hover lift+tilt so
+     it doesn't get clipped by overflow-x:auto. */
+  .cards{display:flex;gap:25px;flex-wrap:nowrap;justify-content:flex-start;
+        overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;
+        width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
+        padding:24px 0 32px clamp(20px,6vw,64px)}
+  .card{flex:0 0 min(620px,85vw);scroll-snap-align:start}
   .card__panel{height:100%}
 
   @media (prefers-reduced-motion: reduce){
@@ -71,6 +84,14 @@
     <p class="group__intro">As the only designer at this 0-to-1 startup, I helped build software to make the experience of having cancer just a little bit easier.</p>
     <div class="cards-scroll">
     <div class="cards">
+        <a class="card" href="/casestudies/manta/hope-ai/" style="--tilt:-3deg">
+        <span class="card__panel">
+          <span class="card__tag">CASE STUDY</span>
+          <span class="card__title">HopeAI</span>
+          <span class="card__desc desc">I designed HopeAI, our AI companion for cancer patients, end to end — from what it should never do, to the voice that makes it feel like a guide instead of a robot.</span>
+          <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </span>
+      </a>
         <a class="card" href="/casestudies/manta/brand-evolution/" style="--tilt:2deg">
         <span class="card__panel">
           <span class="card__tag">CASE STUDY</span>
@@ -79,35 +100,35 @@
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </a>
-      <a class="card" href="/casestudies/manta/appointment-prep/" style="--tilt:-2deg">
-        <span class="card__panel">
-          <span class="card__tag">CASE STUDY</span>
-          <span class="card__title">The Eight-Minute Appointment</span>
-          <span class="card__desc desc">A rushed visit with an oncologist is the hardest moment in the whole journey. Here's how we designed a before/during/after ritual to meet it.</span>
-          <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-        </span>
-      </a>
       <div class="card card--soon" style="--tilt:-2deg">
         <span class="card__panel">
           <span class="card__tag">CASE STUDY</span>
-          <span class="card__title">In Your Pocket</span>
-          <span class="card__desc desc">Our users were already treating Manta Cares like an app. They just didn't have one yet. This is the story of finally giving them the one they'd been improvising.</span>
+          <span class="card__title">Do We Need An App?</span>
+          <span class="card__desc desc">Before we built a single screen, we had to answer an uncomfortable question honestly: did our users need an app, or did we just want to build one?</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </div>
       <div class="card card--soon" style="--tilt:-3deg">
         <span class="card__panel">
           <span class="card__tag">CASE STUDY</span>
-          <span class="card__title">The Year Manta Became a Companion</span>
-          <span class="card__desc desc">A year ago, Manta Cares was a website you visited. Today it's an app that walks beside you — the story of how we turned a library of cancer content into a companion for the scariest year of someone's life.</span>
+          <span class="card__title">The Question of Maps</span>
+          <span class="card__desc desc">Cancer Maps are the backbone of the Manta Cares product — a way to make an overwhelming diagnosis feel navigable. Here's how we designed a map for a journey nobody chooses to take.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </div>
-      <div class="card card--soon" style="--tilt:2deg">
+      <div class="card card--soon" style="--tilt:-2deg">
         <span class="card__panel">
           <span class="card__tag">CASE STUDY</span>
-          <span class="card__title">Redesigning the Dashboard Around One Person</span>
-          <span class="card__desc desc">When the whole company is moving fast, the most useful thing a designer can do is name the one person every decision answers to. Here's how designing the dashboard for her changed almost everything.</span>
+          <span class="card__title">Defining Manta's ICP</span>
+          <span class="card__desc desc">Cancer touches everyone differently, but good design decisions need a specific person in mind. Here's how we defined the one patient every feature at Manta Cares answers to.</span>
+          <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </span>
+      </div>
+      <div class="card card--soon" style="--tilt:3deg">
+        <span class="card__panel">
+          <span class="card__tag">CASE STUDY</span>
+          <span class="card__title">The Eight-Minute Appointment</span>
+          <span class="card__desc desc">A rushed visit with an oncologist is the hardest moment in the whole journey. Here's how we designed a before/during/after ritual to meet it.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </div>

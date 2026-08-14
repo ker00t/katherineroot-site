@@ -32,6 +32,19 @@
 
   .article__img{width:100%}
 
+  /* full-viewport hero: text vertically centered in (100vh minus a
+     200px reserve), so the lead screenshot immediately following it
+     always starts 200px before the fold, peeking into view without
+     scrolling — same treatment as the HopeAI case study. */
+  .page-head{min-height:calc(100vh - 200px);display:flex;flex-direction:column;
+        justify-content:center;align-items:center}
+  .article{padding-top:0}
+  .article::before{background:linear-gradient(to bottom,rgba(255,255,255,0) 0,rgba(255,255,255,0) 200px,#fff 300px,#fff calc(100% - 220px),rgba(255,255,255,0) 100%)}
+  .article__breakout{width:100vw;margin:32px 0;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+  .article>.article__breakout:first-child{margin-top:0}
+  .article__breakout .article__img-row{max-width:1100px;margin:0 auto}
+  .article__breakout .article__img-row img{height:auto}
+
   .cta{font-size:16px;padding:14px 28px}
 
   @media (prefers-reduced-motion: reduce){
@@ -54,23 +67,23 @@
     <span class="page-head__eyebrow">CASE STUDY</span>
     <h1 class="page-head__title">First App Experience</h1>
     <p class="page-head__intro">For years the experience of downloading the Mighty Networks app was crusty and abandoned. It languished as a P2 project, forever deemed not worth our time to update. Here I explore the value of making a killer first impression.</p>
+    <a class="cta page-head__cta" href="#article" style="--tilt:-2deg">Read on <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg></a>
   </div>
 
-  <div class="construction-notice">
-    <div class="construction-notice__box">
-      <p class="construction-notice__title">🚧 Under Construction 🚧</p>
-      <p class="construction-notice__desc">Please bear with me while I get these draft case studies refined. They are a work in progress, but they are here in draft form to give you a general sense of my work while I finish up!</p>
-    </div>
-  </div>
-
-  <article class="article">
-    <div class="article__img-row">
-      <img src="media/fae-2.png" alt="Screens from the new first app experience proposal">
+  <article class="article" id="article">
+    <div class="article__breakout">
+      <div class="article__img-row">
+        <img src="media/fae-2.png" alt="Screens from the new first app experience proposal" style="width:1099px;max-width:100%">
+      </div>
     </div>
     <p class="article__caption">Screens from the new first app experience proposal</p>
 
     <h2>The Problem</h2>
-    <img class="article__img" src="media/fae-3.png" alt="Four mobile app screens showing crusty old designs for the first app experience">
+    <div class="article__breakout">
+      <div class="article__img-row">
+        <img class="article__img" src="media/fae-3.png" alt="Four mobile app screens showing crusty old designs for the first app experience" style="width:1100px;max-width:100%">
+      </div>
+    </div>
     <p>At Mighty Networks we are constantly evaluating what projects will have the highest impact on our key metrics, and in my role as Director of Design, I am always on the lookout for design-first solutions. To me, the first experience downloading our app was a clear area where we were not providing a top quality experience, but with a huge roadmap of new features, and a company focus on a different user group, <strong>proving that this project held value</strong> was an uphill battle.</p>
     <p class="article__caption">The original first app experience</p>
 
@@ -86,8 +99,10 @@
     </blockquote>
     <p>Based on these observations, one principle for the new first app experience was to speak to the member. I wanted to focus on helping members understand the world they were entering, and <strong>excite them about the idea of navigating a new app</strong> rather than dreading it.</p>
     <p>In my proposal, I accomplish this by downplaying host use cases, using common language like "community" rather than concepts like "Network" that need explaining, and providing clear options that spoke to the member-specific use cases we identified.</p>
-    <div class="article__img-row">
-      <img src="media/fae-5.png" alt="The original vs updated landing screens of the Mighty Networks App">
+    <div class="article__breakout">
+      <div class="article__img-row">
+        <img src="media/fae-5.png" alt="The original vs updated landing screens of the Mighty Networks App" style="width:1100px;max-width:100%">
+      </div>
     </div>
     <p class="article__caption">The original vs updated landing screens of the Mighty Networks App</p>
 
@@ -103,7 +118,11 @@
     <p>One of our product principles at Mighty Networks is that a network should always feel alive, but we struggled to showcase this in our first app experience.</p>
     <p>For one, our search algorithm was very rudimentary, and more often than not surfaced inactive networks over thriving communities (this proposal did not address any of our issues with search, as that was a full project to be handled independently). In addition, every network on our platform is completely unique, meaning that common metrics that work well to indicate an active network &mdash; like member count, or last active date &mdash; will work for some networks, but might actually hinder others.</p>
     <p>I experimented with a new set of tags to show on networks, using <strong>more sustainable ways of conveying liveliness</strong>. I proposed showcasing networks that were currently livestreaming, had a large number of members online, or had a large number of members near you (providing you had shared your location), as well as networks that allowed previewing before joining.</p>
-    <img class="article__img" src="media/fae-8.png" alt="Network search result cards with new activity tags">
+    <div class="article__breakout">
+      <div class="article__img-row">
+        <img class="article__img" src="media/fae-8.png" alt="Network search result cards with new activity tags" style="width:1100px;max-width:100%">
+      </div>
+    </div>
     <p class="article__caption">Network search result cards with new activity tags</p>
     <p>I also employed the magic of <strong>animation to convey a feeling of liveliness</strong>. While a network was loading, I surfaced imagery from the spaces and people within it, exciting you about all there is to see and do once you get inside.</p>
     <video class="article__video" src="media/fae-video-2.mp4" autoplay loop muted playsinline></video>
@@ -112,8 +131,10 @@
     <h3>Principle 4: Showcase Our Best</h3>
     <p>A major sticking point in prioritizing a project to update the first app experience was our dreaded "Featured Networks" screen. We had hoped to curate a list of our favorite networks for new members to admire, but in practice this screen had the opposite effect.</p>
     <p>Many of our networks require payment to join, or are private communities reserved just for those who are approved. We were showcasing networks that we were proud of, but without the ability to see what was happening inside them, a new member had no idea how interesting they were. Instead they often looked dead, and even abandoned.</p>
-    <div class="article__img-row">
-      <img src="media/fae-10.png" alt="The original vs updated browsing experience in the Mighty Networks App">
+    <div class="article__breakout">
+      <div class="article__img-row">
+        <img src="media/fae-10.png" alt="The original vs updated browsing experience in the Mighty Networks App" style="width:1100px;max-width:100%">
+      </div>
     </div>
     <p class="article__caption">The original vs updated browsing experience in the Mighty Networks App</p>
     <p>This proposal was a great opportunity to re-evaluate whether we needed this screen in our app at all. The goal for showcasing networks in the first place was just to prove that Mighty Networks is a place where vibrant, active, interesting communities come to thrive. And while we needed a mechanism for members to be able to find networks that were using our app, we didn't necessarily need every network to be available for browsing.</p>
