@@ -4,18 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="/assets/favicon.png" type="image/png">
-<title>In Your Pocket | Katherine Root</title>
+<title>Do We Need An App? | Katherine Root</title>
 <meta name="description" content="Manta Cares users were already treating the website like an app. This is the story of finally giving them the one they'd been improvising.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Katherine Root">
-<meta property="og:title" content="In Your Pocket | Katherine Root">
+<meta property="og:title" content="Do We Need An App? | Katherine Root">
 <meta property="og:description" content="Manta Cares users were already treating the website like an app. This is the story of finally giving them the one they'd been improvising.">
 <meta property="og:url" content="https://www.katherineroot.com/casestudies/manta/mobile-app/">
 <meta property="og:image" content="https://www.katherineroot.com/assets/thumbnail.png">
 <meta property="og:image:width" content="1920">
 <meta property="og:image:height" content="1080">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="In Your Pocket | Katherine Root">
+<meta name="twitter:title" content="Do We Need An App? | Katherine Root">
 <meta name="twitter:description" content="Manta Cares users were already treating the website like an app. This is the story of finally giving them the one they'd been improvising.">
 <meta name="twitter:image" content="https://www.katherineroot.com/assets/thumbnail.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,9 +30,10 @@
      the letter-spacing this page's meta byline uses, and the in-text
      link color this page's intro/article body use. --- */
 
+  .page-head{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center}
+
   .page-head__intro a{color:var(--lime);text-decoration:underline}
   .article a{color:var(--lime)}
-  .article__meta{letter-spacing:.04em}
 
   @media (prefers-reduced-motion: reduce){
     .cta,.article__nav-links a{transition:none !important}
@@ -52,19 +53,17 @@
 
   <div class="page-head">
     <span class="page-head__eyebrow">CASE STUDY</span>
-    <h1 class="page-head__title">In Your Pocket</h1>
+    <h1 class="page-head__title">Do We Need An App?</h1>
+    <p class="page-head__meta">Case study · Manta Cares</p>
     <p class="page-head__intro">Our users were already treating Manta Cares like an app. They just didn't have one yet. They were saving our website to their home screens, bringing their phones (not their laptops) to chemo, and writing in to ask how to "add to home screen" in Safari. As Head of Design, my job here wasn't to convince anyone they wanted a mobile app — it was to finally give them the one they'd been improvising, for people having the hardest year of their lives.</p>
-  </div>
-
-  <div class="construction-notice">
     <div class="construction-notice__box">
       <p class="construction-notice__title">🚧 Under Construction 🚧</p>
       <p class="construction-notice__desc">Please bear with me while I get these draft case studies refined. They are a work in progress, but they are here in draft form to give you a general sense of my work while I finish up!</p>
     </div>
+    <a class="cta page-head__cta" href="#article" style="--tilt:-2deg">Read on <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg></a>
   </div>
 
-  <article class="article">
-    <p class="article__meta">Case study · Manta Cares</p>
+  <article class="article" id="article">
 
     <h2>The Problem</h2>
     <p>Manta Cares is a free, HIPAA-compliant platform for cancer patients and care partners. For most of our history, it lived on the web: Dashboard, Cancer Maps, Appointment Notebook, Symptom Tracker, and Hope, our AI care partner — all of it behind a browser tab. That was a deliberate, reasonable choice for a small team. But it quietly asked a lot of our users.</p>
@@ -126,8 +125,6 @@
   <nav class="article__nav" aria-label="More Manta case studies">
     <p class="article__nav-label">More Manta case studies</p>
     <div class="article__nav-links">
-      <a href="/casestudies/manta/year-in-review/">The Year Manta Became a Companion →</a>
-      <a href="/casestudies/manta/dashboard-redesign/">Redesigning the Dashboard Around One Person →</a>
       <a href="/casestudies/manta/appointment-prep/">The Eight-Minute Appointment →</a>
       <a href="/casestudies/manta/web-to-mobile/">From Tab to Pocket →</a>
       <a href="/casestudies/manta/brand-evolution/">Earning Trust on Sight →</a>

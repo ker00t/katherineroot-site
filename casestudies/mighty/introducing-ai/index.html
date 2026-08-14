@@ -33,6 +33,18 @@
   .article__img{margin:32px auto}
   .article__video{max-width:100%}
 
+  /* full-viewport hero: text vertically centered in (100vh minus a
+     200px reserve), so the lead screenshot immediately following it
+     always starts 200px before the fold, peeking into view without
+     scrolling — same treatment as the HopeAI case study. */
+  .page-head{min-height:calc(100vh - 200px);display:flex;flex-direction:column;
+        justify-content:center;align-items:center}
+  .article{padding-top:0}
+  .article::before{background:linear-gradient(to bottom,rgba(255,255,255,0) 0,rgba(255,255,255,0) 200px,#fff 300px,#fff calc(100% - 220px),rgba(255,255,255,0) 100%)}
+  .article__breakout{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+  .article__breakout .article__img-row{max-width:1100px;margin:0 auto}
+  .article__breakout .article__img{width:100%;height:auto;margin:0}
+
   .cta{font-size:16px;padding:14px 28px}
 
   @media (prefers-reduced-motion: reduce){
@@ -55,17 +67,15 @@
     <span class="page-head__eyebrow">CASE STUDY</span>
     <h1 class="page-head__title">Introducing AI</h1>
     <p class="page-head__intro">When it became clear in early 2023 that AI was changing the tech industry, we held a hackathon to ensure Mighty was using this awesome technology to our advantage, and ultimately released a powerful set of AI features.</p>
+    <a class="cta page-head__cta" href="#article" style="--tilt:-2deg">Read on <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg></a>
   </div>
 
-  <div class="construction-notice">
-    <div class="construction-notice__box">
-      <p class="construction-notice__title">🚧 Under Construction 🚧</p>
-      <p class="construction-notice__desc">Please bear with me while I get these draft case studies refined. They are a work in progress, but they are here in draft form to give you a general sense of my work while I finish up!</p>
+  <article class="article" id="article">
+    <div class="article__breakout">
+      <div class="article__img-row">
+        <img class="article__img" src="media/ai-1.png" alt="">
+      </div>
     </div>
-  </div>
-
-  <article class="article">
-    <img class="article__img" src="media/ai-1.png" alt="" style="max-width:420px">
 
     <h2>The Problem</h2>
     <p>"With AI setting new consumer expectations, we needed to raise the bar for the services we provided at Mighty to show we were on the leading edge."</p>

@@ -261,6 +261,22 @@
      copy + reading-list links. --- */
   #ai{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%F0%9F%A4%96</text></svg>") 16 16,auto}
   #ai .ai__body{margin-top:-24px}
+  /* --- beep/boop: a tiny playful robot-noise flourish wherever you
+     click/tap inside the AI section — matches the robot cursor. Each
+     span is positioned at the click point (fixed, so it's unaffected by
+     scroll) and animates itself out, then removes itself from the DOM. --- */
+  .ai__beep-boop{position:fixed;z-index:70;pointer-events:none;
+        font-size:12px;font-weight:600;letter-spacing:.02em;color:#fff;
+        transform:translate(-50%,-50%);
+        animation:aiBeepBoop .9s ease-out forwards}
+  @keyframes aiBeepBoop{
+    0%{opacity:0;transform:translate(-50%,-50%) translateY(0) scale(.7)}
+    20%{opacity:1;transform:translate(-50%,-50%) translateY(-8px) scale(1)}
+    100%{opacity:0;transform:translate(-50%,-50%) translateY(-36px) scale(1)}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .ai__beep-boop{animation:none;display:none}
+  }
   .ai__body{display:flex;flex-direction:column;gap:40px;max-width:1100px;
         line-height:1.5;color:#fff;text-align:center}
   .ai__body p{margin:0 auto;max-width:800px}
@@ -686,14 +702,14 @@
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </a>
-      <a class="card card--fan-right" href="/casestudies/manta/brand-evolution/" style="--tilt:2deg">
-        <img class="card__fan-img fan-1" src="/assets/screens/manta-1.png" alt="" aria-hidden="true">
-        <img class="card__fan-img fan-2" src="/assets/screens/manta-2.png" alt="" aria-hidden="true">
-        <img class="card__fan-img fan-3" src="/assets/screens/manta-3.png" alt="" aria-hidden="true">
+      <a class="card card--fan-right" href="/casestudies/manta/hope-ai/" style="--tilt:2deg">
+        <img class="card__fan-img fan-1" src="/assets/screens/manta-6.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-2" src="/assets/screens/manta-3.png" alt="" aria-hidden="true">
+        <img class="card__fan-img fan-3" src="/assets/screens/manta-9.png" alt="" aria-hidden="true">
         <span class="card__panel">
           <span class="card__tag">CASE STUDY</span>
-          <span class="card__title">Maturing the Manta Cares Brand</span>
-          <span class="card__desc desc">As a seed stage startup, Manta Cares needed to evolve its brand language from "scrappy startup" to "heartfelt and reliable". This included the product itself, but also digital marketing, physical materials, and a lot more.</span>
+          <span class="card__title">HopeAI</span>
+          <span class="card__desc desc">I designed HopeAI, our AI companion for cancer patients, end to end — from what it should never do, to the voice that makes it feel like a guide instead of a robot.</span>
           <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </span>
       </a>
@@ -741,6 +757,7 @@
           <div class="embla__slide screens__slide"><img src="assets/screens/manta-6.png" alt="Manta Cares Hope AI"></div>
           <div class="embla__slide screens__slide"><img src="assets/screens/manta-7.png" alt="Manta Cares Map Full"></div>
           <div class="embla__slide screens__slide"><img src="assets/screens/manta-8.png" alt="Manta Cares Nav"></div>
+          <div class="embla__slide screens__slide"><img src="assets/screens/manta-9.png" alt="Manta Cares HopeAI Conversation"></div>
           <div class="embla__slide screens__slide"><img src="assets/screens/mighty-1.png" alt="Mighty Networks Splash Screen"></div>
           <div class="embla__slide screens__slide"><img src="assets/screens/mighty-2.png" alt="Mighty Networks Find Community"></div>
           <div class="embla__slide screens__slide"><img src="assets/screens/mighty-3.png" alt="Mighty Networks Interests"></div>
@@ -929,6 +946,32 @@
   </div>
 
 <script src="/assets/secret-menu.js" defer></script>
+<script>
+// --- ai section: click/tap anywhere inside to pop up tiny "beep" and
+// "boop" text at that point, echoing the robot cursor. ---
+(function () {
+  var ai = document.getElementById('ai');
+  if (!ai) return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
+
+  function spawn(text, x, y, delay) {
+    var el = document.createElement('span');
+    el.className = 'ai__beep-boop';
+    el.textContent = text;
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    el.style.animationDelay = delay + 's';
+    document.body.appendChild(el);
+    el.addEventListener('animationend', function () { el.remove(); });
+  }
+
+  ai.addEventListener('click', function (e) {
+    spawn('beep', e.clientX - 18, e.clientY, 0);
+    spawn('boop', e.clientX + 18, e.clientY, .15);
+  });
+})();
+</script>
 <script>
 // --- hero letter-flip: same interaction as the live site (hover flips a
 // letter and shows its tag; touch taps one letter active at a time;
