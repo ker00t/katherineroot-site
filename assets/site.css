@@ -26,7 +26,7 @@
 html{background:var(--lime);scroll-behavior:smooth;overflow-x:hidden}
 body{margin:0;overflow-x:hidden;color:#fff;font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
      -webkit-font-smoothing:antialiased;background:#f455a7;
-     animation:bgCycle 200s ease-in-out infinite}
+     animation:bgCycle 200s ease-in-out infinite;animation-delay:var(--bg-delay,0s)}
 @keyframes bgCycle{
   0%,6%{background-color:#f455a7}
   20%,26%{background-color:#E81BBC}
@@ -391,7 +391,8 @@ a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
   .cards{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
         scroll-snap-type:x proximity;padding-bottom:8px;
         width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
-        padding-left:clamp(20px,6vw,64px);padding-right:clamp(20px,6vw,64px)}
+        padding-left:clamp(20px,6vw,64px);padding-right:clamp(20px,6vw,64px);
+        scroll-padding-left:clamp(20px,6vw,64px);scroll-padding-right:clamp(20px,6vw,64px)}
   .card{flex:0 0 min(300px,80vw);width:auto;scroll-snap-align:start}
   /* .article__img-row images are sized by a fixed height (280px) on
      desktop so a row of side-by-side comparison shots lines up neatly.
