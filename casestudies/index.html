@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script src="/assets/bg-continuity.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="/assets/favicon.png" type="image/png">
 <title>Case Studies | Katherine Root</title>
@@ -49,13 +50,17 @@
      with its own max-width (not full viewport width), so a plain
      negative-margin breakout only reaches .group's edges, not the true
      viewport edge — width:100vw does, same technique the homepage's
-     .cards uses. Extra top/bottom padding (beyond the breakout's own
-     horizontal padding) gives room for each card's hover lift+tilt so
-     it doesn't get clipped by overflow-x:auto. */
+     .cards uses. Matching left/right padding means the first and last
+     card sit inset from the edge at rest (not flush) — cards only reach
+     the true edge transiently while scrolling past it, settling back to
+     an inset once the first or last card is fully in view. Extra top/
+     bottom padding gives room for each card's hover lift+tilt so it
+     doesn't get clipped by overflow-x:auto. */
   .cards{display:flex;gap:25px;flex-wrap:nowrap;justify-content:flex-start;
         overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;
         width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
-        padding:24px 0 32px clamp(20px,6vw,64px)}
+        padding:24px clamp(20px,6vw,64px) 32px;
+        scroll-padding-left:clamp(20px,6vw,64px);scroll-padding-right:clamp(20px,6vw,64px)}
   .card{flex:0 0 min(620px,85vw);scroll-snap-align:start}
   .card__panel{height:100%}
 
