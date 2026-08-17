@@ -39,15 +39,14 @@
   .article__img{width:100%}
   .article__video{max-width:100%}
 
-  /* full-viewport hero: text vertically centered in (100vh minus a
-     200px reserve), so the banner image immediately following it always
-     starts 200px before the fold, peeking into view without scrolling —
-     same treatment as the HopeAI case study. */
-  .page-head{min-height:calc(100vh - 200px);display:flex;flex-direction:column;
-        justify-content:center;align-items:center}
+  /* header sits in plain document flow — a fixed 120px gap to the
+     banner image below matches Figma's actual auto-layout numbers
+     exactly. */
+  .page-head{padding-bottom:0}
   .article{padding-top:0}
   .article::before{background:linear-gradient(to bottom,rgba(255,255,255,0) 0,rgba(255,255,255,0) 200px,#fff 300px,#fff calc(100% - 220px),rgba(255,255,255,0) 100%)}
   .article__breakout{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+  .article>.article__breakout:first-child{margin-top:120px}
   .article__breakout .article__img-row{max-width:1100px;margin:0 auto}
   .article__breakout .article__img{width:100%;height:auto}
 
@@ -70,8 +69,8 @@
   </div>
 
   <div class="page-head">
-    <span class="page-head__eyebrow">CASE STUDY</span>
     <h1 class="page-head__title">Unlocking People Magic</h1>
+    <p class="page-head__meta">Case Study · Mighty Networks</p>
     <p class="page-head__intro">As a B2B2C company, Mighty Networks has to balance catering not just to our Hosts, but to their members. In my experience, if you build for the members, the Hosts will follow &mdash; so how do we make their experience truly magical?</p>
     <a class="cta page-head__cta" href="#article" style="--tilt:-2deg">Read on <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg></a>
   </div>

@@ -32,13 +32,29 @@
      card currently on /manta/ and /mighty/ onto one page, grouped by
      company. --- */
 
-  .page-head{max-width:900px;padding-bottom:clamp(24px,5vw,40px)}
+  .page-head{max-width:900px;padding-bottom:0;text-align:left}
   .page-head__title{font-size:clamp(40px,8vw,88px)}
   .page-head__intro{font-size:clamp(17px,2.2vw,22px);line-height:1.5}
 
-  .group{max-width:1280px;margin:0 auto;padding:clamp(48px,8vw,72px) clamp(20px,6vw,64px) 0;text-align:center}
-  .group__title{font-size:clamp(26px,4vw,40px);font-weight:600;letter-spacing:-.02em;margin:0 0 10px}
-  .group__intro{font-size:clamp(16px,1.8vw,19px);opacity:.85;margin:0 auto 32px;max-width:640px;line-height:1.5}
+  .group{max-width:900px;margin:0 auto;padding:120px clamp(20px,6vw,64px) 0;text-align:left}
+  /* logo hover: same tilt-and-lift + white->color crossfade as the
+     homepage's company row (assets/logos/{company}-{white,bg,color}.svg).
+     The link tilts/lifts on hover like .company does; inside it, the
+     badge sizes to its in-flow white logo and the bg/color layers are
+     absolutely positioned to overlay it and fade in — all three layers
+     (white/bg/color) share the same canvas per company, so a plain
+     inset:0 lines each one up exactly. */
+  .group__logo-link{--tilt:-2deg;display:inline-block;margin:0 0 16px;transition:transform .3s var(--spring)}
+  .group__logo-link:hover,.group__logo-link:focus-visible{transform:translateY(-6px) rotate(var(--tilt))}
+  .group__logo-badge{position:relative;display:inline-flex}
+  .group__logo{display:block;object-fit:contain;transition:opacity .45s var(--spring)}
+  .group__logo--white{height:clamp(40px,5vw,64px);width:auto}
+  .group__logo--bg{position:absolute;inset:0;opacity:0;z-index:0}
+  .group__logo--color{position:absolute;inset:0;opacity:0;z-index:1}
+  .group__logo-link:hover .group__logo--white,.group__logo-link:focus-visible .group__logo--white{opacity:0;transition-delay:0s}
+  .group__logo-link:hover .group__logo--bg,.group__logo-link:focus-visible .group__logo--bg,
+  .group__logo-link:hover .group__logo--color,.group__logo-link:focus-visible .group__logo--color{opacity:1}
+  .group__intro{font-size:clamp(16px,1.8vw,19px);opacity:.85;margin:0 0 40px;max-width:900px;line-height:1.5}
   .group__intro a{text-decoration:underline;text-underline-offset:3px}
 
   /* this page's own card-grid wrapper (differs per page); .card/
@@ -55,12 +71,20 @@
      the true edge transiently while scrolling past it, settling back to
      an inset once the first or last card is fully in view. Extra top/
      bottom padding gives room for each card's hover lift+tilt so it
-     doesn't get clipped by overflow-x:auto. */
-  .cards{display:flex;gap:25px;flex-wrap:nowrap;justify-content:flex-start;
+     doesn't get clipped by overflow-x:auto. The left inset itself isn't
+     the plain clamp() the right side uses — .group/.page-head are
+     centered 900px columns, so their content's true left edge is
+     max(0, (100vw - 900px)/2) + the clamp() padding, not the clamp()
+     alone. --edge-inset reproduces that so the first card's resting
+     position lines up with the header/logo above it, while the
+     container's own left edge stays pinned to the true viewport edge
+     (still 100vw wide) so scrolling can still carry a card flush to it. */
+  .cards{--edge-inset:max(calc((100vw - 900px)/2 + clamp(20px,6vw,64px)),clamp(20px,6vw,64px));
+        display:flex;gap:25px;flex-wrap:nowrap;justify-content:flex-start;
         overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;
         width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
-        padding:24px clamp(20px,6vw,64px) 32px;
-        scroll-padding-left:clamp(20px,6vw,64px);scroll-padding-right:clamp(20px,6vw,64px)}
+        padding:24px clamp(20px,6vw,64px) 32px var(--edge-inset);
+        scroll-padding-left:var(--edge-inset);scroll-padding-right:clamp(20px,6vw,64px)}
   .card{flex:0 0 min(620px,85vw);scroll-snap-align:start}
   .card__panel{height:100%}
 
@@ -85,8 +109,14 @@
   </div>
 
   <div class="group">
-    <h2 class="group__title">Manta Cares</h2>
-    <p class="group__intro">As the only designer at this 0-to-1 startup, I helped build software to make the experience of having cancer just a little bit easier.</p>
+    <a class="group__logo-link" href="https://www.mantacares.com" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">
+      <span class="group__logo-badge">
+        <img class="group__logo group__logo--white" src="/assets/logos/manta_full_white.svg" alt="Manta Cares">
+        <img class="group__logo group__logo--bg" src="/assets/logos/manta_full_bg.svg" alt="" aria-hidden="true">
+        <img class="group__logo group__logo--color" src="/assets/logos/manta_full_color.svg" alt="" aria-hidden="true">
+      </span>
+    </a>
+    <p class="group__intro">As the sole, founding designer at this 0-to-1 startup, I helped build software to make the experience of having cancer just a little bit easier.</p>
     <div class="cards-scroll">
     <div class="cards">
         <a class="card" href="/casestudies/manta/hope-ai/" style="--tilt:-3deg">
@@ -142,9 +172,14 @@
   </div>
 
   <div class="group">
-    <h2 class="group__title">Mighty Networks</h2>
-    <p class="group__intro">I spent ten years building and running the design organization at Mighty Networks. Here are case studies from some of my favorite projects during my tenure.</p>
-    <div class="cards-scroll">
+    <a class="group__logo-link" href="https://www.mightynetworks.com" target="_blank" rel="noopener noreferrer" style="--tilt:3deg">
+      <span class="group__logo-badge">
+        <img class="group__logo group__logo--white" src="/assets/logos/mighty-white.svg" alt="Mighty Networks">
+        <img class="group__logo group__logo--bg" src="/assets/logos/mighty-bg.svg" alt="" aria-hidden="true">
+        <img class="group__logo group__logo--color" src="/assets/logos/mighty-color.svg" alt="" aria-hidden="true">
+      </span>
+    </a>
+    <p class="group__intro">I spent ten years as an IC and Director, building and then running the design organization at Mighty Networks to bring people magic to online communities.</p>
     <div class="cards">
       <a class="card" href="/casestudies/mighty/first-app-experience/" style="--tilt:-2deg">
         <span class="card__panel">

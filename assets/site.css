@@ -38,14 +38,16 @@ body{margin:0;overflow-x:hidden;color:#fff;font-family:'Bricolage Grotesque',ui-
 a{color:inherit}
 img{max-width:100%}
 
-/* --- back-link: circular back button, every subpage (not homepage) --- */
-.back-link{position:fixed;top:24px;left:24px;z-index:10}
-.back-link a{--tilt:-3deg;display:flex;align-items:center;justify-content:center;
-      width:48px;height:48px;border-radius:50%;border:2px solid #fff;color:#fff;
-      text-decoration:none;transition:transform .3s var(--spring),background-color .2s ease,color .2s ease}
-.back-link a:hover,.back-link a:focus-visible{transform:translateY(-4px) rotate(var(--tilt));
-      background:var(--lime);color:#000;border-color:var(--lime);outline:none}
-.back-link svg{width:22px;height:22px}
+/* --- back-link: an oversized bare arrow that sits above the page's own
+   header content, every subpage (not homepage). Normal document flow
+   (not position:fixed) so it scrolls away with the top of the page —
+   only visible when you're up there, not pinned on screen. --- */
+.back-link{max-width:900px;margin:0 auto;padding:120px clamp(20px,6vw,64px) 16px}
+.back-link a{--tilt:-3deg;display:inline-flex;color:#fff;
+      text-decoration:none;transition:transform .3s var(--spring),color .2s ease}
+.back-link a:hover,.back-link a:focus-visible{transform:translateX(-8px) rotate(var(--tilt));
+      color:var(--lime);outline:none}
+.back-link svg{width:64px;height:64px}
 
 /* --- corner sparkle: a subtle decorative fixture at the very top of
    every page, shared site-wide. position:absolute (anchored to the
@@ -187,15 +189,13 @@ img{max-width:100%}
    (casestudies/index.html, sideprojects/index.html) need a wider
    max-width, different bottom padding, and bigger title/intro sizes —
    each carries a small local override for just those properties. --- */
-.page-head{max-width:1600px;margin:0 auto;padding:clamp(120px,16vw,180px) clamp(20px,6vw,64px) clamp(40px,7vw,56px);
-      text-align:center}
-.page-head__eyebrow{display:inline-block;background:#fff;color:#f455a7;font-size:13px;font-weight:600;
-      padding:6px 16px;border-radius:100px;margin-bottom:20px}
+.page-head{max-width:900px;margin:0 auto;padding:0 clamp(20px,6vw,64px) clamp(40px,7vw,56px);
+      text-align:left}
 .page-head__title{font-size:clamp(40px,8vw,88px);font-weight:600;letter-spacing:-.02em;margin:0 0 16px;line-height:1.05}
-.page-head__meta{font-size:18px;font-weight:700;margin:0 0 20px}
-.page-head__intro{font-size:18px;font-weight:300;opacity:.9;margin:0 auto;max-width:700px;line-height:1.4}
+.page-head__meta{font-size:18px;font-weight:700;margin:0 0 40px}
+.page-head__intro{font-size:18px;font-weight:300;opacity:.9;margin:0;line-height:1.4}
 .page-head__intro+.page-head__intro{margin-top:16px}
-.page-head__cta{margin-top:clamp(20px,3vw,28px)}
+.page-head__cta{margin-top:40px}
 
 /* --- construction notice: now sits inside .page-head itself (a flex
    column), directly after the intro, so it's part of the hero and
@@ -353,8 +353,8 @@ a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
 .card--soon{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%F0%9F%99%85%E2%80%8D%E2%99%80%EF%B8%8F</text></svg>") 16 16,default}
 .card--soon .card__panel{background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.3);
       filter:grayscale(.6)}
-.card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:14px;font-weight:600;
-      padding:5px 14px;border-radius:100px;transition:background-color .3s ease,color .3s ease}
+.card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:16px;font-weight:600;
+      padding:4px 14px;border-radius:100px;transition:background-color .3s ease,color .3s ease}
 .card--soon .card__tag{background:rgba(255,255,255,.25);color:rgba(255,255,255,.8)}
 .card__title{font-size:clamp(22px,2.6vw,32px);font-weight:600;margin:0}
 .card--soon .card__title{color:rgba(255,255,255,.7)}
@@ -366,7 +366,7 @@ a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
 .card__desc{line-height:1.5;margin:0;opacity:.9;transition:opacity .3s ease}
 .card--soon .card__desc{opacity:.55}
 .card__arrow{margin-top:auto;line-height:0}
-.card__arrow svg{width:26px;height:26px}
+.card__arrow svg{width:32px;height:32px}
 /* .cards-scroll wraps every .cards grid. It's inert (display:contents)
    above mobile, so .cards lays out exactly as if the wrapper weren't
    there. On mobile it becomes a real block box so .cards can break out
