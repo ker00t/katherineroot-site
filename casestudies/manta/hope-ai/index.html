@@ -33,17 +33,14 @@
      hero and phone-mockup rows use to run wider than the article's
      normal 720px reading column. --- */
 
-  /* full-viewport hero: the text block is vertically centered in
-     (100vh minus a 200px reserve), so the hero image immediately
-     following it in the document (see .article__breakout below) always
-     starts 200px before the fold — its top edge peeking into view
-     without scrolling, the rest revealed as you scroll past. */
-  .page-head{min-height:calc(100vh - 200px);
-        display:flex;flex-direction:column;justify-content:center;align-items:center}
-  .page-head__meta{font-size:18px;font-weight:700;margin:0 0 20px}
+  /* header sits in plain document flow now (no viewport-height
+     centering trick) — a fixed 120px gap to the hero image below
+     (see .article__breakout:first-child) matches Figma's actual
+     auto-layout numbers exactly, and the "peek" look is just an
+     emergent result of those fixed gaps at normal viewport heights. */
+  .page-head{padding-bottom:0}
   .page-head__intro{font-size:18px;font-weight:300;opacity:1;line-height:1.4}
   .page-head__intro + .page-head__intro{margin-top:16px}
-  .page-head__cta{margin-top:clamp(20px,3vw,28px)}
 
   /* the hero image sits flush at the very top of .article (no padding
      before it), so the shared top fade runs behind the image itself
@@ -68,17 +65,11 @@
      they get their own full-bleed wrapper instead of being squeezed
      into the reading column like a normal inline image. --- */
   .article__breakout{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
-  .article__breakout .article__img-row{max-width:1100px;margin:32px auto}
+  .article>.article__breakout:first-child{margin-top:120px}
+  .article__breakout .article__img-row{max-width:1100px;margin:0 auto 32px}
   .article__breakout .article__img-row img{height:auto;width:326px;max-width:100%}
 
-  /* --- hope logo: the HopeAI compass mark (Figma node 108:23427) is a
-     stack of 19 separate vector layers with no single flat export, so
-     it's reproduced here as an absolutely-positioned composite using
-     Figma's exact per-layer inset percentages — verified pixel-for-pixel
-     against the Figma screenshot before committing. --- */
-  .hope-logo{position:relative;display:block;width:179px;height:179px}
-  .hope-logo div{position:absolute}
-  .hope-logo img{display:block;width:100%;height:100%}
+  .hope-logo{display:block;width:179px;height:179px}
 
   @media (prefers-reduced-motion: reduce){
     .page-head__cta{transition:none !important}
@@ -97,9 +88,8 @@
   </div>
 
   <div class="page-head">
-    <span class="page-head__eyebrow">CASE STUDY</span>
     <h1 class="page-head__title">HopeAI</h1>
-    <p class="page-head__meta">Manta Cares&nbsp;&nbsp;|&nbsp;&nbsp;Head of Design&nbsp;&nbsp;|&nbsp;&nbsp;2025-26</p>
+    <p class="page-head__meta">Case Study&nbsp;&nbsp;|&nbsp;&nbsp;Manta Cares&nbsp;&nbsp;|&nbsp;&nbsp;Head of Design&nbsp;&nbsp;|&nbsp;&nbsp;2025-26</p>
     <p class="page-head__intro">I designed HopeAI, an AI companion for cancer patients, end to end. I helped define what it should and should not be scoped to do, what it should look and sound like, and how it lives in harmony with the Manta Cares product and brand.</p>
     <p class="page-head__intro">General release Feb 2026&nbsp;&nbsp;|&nbsp;&nbsp;1,400+ patients&nbsp;&nbsp;|&nbsp;&nbsp;8,000+ messages in five months&nbsp;&nbsp;|&nbsp;&nbsp;Weekly actives up ~5x and sustained&nbsp;&nbsp;|&nbsp;&nbsp;~38% adoption against a 60% team goal</p>
     <a class="cta page-head__cta" href="#problem" style="--tilt:-2deg">Read on <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg></a>
@@ -125,27 +115,7 @@
     <h2>Giving Hope an Identity</h2>
     <p>Once we decided to embark on the journey of building our AI, we needed to give it an identity. The name came to us quickly, deciding that "Hope" was the best guide to have when navigating cancer. We went back and forth on the details &mdash; Hope, Hope Cares, Hope.ai &mdash; and settled formally on HopeAI, Hope for short.</p>
     <p>We also settled quickly on the visual of a compass, building on the motif of our cancer maps, in one of our brand purples so it's instantly recognizable in a sea of blue UI.</p>
-    <div class="hope-logo" role="img" aria-label="The HopeAI compass mark" style="margin:32px auto">
-      <div style="inset:4.27% 4.1% 5.56% 5.74%"><img src="media/logo-parts/ellipse5.svg" alt=""></div>
-      <div style="inset:21.49% 22.1% 19.55% 21.58%"><img src="media/logo-parts/vector.svg" alt=""></div>
-      <div style="inset:4% 4.1% 4.2% 4.1%"><img src="media/logo-parts/ellipse3stroke.svg" alt=""></div>
-      <div style="inset:32.96% 35.25% 32.06% 35.79%"><img src="media/logo-parts/vector1.svg" alt=""></div>
-      <div style="inset:0.72% 0.82% 0.92% 0.82%"><img src="media/logo-parts/ellipse1stroke.svg" alt=""></div>
-      <div style="inset:47.17% 46.72% 45.73% 46.17%"><img src="media/logo-parts/ellipse2.svg" alt=""></div>
-      <div style="inset:0 0.72% 0 1.58%"><img src="media/logo-parts/vector2.svg" alt=""></div>
-      <div style="inset:11.15% 11.6% 10.94% 12.51%"><img src="media/logo-parts/vector3.svg" alt=""></div>
-      <div style="inset:20.87% 21.44% 20.17% 22.25%"><img src="media/logo-parts/vector4.svg" alt=""></div>
-      <div style="inset:27.98% 53.87% 54.01% 28.79%"><img src="media/logo-parts/vector5.svg" alt=""></div>
-      <div style="inset:54.27% 27.96% 27.97% 54.86%"><img src="media/logo-parts/vector6.svg" alt=""></div>
-      <div style="inset:35.72% 27.98% 54.01% 66.86%"><img src="media/logo-parts/vector7.svg" alt=""></div>
-      <div style="inset:54.27% 65.89% 35.71% 28.78%"><img src="media/logo-parts/vector8.svg" alt=""></div>
-      <div style="inset:27.92% 38.54% 68.55% 54.41%"><img src="media/logo-parts/vector9.svg" alt=""></div>
-      <div style="inset:69.01% 53.97% 27.94% 39.97%"><img src="media/logo-parts/vector10.svg" alt=""></div>
-      <div style="inset:49.41% 81.3% 49.31% 13.12%"><img src="media/logo-parts/vector11.svg" alt=""></div>
-      <div style="inset:49.42% 12.24% 49.31% 82.21%"><img src="media/logo-parts/vector12.svg" alt=""></div>
-      <div style="inset:82.68% 48.87% 11.79% 49.82%"><img src="media/logo-parts/vector13.svg" alt=""></div>
-      <div style="inset:11.77% 48.97% 82.93% 49.76%"><img src="media/logo-parts/vector14.svg" alt=""></div>
-    </div>
+    <img class="hope-logo" src="media/hopelogo.svg" alt="The HopeAI compass mark" style="margin:32px auto">
     <p>A fun aside &mdash; I also explored watercolor styling, and the idea of letting patients choose their own visual style to fit their mood or personality &mdash; the same instinct about control, pushed one step further. Neither shipped. Looking back I think that was the right call for launch, but it's still the exploration I'd most like to revive.</p>
     <div class="article__breakout">
       <div class="article__img-row">

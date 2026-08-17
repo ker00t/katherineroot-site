@@ -30,14 +30,22 @@
      from the shared homepage-sized defaults to the subpage-template
      scale) plus this page's own cards grid wrapper. --- */
 
-  .page-head{padding-bottom:clamp(48px,8vw,72px)}
+  .page-head{padding-bottom:0;text-align:left}
   .page-head__title{font-size:clamp(40px,8vw,88px)}
   .page-head__intro{font-size:clamp(17px,2.2vw,22px);line-height:1.5}
 
   /* this page's own card-grid wrapper (differs per page); .card/
-     .card__panel/etc. themselves are shared — see site.css */
-  .cards{display:flex;gap:25px;flex-wrap:wrap;justify-content:center;max-width:1280px;
-        margin:0 auto;padding:0 clamp(20px,6vw,64px) clamp(64px,10vw,120px)}
+     .card__panel/etc. themselves are shared — see site.css. A fixed
+     2-column grid (rather than flex-wrap, which only lands on 2-per-row
+     once the container happens to be wide enough) so the 4 cards always
+     read as a deliberate 2x2 box. */
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:25px;max-width:1280px;
+        margin:0 auto;padding:120px clamp(20px,6vw,64px) clamp(64px,10vw,120px)}
+  .cards .card{width:auto}
+
+  @media (max-width:720px){
+    .cards{grid-template-columns:1fr}
+  }
 
   @media (prefers-reduced-motion: reduce){
     .card,.card__panel,.card__tag,.card__desc{transition:none !important}
@@ -85,6 +93,13 @@
         <span class="card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
       </span>
     </a>
+    <div class="card card--soon" style="--tilt:3deg">
+      <span class="card__panel">
+        <span class="card__tag">COMING SOON</span>
+        <span class="card__title">Citrus Exchange</span>
+        <span class="card__desc desc">Helping residents of Mountain View share excess fruit from their yard with the community.</span>
+      </span>
+    </div>
   </div>
   </div>
 
