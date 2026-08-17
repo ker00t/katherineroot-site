@@ -342,11 +342,11 @@ img{max-width:100%}
    The .cards container itself differs per page (different wrapping
    markup/padding) and stays local to each. --- */
 .card{--tilt:-2deg;position:relative;display:block;width:min(620px,100%);
-      text-decoration:none;color:#fff;transition:transform .3s var(--spring)}
+      text-decoration:none;color:#fff;transition:transform .3s var(--spring);will-change:transform}
 a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
 .card__panel{position:relative;background:rgba(255,255,255,.1);border-radius:22px;
       min-height:280px;padding:34px;text-align:left;display:flex;flex-direction:column;gap:16px;
-      transition:background-color .3s ease,color .3s ease}
+      transition:background-color .3s ease,color .3s ease;will-change:background-color}
 a.card:hover .card__panel,a.card:focus-visible .card__panel{background:#fff;color:var(--charcoal)}
 a.card:hover .card__tag,a.card:focus-visible .card__tag{background:#f455a7;color:#fff}
 a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
@@ -354,7 +354,8 @@ a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
 .card--soon .card__panel{background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.3);
       filter:grayscale(.6)}
 .card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:16px;font-weight:600;
-      padding:4px 14px;border-radius:100px;transition:background-color .3s ease,color .3s ease}
+      padding:4px 14px;border-radius:100px;transition:background-color .3s ease,color .3s ease;
+      will-change:background-color}
 .card--soon .card__tag{background:rgba(255,255,255,.25);color:rgba(255,255,255,.8)}
 .card__title{font-size:clamp(22px,2.6vw,32px);font-weight:600;margin:0}
 .card--soon .card__title{color:rgba(255,255,255,.7)}

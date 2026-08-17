@@ -262,6 +262,11 @@
      copy + reading-list links. --- */
   #ai{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%F0%9F%A4%96</text></svg>") 16 16,auto}
   #ai .ai__body{margin-top:-24px}
+  /* browsers swap an inherited custom cursor for their own native
+     pointer over links/buttons, so the robot has to be re-declared
+     directly on the clickable items rather than relying on it
+     cascading down from #ai. */
+  #ai .ai__link,#ai .cta{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%F0%9F%A4%96</text></svg>") 16 16,pointer}
   /* --- beep/boop: a tiny playful robot-noise flourish wherever you
      click/tap inside the AI section — matches the robot cursor. Each
      span is positioned at the click point (fixed, so it's unaffected by
@@ -625,7 +630,7 @@
         <p class="company__piece company__name company__name--launch">Launch Design <svg class="company__name-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></p>
         <span class="company__tap-label" aria-hidden="true">Launch Design <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span>
       </a>
-      <a class="company" href="https://www.mantacares.com" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">
+      <a class="company" href="https://pages.mantacares.com/cancer-maps" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">
         <div class="company__badge">
           <img class="company__logo company__logo--manta company__logo--white" src="assets/logos/manta-white.svg" alt="Manta Cares">
           <div class="company__logo company__logo--color" aria-hidden="true">
