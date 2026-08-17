@@ -375,21 +375,61 @@
 
   /* --- lightbox: native <dialog> so Escape/backdrop-click and focus
      trapping come for free. Opened by clicking any pretty-screens
-     image; shows it large, centered, at its natural aspect ratio. --- */
+     image; shows it large, centered, at its natural aspect ratio.
+     .lightbox-body grids the image with its prev/next buttons so they
+     can reflow: flanking it on desktop (3 columns), a centered pair
+     below it on mobile (image spans row 1, buttons split row 2) —
+     without that grid they'd either need two different DOM orders or
+     to be pinned to the viewport edges instead of the image itself. */
   #screens-lightbox{border:none;background:transparent;padding:0;max-width:none;
         max-height:none;position:fixed;inset:0;margin:auto;overflow:visible}
   #screens-lightbox::backdrop{background:rgba(0,0,0,.85)}
   #screens-lightbox[open]{display:flex;align-items:center;justify-content:center}
-  #screens-lightbox-img{max-width:min(560px,88vw);max-height:88vh;width:auto;height:auto;
-        display:block;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
-  #screens-lightbox-close{position:fixed;top:24px;right:24px;width:44px;height:44px;
-        border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,.3);color:#fff;
-        font-size:24px;line-height:1;cursor:pointer;
-        display:flex;align-items:center;justify-content:center;
+  .lightbox-body{display:grid;grid-template-columns:auto auto auto;
+        grid-template-areas:"prev img next";align-items:center;gap:20px}
+  /* user-select:none — rapid clicking through prev/next (or a stray
+     double-click) was highlighting the image like selected text. */
+  #screens-lightbox-img{grid-area:img;max-width:min(560px,88vw);max-height:88vh;
+        width:auto;height:auto;display:block;border-radius:14px;
+        box-shadow:0 30px 80px rgba(0,0,0,.5);user-select:none}
+  /* close: desktop can Escape or click the backdrop, so the X is
+     mobile-only, where tapping outside the image is less reliable. */
+  #screens-lightbox-close{display:none;position:fixed;top:24px;right:24px;
+        width:44px;height:44px;border-radius:50%;border:2px solid #fff;
+        background:rgba(0,0,0,.3);color:#fff;font-size:24px;line-height:1;cursor:pointer;
+        align-items:center;justify-content:center;outline:none;
+        -webkit-tap-highlight-color:transparent;
         transition:background .2s ease,transform .2s var(--spring)}
-  #screens-lightbox-close:hover,#screens-lightbox-close:focus-visible{
-        background:var(--lime);color:#000;border-color:var(--lime);
-        transform:scale(1.08);outline:none}
+  /* prev/next: same circular-button treatment as close, but normal
+     grid items instead of being pinned to the viewport edge. */
+  #screens-lightbox-prev,#screens-lightbox-next{width:48px;height:48px;border-radius:50%;
+        border:2px solid #fff;background:rgba(0,0,0,.3);color:#fff;cursor:pointer;
+        display:flex;align-items:center;justify-content:center;outline:none;
+        -webkit-tap-highlight-color:transparent;
+        transition:background .2s ease,transform .2s var(--spring)}
+  #screens-lightbox-prev{grid-area:prev}
+  #screens-lightbox-next{grid-area:next}
+  #screens-lightbox-prev svg,#screens-lightbox-next svg{width:24px;height:24px}
+  /* hover:hover gates the lime swap to real mouse hover — without it,
+     tapping on a touchscreen "sticks" the lime state on until the next
+     tap elsewhere, and clicking/arrow-keying through images left it
+     stuck (inconsistently) on whichever control last took focus.
+     :focus-visible is deliberately left out of the trigger for the
+     same reason — the buttons are already fully operable via click and
+     the Left/Right shortcuts, so there's no bare-keyboard-only path
+     that needs its own focus indicator here. */
+  @media (hover:hover){
+    #screens-lightbox-close:hover{background:var(--lime);color:#000;
+          border-color:var(--lime);transform:scale(1.08)}
+    #screens-lightbox-prev:hover,#screens-lightbox-next:hover{
+          background:var(--lime);color:#000;border-color:var(--lime);transform:scale(1.08)}
+  }
+  @media (max-width:640px){
+    .lightbox-body{grid-template-columns:1fr 1fr;
+          grid-template-areas:"img img" "prev next";justify-items:center;gap:16px}
+    #screens-lightbox-close{display:flex}
+    #screens-lightbox-prev,#screens-lightbox-next{width:40px;height:40px}
+  }
 
   /* --- testimonials: a native horizontal scroll-snap gallery, full-bleed
      to the viewport edge. Built on Embla Carousel's "loop" example
@@ -563,7 +603,7 @@
        adds the homepage-only animated pieces. */
     .card__fan-img{display:none}
     .letter,.glyph,.tag,.cta,.card,.company,.company__badge,.company__logo,
-    .screens__slide img,#screens-lightbox-close{transition:none !important}
+    .screens__slide img,#screens-lightbox-close,#screens-lightbox-prev,#screens-lightbox-next{transition:none !important}
     .letter:hover .glyph,.letter.is-active .glyph{transform:none;color:#fff}
   }
 </style>
@@ -793,7 +833,15 @@
   <!-- click any pretty-screens image to open it larger here -->
   <dialog id="screens-lightbox">
     <button type="button" id="screens-lightbox-close" aria-label="Close">&times;</button>
-    <img id="screens-lightbox-img" src="" alt="">
+    <div class="lightbox-body">
+      <button type="button" id="screens-lightbox-prev" aria-label="Previous screen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      </button>
+      <img id="screens-lightbox-img" src="" alt="">
+      <button type="button" id="screens-lightbox-next" aria-label="Next screen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </button>
+    </div>
   </dialog>
 
   <!-- ============ testimonials ============ -->
@@ -1145,19 +1193,40 @@
 // native <dialog> (free Escape-to-close + focus trap). Embla already
 // suppresses the click event that would otherwise fire at the end of a
 // drag, so this only opens on a genuine click/tap, never a released
-// drag. Clicking the backdrop or the close button closes it. ---
+// drag. Clicking the backdrop or the close button closes it. Prev/next
+// (buttons or Left/Right arrow keys while open) step through the same
+// flat list of screens the carousel itself uses, wrapping at either end. ---
 (function () {
   var dialog = document.getElementById('screens-lightbox');
   var lightboxImg = document.getElementById('screens-lightbox-img');
   var closeBtn = document.getElementById('screens-lightbox-close');
-  if (!dialog || !lightboxImg || !closeBtn) return;
+  var prevBtn = document.getElementById('screens-lightbox-prev');
+  var nextBtn = document.getElementById('screens-lightbox-next');
+  if (!dialog || !lightboxImg || !closeBtn || !prevBtn || !nextBtn) return;
 
-  document.querySelectorAll('.screens__slide img').forEach(function (img) {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.screens__slide img'));
+  var currentIndex = -1;
+
+  function show(index) {
+    currentIndex = (index + slides.length) % slides.length;
+    var img = slides[currentIndex];
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
+  }
+
+  slides.forEach(function (img, index) {
     img.addEventListener('click', function () {
-      lightboxImg.src = img.src;
-      lightboxImg.alt = img.alt;
+      show(index);
       dialog.showModal();
     });
+  });
+
+  prevBtn.addEventListener('click', function () { show(currentIndex - 1); });
+  nextBtn.addEventListener('click', function () { show(currentIndex + 1); });
+
+  dialog.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); show(currentIndex - 1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); show(currentIndex + 1); }
   });
 
   closeBtn.addEventListener('click', function () { dialog.close(); });
