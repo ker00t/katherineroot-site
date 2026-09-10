@@ -1119,6 +1119,7 @@
 </script>
 <script src="https://unpkg.com/embla-carousel/embla-carousel.umd.js"></script>
 <script src="https://unpkg.com/embla-carousel-autoplay/embla-carousel-autoplay.umd.js"></script>
+<script src="https://unpkg.com/embla-carousel-wheel-gestures/dist/embla-carousel-wheel-gestures.umd.js"></script>
 <script>
 // --- Kind Words gallery: Embla Carousel's "loop" example
 // (embla-carousel.com/docs/examples/predefined#loop), via CDN. loop:true
@@ -1186,11 +1187,16 @@
 // (embla-carousel.com/docs/examples/predefined#drag-free) — momentum-
 // based free dragging instead of the loop/snap-to-center behavior Kind
 // Words uses. No autoplay/click-to-center here either; it's a browse-
-// at-your-own-pace gallery of real product shots. ---
+// at-your-own-pace gallery of real product shots. The official Wheel
+// Gestures plugin adds laptop trackpad (and mouse-wheel) scrolling —
+// it only engages on genuinely horizontal wheel deltas, which a
+// two-finger trackpad swipe produces but normal page-scrolling and
+// touchscreen swipes don't, so neither is affected. ---
 (function () {
   var viewport = document.getElementById('screens-viewport');
   if (!viewport || !window.EmblaCarousel) return;
-  EmblaCarousel(viewport, { dragFree: true });
+  var plugins = window.EmblaCarouselWheelGestures ? [EmblaCarouselWheelGestures()] : [];
+  EmblaCarousel(viewport, { dragFree: true }, plugins);
 })();
 </script>
 <script>
