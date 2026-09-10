@@ -345,7 +345,7 @@ img{max-width:100%}
       text-decoration:none;color:#fff;transition:transform .3s var(--spring);will-change:transform}
 a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
 .card__panel{position:relative;background:rgba(255,255,255,.1);border-radius:22px;
-      min-height:280px;padding:34px;text-align:left;display:flex;flex-direction:column;gap:16px;
+      min-height:280px;height:100%;padding:34px;text-align:left;display:flex;flex-direction:column;gap:16px;
       transition:background-color .3s ease,color .3s ease;will-change:background-color}
 a.card:hover .card__panel,a.card:focus-visible .card__panel{background:#fff;color:var(--charcoal)}
 a.card:hover .card__tag,a.card:focus-visible .card__tag{background:#f455a7;color:#fff}
