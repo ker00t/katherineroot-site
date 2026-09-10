@@ -415,3 +415,26 @@ a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
   .back-link a,.say-hi__icon,.site-footer__links a{transition:none !important}
   .article__img,.article__img-row img{transition:none !important}
 }
+
+/* --- hover-suspended: see assets/bfcache-hover-fix.js. :hover only gets
+   recomputed on a real pointer-move, so a card left hovered when a
+   target="_blank" link (or, via bfcache, any link) takes you to a new
+   tab/page stays visually "hovered" — fan-hover screenshots, color-swap
+   logos, etc. — for as long as this tab is hidden/unfocused, since its
+   DOM never sees the pointer actually leave. Note pointer-events:none
+   alone does NOT fix this: it stops new hit-tests, but a :hover match
+   already in effect stays in effect regardless — browsers only clear it
+   on an actual pointer-move showing the cursor left, which is exactly
+   what this tab isn't getting. So instead, while this class is present,
+   force every hover-triggered property straight back to its resting
+   value with !important, which produces the correct unhovered look
+   regardless of what :hover thinks is still true underneath. The script
+   toggles the class off the moment a real mousemove happens again,
+   handing control back to normal :hover. (Card-specific — the only
+   hover effect reported stuck; extend here if others turn out to have
+   the same problem.) */
+.js-hover-suspended .card__fan-img{opacity:0 !important}
+.js-hover-suspended a.card{transform:none !important}
+.js-hover-suspended a.card .card__panel{background:rgba(255,255,255,.1) !important;color:#fff !important}
+.js-hover-suspended a.card .card__tag{background:#fff !important;color:#f455a7 !important}
+.js-hover-suspended a.card .card__desc{opacity:.9 !important}
