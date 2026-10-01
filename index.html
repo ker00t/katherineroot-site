@@ -88,6 +88,31 @@
   .letter.is-active .tag{opacity:1;transform:translateX(-50%) translateY(0) scale(1) rotate(var(--tilt))}
   .hero__sub{font-size:clamp(17px,2vw,24px);max-width:1000px;margin:0}
 
+  /* --- sizzle: a 3-up "sizzle reel" of real product-interaction clips,
+     right below the hero. All three source videos are portrait phone
+     recordings (0.46-0.52 aspect, 5-68s long) — clamped to a shared
+     height with width following naturally keeps them reading as a row
+     of phone screens without a literal bezel mockup, matching the
+     site's plain-rounded-rect video treatment elsewhere
+     (.article__video). Each clip links to the case study it's pulled
+     from, muted/autoplay/loop/playsinline so the motion itself is the
+     pitch — no controls, no sound, just loop. */
+  .sizzle__row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+        gap:clamp(20px,4vw,48px)}
+  .sizzle__item{--tilt:-2deg;display:flex;flex-direction:column;align-items:center;gap:16px;
+        text-decoration:none;color:#fff;transition:transform .3s var(--spring)}
+  .sizzle__item:hover,.sizzle__item:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
+  .sizzle__item video{height:clamp(300px,52vh,580px);width:auto;display:block;
+        border-radius:20px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+  .sizzle__label{font-size:16px;font-weight:600;opacity:.9}
+  @media (max-width:768px){
+    .sizzle__row{flex-direction:column;gap:40px}
+    .sizzle__item video{height:clamp(280px,56vh,420px)}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .sizzle__item{transition:none !important}
+  }
+
   /* --- companies: 5-logo row using the real single-file asset set from
      Figma's "company hover" frame (assets/logos/{company}-{white,color,
      bg,arrow}.svg — each company's white/color/bg share one native
@@ -638,7 +663,27 @@
       </span>
     </h1>
     <p class="hero__sub">Product, AI, and Experience Designer</p>
-    <a class="cta" href="#strategy" style="--tilt:-3deg">Tell me more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+    <a class="cta" href="#sizzle" style="--tilt:-3deg">Tell me more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <!-- ============ sizzle ============ -->
+  <section class="section" id="sizzle">
+    <h2 class="section__title">A few of my favorite interactions, in motion.</h2>
+    <div class="sizzle__row">
+      <a class="sizzle__item" href="/casestudies/manta/hope-ai/" style="--tilt:-2deg">
+        <video src="/casestudies/manta/hope-ai/media/appstorevideo.mp4" autoplay loop muted playsinline aria-label="HopeAI App Store preview video"></video>
+        <span class="sizzle__label">HopeAI</span>
+      </a>
+      <a class="sizzle__item" href="/casestudies/mighty/first-app-experience/" style="--tilt:3deg">
+        <video src="/casestudies/mighty/first-app-experience/media/fae-video-1.mp4" autoplay loop muted playsinline aria-label="First App Experience interaction preview video"></video>
+        <span class="sizzle__label">First App Experience</span>
+      </a>
+      <a class="sizzle__item" href="/casestudies/mighty/people-magic/" style="--tilt:-3deg">
+        <video src="/casestudies/mighty/people-magic/media/pm-video-1.mp4" autoplay loop muted playsinline aria-label="Unlocking People Magic interaction preview video"></video>
+        <span class="sizzle__label">People Magic</span>
+      </a>
+    </div>
+    <a class="cta" href="#strategy" style="--tilt:2deg">Show me more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
   <!-- ============ companies ============ -->
