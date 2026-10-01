@@ -105,6 +105,12 @@
      with the other two peeking in from each edge, matching how the
      casestudies card carousel insets its own edges — scroll-snap-align
      center plus matching scroll-padding keeps it snapping back there. */
+  /* pulled up over hero's own bottom whitespace (hero's content is
+     vertically centered inside its own 100vh box, so there's empty
+     room below it already) so the clips' rounded tops are visibly
+     peeking up from the bottom edge on first load, before any
+     scrolling — a hint there's more below, not just a hard cut. */
+  #sizzle{margin-top:-150px}
   .sizzle__row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
         gap:clamp(20px,4vw,48px)}
   .sizzle__item{--tilt:-2deg;display:flex;text-decoration:none;color:#fff;
@@ -123,7 +129,8 @@
        which clip is centered — the three source videos' aspect ratios
        vary enough (0.46-0.70) that a shared height would let the
        widest one crowd out the side peeks almost entirely. */
-    .sizzle__item video{width:min(72vw,380px);height:auto;max-height:calc(100vh - 180px)}
+    .sizzle__item video{width:min(72vw,380px);height:auto;max-height:calc(100vh - 180px);
+          box-shadow:none}
   }
   @media (prefers-reduced-motion: reduce){
     .sizzle__item{transition:none !important}
@@ -688,11 +695,11 @@
       <a class="sizzle__item" href="/casestudies/manta/hope-ai/" style="--tilt:-2deg">
         <video src="/casestudies/manta/hope-ai/media/appstorevideo.mp4" autoplay loop muted playsinline aria-label="HopeAI App Store preview video"></video>
       </a>
-      <a class="sizzle__item" href="/casestudies/mighty/first-app-experience/" style="--tilt:3deg">
-        <video src="/assets/sizzle/fae-video-1-cropped.mp4" autoplay loop muted playsinline aria-label="First App Experience interaction preview video"></video>
-      </a>
       <a class="sizzle__item" href="/casestudies/mighty/people-magic/" style="--tilt:-3deg">
         <video src="/assets/sizzle/pm-video-1-cropped.mp4" autoplay loop muted playsinline aria-label="Unlocking People Magic interaction preview video"></video>
+      </a>
+      <a class="sizzle__item" href="/casestudies/mighty/first-app-experience/" style="--tilt:3deg">
+        <video src="/assets/sizzle/fae-video-1-cropped.mp4" autoplay loop muted playsinline aria-label="First App Experience interaction preview video"></video>
       </a>
     </div>
     <a class="cta" href="#strategy" style="--tilt:2deg">Show me more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
