@@ -637,7 +637,7 @@
         <span class="letter"><span class="glyph">t</span><span class="tag" style="background:#00C2A8;color:#fff;--tilt:-5deg">say hi 👋</span></span>
       </span>
     </h1>
-    <p class="hero__sub">I'm a Product, AI, and Experience Design Expert</p>
+    <p class="hero__sub">Product, AI, and Experience Designer</p>
     <a class="cta" href="#strategy" style="--tilt:-3deg">Tell me more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
@@ -1070,6 +1070,33 @@
       });
     });
   }
+})();
+
+// --- hero name bounce-in: each letter of "Katherine Root" bounces once,
+// in order, on page load — reuses letterBounce/.is-bouncing (the same
+// animation the click interaction above triggers), just staggered
+// instead of fired all at once. Independent of the hover/touch branch
+// above (an entrance animation should look the same on every device),
+// so it brings its own animationend cleanup rather than relying on the
+// listener that branch only attaches for non-touch. Stagger is solved
+// backwards from a 2s budget for the whole name: the last letter's
+// bounce has to START by (2000ms - animation duration) so it still
+// FINISHES at 2s. ---
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var letters = Array.prototype.slice.call(document.querySelectorAll('#name .letter'));
+  if (!letters.length) return;
+  var totalBudgetMs = 2000;
+  var animMs = 500; // matches @keyframes letterBounce's .5s duration
+  var stagger = letters.length > 1 ? (totalBudgetMs - animMs) / (letters.length - 1) : 0;
+  letters.forEach(function (letter, i) {
+    setTimeout(function () {
+      letter.classList.add('is-bouncing');
+      letter.addEventListener('animationend', function () {
+        letter.classList.remove('is-bouncing');
+      }, { once: true });
+    }, i * stagger);
+  });
 })();
 
 // --- companies: on hover:none devices the desktop fan-out (CSS above hides
