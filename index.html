@@ -104,13 +104,10 @@
      initial scroll position so the middle clip sits centered at rest
      with the other two peeking in from each edge, matching how the
      casestudies card carousel insets its own edges — scroll-snap-align
-     center plus matching scroll-padding keeps it snapping back there. */
-  /* pulled up over hero's own bottom whitespace (hero's content is
-     vertically centered inside its own 100vh box, so there's empty
-     room below it already) so the clips' rounded tops are visibly
-     peeking up from the bottom edge on first load, before any
-     scrolling — a hint there's more below, not just a hard cut. */
-  #sizzle{margin-top:-150px;background:var(--lime)}
+     center plus matching scroll-padding keeps it snapping back there.
+     No section-level overrides here — #sizzle is a standard full-
+     viewport .section like every other, no peek-from-bottom margin
+     hack and no custom background, just its own content below. */
   .sizzle__row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
         gap:clamp(20px,4vw,48px)}
   .sizzle__item{--tilt:-2deg;display:flex;text-decoration:none;color:#fff;
