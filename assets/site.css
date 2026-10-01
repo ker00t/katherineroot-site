@@ -350,7 +350,7 @@ a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt))
 a.card:hover .card__panel,a.card:focus-visible .card__panel{background:#fff;color:var(--charcoal)}
 a.card:hover .card__tag,a.card:focus-visible .card__tag{background:#f455a7;color:#fff}
 a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
-.card--soon{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%F0%9F%99%85%E2%80%8D%E2%99%80%EF%B8%8F</text></svg>") 16 16,default}
+.card--soon{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%E2%8F%B3</text></svg>") 16 16,default}
 .card--soon .card__panel{background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.3);
       filter:grayscale(.6)}
 .card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:16px;font-weight:600;
