@@ -1099,6 +1099,27 @@
   });
 })();
 
+// --- hero name ambient bounce: every 5s, bounce one random letter of
+// "Katherine Root" — but only if the pointer isn't currently over any
+// letter, so it never fights the hover-triggered flip/tag reveal.
+// Reuses letterBounce/.is-bouncing like the click interaction and the
+// page-load sequence above. ---
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var letters = Array.prototype.slice.call(document.querySelectorAll('#name .letter'));
+  if (!letters.length) return;
+  setInterval(function () {
+    if (document.querySelector('#name .letter:hover')) return;
+    var letter = letters[Math.floor(Math.random() * letters.length)];
+    letter.classList.remove('is-bouncing');
+    void letter.offsetWidth;
+    letter.classList.add('is-bouncing');
+    letter.addEventListener('animationend', function () {
+      letter.classList.remove('is-bouncing');
+    }, { once: true });
+  }, 5000);
+})();
+
 // --- companies: on hover:none devices the desktop fan-out (CSS above hides
 // it entirely there) is replaced by a two-tap pattern on the logo itself.
 // First tap on a logo reveals its own .company__tap-label (name + arrow)
