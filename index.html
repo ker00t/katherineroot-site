@@ -1079,14 +1079,14 @@
 // above (an entrance animation should look the same on every device),
 // so it brings its own animationend cleanup rather than relying on the
 // listener that branch only attaches for non-touch. Stagger is solved
-// backwards from a 2s budget for the whole name: the last letter's
-// bounce has to START by (2000ms - animation duration) so it still
-// FINISHES at 2s. ---
+// backwards from a <1s budget for the whole name: the last letter's
+// bounce has to START by (budget - animation duration) so it still
+// FINISHES inside the budget. ---
 (function () {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   var letters = Array.prototype.slice.call(document.querySelectorAll('#name .letter'));
   if (!letters.length) return;
-  var totalBudgetMs = 2000;
+  var totalBudgetMs = 950;
   var animMs = 500; // matches @keyframes letterBounce's .5s duration
   var stagger = letters.length > 1 ? (totalBudgetMs - animMs) / (letters.length - 1) : 0;
   letters.forEach(function (letter, i) {
