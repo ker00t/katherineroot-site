@@ -89,25 +89,41 @@
   .hero__sub{font-size:clamp(17px,2vw,24px);max-width:1000px;margin:0}
 
   /* --- sizzle: a 3-up "sizzle reel" of real product-interaction clips,
-     right below the hero. All three source videos are portrait phone
-     recordings (0.46-0.52 aspect, 5-68s long) — clamped to a shared
-     height with width following naturally keeps them reading as a row
-     of phone screens without a literal bezel mockup, matching the
-     site's plain-rounded-rect video treatment elsewhere
+     right below the hero — just the clips themselves, no title or
+     labels, sized to fill the viewport's available height (section
+     padding + the CTA below are the only things subtracted from 100vh).
+     All three source videos are portrait phone recordings (0.46-0.52
+     aspect) — height-clamped with width following naturally keeps them
+     reading as a row of phone screens without a literal bezel mockup,
+     matching the site's plain-rounded-rect video treatment elsewhere
      (.article__video). Each clip links to the case study it's pulled
      from, muted/autoplay/loop/playsinline so the motion itself is the
-     pitch — no controls, no sound, just loop. */
+     pitch — no controls, no sound, just loop.
+     On mobile this becomes a horizontal scroll-snap strip instead of a
+     wrapping row: centerMiddleSizzleItem() (bottom of page) sets the
+     initial scroll position so the middle clip sits centered at rest
+     with the other two peeking in from each edge, matching how the
+     casestudies card carousel insets its own edges — scroll-snap-align
+     center plus matching scroll-padding keeps it snapping back there. */
   .sizzle__row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
         gap:clamp(20px,4vw,48px)}
-  .sizzle__item{--tilt:-2deg;display:flex;flex-direction:column;align-items:center;gap:16px;
-        text-decoration:none;color:#fff;transition:transform .3s var(--spring)}
+  .sizzle__item{--tilt:-2deg;display:flex;text-decoration:none;color:#fff;
+        transition:transform .3s var(--spring)}
   .sizzle__item:hover,.sizzle__item:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
-  .sizzle__item video{height:clamp(300px,52vh,580px);width:auto;display:block;
+  .sizzle__item video{height:clamp(360px,calc(100vh - 220px),900px);width:auto;display:block;
         border-radius:20px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
-  .sizzle__label{font-size:16px;font-weight:600;opacity:.9}
   @media (max-width:768px){
-    .sizzle__row{flex-direction:column;gap:40px}
-    .sizzle__item video{height:clamp(280px,56vh,420px)}
+    .sizzle__row{flex-wrap:nowrap;justify-content:flex-start;
+          overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;
+          width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
+          padding:0 clamp(20px,6vw,64px);gap:20px}
+    .sizzle__item{flex:0 0 auto;scroll-snap-align:center;scroll-snap-stop:always}
+    /* width-capped (not height-capped, like the desktop rule above) so
+       the peek amount on either side stays consistent regardless of
+       which clip is centered — the three source videos' aspect ratios
+       vary enough (0.46-0.70) that a shared height would let the
+       widest one crowd out the side peeks almost entirely. */
+    .sizzle__item video{width:min(72vw,380px);height:auto;max-height:calc(100vh - 180px)}
   }
   @media (prefers-reduced-motion: reduce){
     .sizzle__item{transition:none !important}
@@ -668,19 +684,15 @@
 
   <!-- ============ sizzle ============ -->
   <section class="section" id="sizzle">
-    <h2 class="section__title">A few of my favorite interactions, in motion.</h2>
     <div class="sizzle__row">
       <a class="sizzle__item" href="/casestudies/manta/hope-ai/" style="--tilt:-2deg">
         <video src="/casestudies/manta/hope-ai/media/appstorevideo.mp4" autoplay loop muted playsinline aria-label="HopeAI App Store preview video"></video>
-        <span class="sizzle__label">HopeAI</span>
       </a>
       <a class="sizzle__item" href="/casestudies/mighty/first-app-experience/" style="--tilt:3deg">
         <video src="/casestudies/mighty/first-app-experience/media/fae-video-1.mp4" autoplay loop muted playsinline aria-label="First App Experience interaction preview video"></video>
-        <span class="sizzle__label">First App Experience</span>
       </a>
       <a class="sizzle__item" href="/casestudies/mighty/people-magic/" style="--tilt:-3deg">
         <video src="/casestudies/mighty/people-magic/media/pm-video-1.mp4" autoplay loop muted playsinline aria-label="Unlocking People Magic interaction preview video"></video>
-        <span class="sizzle__label">People Magic</span>
       </a>
     </div>
     <a class="cta" href="#strategy" style="--tilt:2deg">Show me more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
@@ -1163,6 +1175,27 @@
       letter.classList.remove('is-bouncing');
     }, { once: true });
   }, 5000);
+})();
+
+// --- sizzle reel centering: on mobile the clip row is a horizontal
+// scroll-snap strip (see .sizzle__row's @media max-width:768px rule) —
+// this sets its initial scroll position so the middle clip starts
+// centered on screen with the other two peeking in from each edge,
+// since a freshly-loaded scroll container otherwise always rests at
+// scrollLeft 0 (the first item flush left), not centered. Runs once on
+// load only, not on later resizes, so it doesn't yank the scroll
+// position back if the user has already swiped to another clip. ---
+(function () {
+  function centerMiddleSizzleItem() {
+    if (!window.matchMedia('(max-width: 768px)').matches) return;
+    var row = document.querySelector('.sizzle__row');
+    var items = row && row.querySelectorAll('.sizzle__item');
+    if (!items || items.length < 2) return;
+    var middle = items[Math.floor(items.length / 2)];
+    row.scrollLeft = middle.offsetLeft - (row.clientWidth - middle.offsetWidth) / 2;
+  }
+  if (document.readyState === 'complete') centerMiddleSizzleItem();
+  else window.addEventListener('load', centerMiddleSizzleItem);
 })();
 
 // --- companies: on hover:none devices the desktop fan-out (CSS above hides
