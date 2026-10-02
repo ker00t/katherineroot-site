@@ -1272,6 +1272,54 @@
   else window.addEventListener('load', centerMiddleSizzleItem);
 })();
 
+// --- hero "Tell me more": slow scroll past the sizzle reel. The browser's
+// native smooth-scroll (html{scroll-behavior:smooth}) has a fixed,
+// quick duration and can't be tuned, so for this one button only we
+// drive the scroll ourselves at ~0.45 px/ms (several times slower
+// than native) — long enough to actually see the three clips go by as
+// #strategy slides up over them. Every other anchor/button keeps the
+// native behavior. Any wheel/touch/key input cancels the animation so
+// the page never fights the user; reduced-motion users keep the native
+// jump. ---
+(function () {
+  var cta = document.querySelector('#hero .cta[href="#strategy"]');
+  var target = document.getElementById('strategy');
+  if (!cta || !target) return;
+  var raf = null;
+
+  function stop() {
+    if (raf) cancelAnimationFrame(raf);
+    raf = null;
+    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (t) {
+      window.removeEventListener(t, stop);
+    });
+  }
+
+  cta.addEventListener('click', function (e) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    e.preventDefault();
+    stop();
+    var from = window.scrollY;
+    var to = Math.round(from + target.getBoundingClientRect().top);
+    var dist = to - from;
+    if (Math.abs(dist) < 2) return;
+    var dur = Math.min(7000, Math.max(3500, Math.abs(dist) / 0.45));
+    var start = null;
+    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (t) {
+      window.addEventListener(t, stop, { passive: true });
+    });
+    function ease(t) { return t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+    function step(now) {
+      if (start === null) start = now;
+      var t = Math.min(1, (now - start) / dur);
+      window.scrollTo({ top: from + dist * ease(t), behavior: 'instant' });
+      if (t < 1) raf = requestAnimationFrame(step);
+      else { stop(); history.pushState(null, '', '#strategy'); }
+    }
+    raf = requestAnimationFrame(step);
+  });
+})();
+
 // --- pin sizzle behind hero: measures hero's actual rendered height
 // (varies by viewport — its content can wrap taller than 100vh) into
 // --hero-h, which #sizzle's margin-top:calc(var(--hero-h) * -1) reads
