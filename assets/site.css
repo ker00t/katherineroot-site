@@ -24,7 +24,13 @@
 /* --- base resets / page shell --- */
 *{box-sizing:border-box}
 html{background:var(--lime);scroll-behavior:smooth;overflow-x:hidden}
-body{margin:0;overflow-x:hidden;color:#fff;font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+/* body has no overflow-x of its own (html's alone already clips every
+   100vw breakout site-wide) deliberately — setting one here forces
+   overflow-y:auto too (any non-visible overflow-x does, per spec),
+   which makes body a second, competing scroll container alongside
+   html and breaks position:sticky for descendants (sizzle's reveal
+   effect on the homepage relies on it staying unambiguous). */
+body{margin:0;color:#fff;font-family:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
      -webkit-font-smoothing:antialiased;background:#f455a7;
      animation:bgCycle 200s ease-in-out infinite;animation-delay:var(--bg-delay,0s)}
 @keyframes bgCycle{

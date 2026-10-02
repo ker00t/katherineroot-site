@@ -59,8 +59,18 @@
   .chev{transform:rotate(90deg)}
 
   /* --- hero: name/tags/letter-flip lifted verbatim from the current site's
-     index.html (.letter/.glyph/.tag), just recolored for white-on-bright. --- */
-  .hero{gap:clamp(0px,0vw,24px)}
+     index.html (.letter/.glyph/.tag), just recolored for white-on-bright.
+     position+z-index here exist for #sizzle's reveal effect below —
+     hero has to paint above sizzle (opposite of their normal DOM-order
+     stacking) so sizzle's lime starts hidden behind it. Hero itself has
+     no background normally (it just shows body's rotating bgCycle
+     color through its transparent box) — for the reveal to actually
+     hide sizzle rather than letting it show through transparently,
+     hero needs its own OPAQUE fill, so it runs the identical bgCycle
+     animation itself (same keyframes/duration/--bg-delay as body) to
+     stay visually seamless with it. */
+  .hero{gap:clamp(0px,0vw,24px);position:relative;z-index:2;
+        animation:bgCycle 200s ease-in-out infinite;animation-delay:var(--bg-delay,0s)}
   .hero__lead{font-size:clamp(17px,2vw,24px);margin:0}
   .hero .cta{margin-top:clamp(20px,4vw,40px)}
   .name{display:flex;flex-wrap:wrap;justify-content:center;row-gap:.05em;
@@ -105,9 +115,32 @@
      with the other two peeking in from each edge, matching how the
      casestudies card carousel insets its own edges — scroll-snap-align
      center plus matching scroll-padding keeps it snapping back there.
-     No section-level overrides here — #sizzle is a standard full-
-     viewport .section like every other, no peek-from-bottom margin
-     hack and no custom background, just its own content below. */
+     Reveal effect: sizzle's lime fill should look like it's sitting
+     behind hero, uncovered as hero scrolls up and off, then covered
+     again by strategy — not just scrolling up to replace hero like a
+     normal section boundary. That needs an actual dwell: a plain
+     position:sticky directly on a ~100vh section has nowhere to go
+     (its own box is exactly one viewport, so there's no extra room to
+     stick through) and releases the instant it'd start, so #sizzle is
+     split into two layers — the <section> itself is an oversized
+     unstyled spacer (--hero-h, the measured hero height set by
+     setHeroHeight() at the bottom of the page, taller by one more
+     viewport for genuine dwell time) pulled up by margin-top:-hero-h
+     so it starts directly underneath hero; .sizzle__sticky, the actual
+     visible content (lime fill, centered layout — the properties
+     every other section gets for free from .section), pins itself via
+     position:sticky for that whole spacer's height before releasing.
+     hero's explicit z-index keeps it painting over the spacer while
+     covering it; strategy needs no z-index of its own in turn — being
+     the next sibling in normal flow already paints it over a lower/
+     auto-stacked sticky element. */
+  #sizzle{position:relative;z-index:0;
+        margin-top:calc(var(--hero-h, 100vh) * -1);
+        min-height:calc(var(--hero-h, 100vh) + 100vh)}
+  .sizzle__sticky{position:sticky;top:0;background:var(--lime);
+        min-height:100vh;display:flex;flex-direction:column;align-items:center;
+        justify-content:center;gap:clamp(40px,7vw,80px);
+        padding:clamp(48px,8vw,64px) clamp(20px,6vw,64px);text-align:center}
   .sizzle__row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
         gap:clamp(20px,4vw,48px)}
   .sizzle__item{--tilt:-2deg;display:flex;text-decoration:none;color:#fff;
@@ -277,6 +310,17 @@
           font-weight:600;font-size:15px}
     .company__tap-label svg{width:16px;height:16px;flex:none}
   }
+
+  /* z-index here is only for #sizzle's reveal effect (see its own
+     comment) — strategy, as the next sibling after sticky/lower-stacked
+     sizzle, already paints over it by default, but position:relative
+     establishes a real stacking context so that holds regardless of
+     any ancestor stacking quirks, rather than relying on implicit
+     auto-stacking behavior. Also needs hero's same opaque-bgCycle
+     treatment so it actually covers sizzle's lime when it scrolls over
+     it, instead of staying transparent and letting it show through. */
+  #strategy{position:relative;z-index:1;
+        animation:bgCycle 200s ease-in-out infinite;animation-delay:var(--bg-delay,0s)}
 
   /* --- strategy numbers: a row of 3 stat callouts (Figma "numbers"
      component, node 105:23023), sitting between the strategy section's
@@ -691,17 +735,19 @@
   </section>
 
   <!-- ============ sizzle ============ -->
-  <section class="section" id="sizzle">
-    <div class="sizzle__row">
-      <a class="sizzle__item" href="/casestudies/manta/hope-ai/" style="--tilt:-2deg">
-        <video src="/casestudies/manta/hope-ai/media/appstorevideo.mp4" autoplay loop muted playsinline aria-label="HopeAI App Store preview video"></video>
-      </a>
-      <a class="sizzle__item" href="/casestudies/mighty/people-magic/" style="--tilt:-3deg">
-        <video src="/assets/sizzle/pm-video-1-cropped.mp4" autoplay loop muted playsinline aria-label="Unlocking People Magic interaction preview video"></video>
-      </a>
-      <a class="sizzle__item" href="/casestudies/mighty/first-app-experience/" style="--tilt:3deg">
-        <video src="/assets/sizzle/fae-video-1-cropped.mp4" autoplay loop muted playsinline aria-label="First App Experience interaction preview video"></video>
-      </a>
+  <section id="sizzle">
+    <div class="sizzle__sticky">
+      <div class="sizzle__row">
+        <a class="sizzle__item" href="/casestudies/manta/hope-ai/" style="--tilt:-2deg">
+          <video src="/casestudies/manta/hope-ai/media/appstorevideo.mp4" autoplay loop muted playsinline aria-label="HopeAI App Store preview video"></video>
+        </a>
+        <a class="sizzle__item" href="/casestudies/mighty/people-magic/" style="--tilt:-3deg">
+          <video src="/assets/sizzle/pm-video-1-cropped.mp4" autoplay loop muted playsinline aria-label="Unlocking People Magic interaction preview video"></video>
+        </a>
+        <a class="sizzle__item" href="/casestudies/mighty/first-app-experience/" style="--tilt:3deg">
+          <video src="/assets/sizzle/fae-video-1-cropped.mp4" autoplay loop muted playsinline aria-label="First App Experience interaction preview video"></video>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -1207,6 +1253,26 @@
   }
   if (document.readyState === 'complete') centerMiddleSizzleItem();
   else window.addEventListener('load', centerMiddleSizzleItem);
+})();
+
+// --- pin sizzle behind hero: measures hero's actual rendered height
+// (varies by viewport — its content can wrap taller than 100vh) into
+// --hero-h, which #sizzle's margin-top:calc(var(--hero-h) * -1) reads
+// to pull itself exactly underneath hero rather than guessing a flat
+// 100vh. Re-measures on resize since hero's wrap height is viewport-
+// dependent; the CSS falls back to 100vh for the brief moment before
+// this runs. ---
+(function () {
+  var hero = document.getElementById('hero');
+  var sizzle = document.getElementById('sizzle');
+  if (!hero || !sizzle) return;
+
+  function setHeroHeight() {
+    sizzle.style.setProperty('--hero-h', hero.offsetHeight + 'px');
+  }
+
+  setHeroHeight();
+  window.addEventListener('resize', setHeroHeight);
 })();
 
 // --- companies: on hover:none devices the desktop fan-out (CSS above hides
