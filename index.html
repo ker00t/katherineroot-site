@@ -1272,20 +1272,27 @@
   else window.addEventListener('load', centerMiddleSizzleItem);
 })();
 
-// --- hero "Tell me more": slow scroll past the sizzle reel. The browser's
-// native smooth-scroll (html{scroll-behavior:smooth}) has a fixed,
-// quick duration and can't be tuned, so for this one button only we
-// drive the scroll ourselves at ~0.45 px/ms (several times slower
-// than native) — long enough to actually see the three clips go by as
-// #strategy slides up over them. Every other anchor/button keeps the
-// native behavior. Any wheel/touch/key input cancels the animation so
-// the page never fights the user; reduced-motion users keep the native
-// jump. ---
+// --- hero "Tell me more": paced scroll past the sizzle reel. The
+// browser's native smooth-scroll (html{scroll-behavior:smooth}) has one
+// fixed speed and can't be tuned, so for this one button only we drive
+// the scroll ourselves with a variable-speed profile: quick through the
+// hero, easing down to a crawl around the moment the sizzle clips are
+// fully revealed (scrollY = hero height, just as #strategy begins to
+// slide over them), then speeding up again as strategy takes over.
+// Speed is a gaussian dip centered on that point, integrated into a
+// time table so position follows the desired speed exactly. Every other
+// anchor/button keeps the native behavior. Any wheel/touch/key input
+// cancels the animation so the page never fights the user; reduced-
+// motion users keep the native jump. ---
 (function () {
   var cta = document.querySelector('#hero .cta[href="#strategy"]');
   var target = document.getElementById('strategy');
-  if (!cta || !target) return;
+  var hero = document.getElementById('hero');
+  if (!cta || !target || !hero) return;
   var raf = null;
+  var V_FAST = 1.5;   // px/ms away from the sizzle
+  var V_SLOW = 0.3;   // px/ms at the slowest point
+  var N = 240;        // samples in the position -> time table
 
   function stop() {
     if (raf) cancelAnimationFrame(raf);
@@ -1303,17 +1310,43 @@
     var to = Math.round(from + target.getBoundingClientRect().top);
     var dist = to - from;
     if (Math.abs(dist) < 2) return;
-    var dur = Math.min(7000, Math.max(3500, Math.abs(dist) / 0.45));
+
+    // speed (px/ms) as a function of scroll position y
+    var center = hero.offsetHeight, sigma = window.innerHeight * 0.4;
+    function speed(y) {
+      var d = (y - center) / sigma;
+      var v = V_FAST - (V_FAST - V_SLOW) * Math.exp(-d * d);
+      // short taper at each end so it neither lurches off nor slams to a stop
+      var edge = Math.min(Math.abs(y - from), Math.abs(to - y)) / (window.innerHeight * 0.25);
+      return v * (0.25 + 0.75 * Math.min(1, edge));
+    }
+    // cumulative time (ms) to reach each sample position
+    var time = [0];
+    for (var i = 1; i <= N; i++) {
+      var y0 = from + dist * (i - 1) / N, y1 = from + dist * i / N;
+      var v = speed((y0 + y1) / 2);
+      time.push(time[i - 1] + Math.abs(y1 - y0) / v);
+    }
+    var total = time[N];
+    function posAt(ms) { // invert the table: elapsed time -> scroll offset
+      var lo = 0, hi = N;
+      while (hi - lo > 1) {
+        var mid = (lo + hi) >> 1;
+        if (time[mid] <= ms) lo = mid; else hi = mid;
+      }
+      var f = (ms - time[lo]) / ((time[hi] - time[lo]) || 1);
+      return from + dist * (lo + f) / N;
+    }
+
     var start = null;
     ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (t) {
       window.addEventListener(t, stop, { passive: true });
     });
-    function ease(t) { return t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
     function step(now) {
       if (start === null) start = now;
-      var t = Math.min(1, (now - start) / dur);
-      window.scrollTo({ top: from + dist * ease(t), behavior: 'instant' });
-      if (t < 1) raf = requestAnimationFrame(step);
+      var ms = Math.min(total, now - start);
+      window.scrollTo({ top: posAt(ms), behavior: 'instant' });
+      if (ms < total) raf = requestAnimationFrame(step);
       else { stop(); history.pushState(null, '', '#strategy'); }
     }
     raf = requestAnimationFrame(step);
