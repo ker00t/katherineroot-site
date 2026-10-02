@@ -117,26 +117,35 @@
      center plus matching scroll-padding keeps it snapping back there.
      Reveal effect: sizzle's lime fill should look like it's sitting
      behind hero, uncovered as hero scrolls up and off, then covered
-     again by strategy — not just scrolling up to replace hero like a
-     normal section boundary. That needs an actual dwell: a plain
-     position:sticky directly on a ~100vh section has nowhere to go
-     (its own box is exactly one viewport, so there's no extra room to
-     stick through) and releases the instant it'd start, so #sizzle is
-     split into two layers — the <section> itself is an oversized
-     unstyled spacer (--hero-h, the measured hero height set by
-     setHeroHeight() at the bottom of the page, taller by one more
-     viewport for genuine dwell time) pulled up by margin-top:-hero-h
-     so it starts directly underneath hero; .sizzle__sticky, the actual
+     again by strategy sliding up OVER it — not strategy just pushing
+     sizzle off the screen as it arrives. That needs an actual dwell: a
+     plain position:sticky directly on a ~100vh section has nowhere to
+     go (its own box is exactly one viewport, so there's no extra room
+     to stick through) and releases the instant it'd start, so #sizzle
+     is split into two layers — the <section> itself is an oversized
+     unstyled spacer pulled up by margin-top:-hero-h (the measured hero
+     height set by setHeroHeight() at the bottom of the page) so it
+     starts directly underneath hero; .sizzle__sticky, the actual
      visible content (lime fill, centered layout — the properties
      every other section gets for free from .section), pins itself via
      position:sticky for that whole spacer's height before releasing.
-     hero's explicit z-index keeps it painting over the spacer while
-     covering it; strategy needs no z-index of its own in turn — being
-     the next sibling in normal flow already paints it over a lower/
-     auto-stacked sticky element. */
+     The spacer's height is hero-h (dwell for hero's own reveal) PLUS
+     TWO extra viewports, not one: with only one, the spacer runs out
+     and sizzle unsticks at the exact scroll position strategy's own
+     top edge first reaches the viewport — i.e. they'd always hand off
+     in a single instant, no window where strategy is actually visible
+     sliding up a path over a still-pinned lime. #strategy's own
+     margin-top:-100vh below pulls ITS entry one viewport earlier so it
+     starts that slide while sizzle is still mid-dwell; the second
+     extra viewport here is what gives sizzle enough dwell left at that
+     point to stay pinned through the whole slide, unsticking exactly
+     as strategy finishes covering it. hero's explicit z-index keeps it
+     painting over the spacer while covering it; strategy needs no
+     z-index of its own in turn — being the next sibling in normal flow
+     already paints it over a lower/auto-stacked sticky element. */
   #sizzle{position:relative;z-index:0;
         margin-top:calc(var(--hero-h, 100vh) * -1);
-        min-height:calc(var(--hero-h, 100vh) + 100vh)}
+        min-height:calc(var(--hero-h, 100vh) + 200vh)}
   .sizzle__sticky{position:sticky;top:0;background:var(--lime);
         min-height:100vh;display:flex;flex-direction:column;align-items:center;
         justify-content:center;gap:clamp(40px,7vw,80px);
@@ -318,8 +327,16 @@
      any ancestor stacking quirks, rather than relying on implicit
      auto-stacking behavior. Also needs hero's same opaque-bgCycle
      treatment so it actually covers sizzle's lime when it scrolls over
-     it, instead of staying transparent and letting it show through. */
-  #strategy{position:relative;z-index:1;
+     it, instead of staying transparent and letting it show through.
+     margin-top:-100vh pulls strategy's own entry one viewport earlier
+     than its natural position (right after #sizzle's spacer) would —
+     without it, strategy only reaches the viewport at the exact scroll
+     position sizzle's sticky dwell runs out anyway, so the handoff is
+     a single instant with no actual "strategy slides up over a still-
+     pinned sizzle" in between. See #sizzle's own comment for the other
+     half of this (the matching extra dwell its spacer needs so it's
+     still pinned for strategy's whole slide, not just the start of it). */
+  #strategy{position:relative;z-index:1;margin-top:-100vh;
         animation:bgCycle 200s ease-in-out infinite;animation-delay:var(--bg-delay,0s)}
 
   /* --- strategy numbers: a row of 3 stat callouts (Figma "numbers"
