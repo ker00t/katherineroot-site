@@ -54,6 +54,31 @@ body{margin:0;color:#fff;font-family:'Bricolage Grotesque',ui-sans-serif,system-
 a{color:inherit}
 img{max-width:100%}
 
+/* --- liquid-glass atmosphere: two fixed, full-viewport film layers laid
+   over the whole page (pointer-events:none, so they never intercept
+   clicks) that give the glass cards/icons something to catch. Each is a
+   few soft radial gradients — no filter:blur, so they're cheap — on an
+   oversized box that slowly drifts via transform only (compositor-
+   thread, no repaint). mix-blend-mode:soft-light lets them gently
+   lighten/deepen whatever is beneath (backgrounds, sizzle clips, text)
+   instead of painting over it, so everything stays legible. ::before is
+   the light caustics, ::after the deeper tint; different durations keep
+   them from ever syncing up. Off under reduced motion (the drift) — the
+   static film stays. --- */
+body::before,body::after{content:"";position:fixed;inset:-20%;z-index:40;pointer-events:none;
+      mix-blend-mode:soft-light;will-change:transform}
+body::before{opacity:.24;
+      background:radial-gradient(38% 34% at 22% 28%,rgba(255,255,255,.95),rgba(255,255,255,0) 70%),
+                 radial-gradient(30% 28% at 78% 62%,rgba(255,255,255,.75),rgba(255,255,255,0) 70%),
+                 radial-gradient(24% 22% at 48% 88%,rgba(255,255,255,.6),rgba(255,255,255,0) 70%);
+      animation:glassDriftA 46s ease-in-out infinite alternate}
+body::after{opacity:.14;
+      background:radial-gradient(34% 30% at 70% 20%,rgba(20,0,60,.9),rgba(20,0,60,0) 70%),
+                 radial-gradient(30% 34% at 18% 72%,rgba(0,40,120,.8),rgba(0,40,120,0) 70%);
+      animation:glassDriftB 62s ease-in-out infinite alternate}
+@keyframes glassDriftA{from{transform:translate3d(-4%,-3%,0) scale(1)}to{transform:translate3d(5%,4%,0) scale(1.12)}}
+@keyframes glassDriftB{from{transform:translate3d(4%,3%,0) scale(1.1)}to{transform:translate3d(-5%,-4%,0) scale(1)}}
+
 /* --- back-link: an oversized bare arrow that sits above the page's own
    header content, every subpage (not homepage). Normal document flow
    (not position:fixed) so it scrolls away with the top of the page —
@@ -449,6 +474,7 @@ a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   body{animation:none;background-color:#f455a7}
+  body::before,body::after{animation:none}
   .back-link a,.say-hi__icon,.site-footer__links a{transition:none !important}
   .article__img,.article__img-row img{transition:none !important}
 }
