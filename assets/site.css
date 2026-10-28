@@ -20,6 +20,16 @@
   --accent:var(--lime);
   --spring: cubic-bezier(.34,1.56,.64,1);
 }
+/* --- liquid-glass tokens, shared by the cards, contact icons, and the
+   homepage lightbox controls: --glass-blur is the frosted backdrop;
+   --glass-rim is the lit edge (top-left bright, bottom-right faint) plus a
+   faint inner glow. Dropped to plain translucency for anyone who has
+   asked their OS for reduced transparency. --- */
+:root{--glass-blur:blur(18px) saturate(1.2);
+      --glass-rim:inset 0 1px 1px rgba(255,255,255,.6),inset 0 -1px 1px rgba(255,255,255,.16),
+                  inset 1px 0 1px rgba(255,255,255,.2),inset 0 0 22px rgba(255,255,255,.07)}
+@media (prefers-reduced-transparency:reduce){:root{--glass-blur:none}}
+
 
 /* --- base resets / page shell --- */
 *{box-sizing:border-box}
@@ -300,7 +310,8 @@ img{max-width:100%}
    override. --- */
 .article-cta{max-width:720px;margin:0 auto;padding:0 clamp(20px,6vw,64px) clamp(64px,10vw,100px);text-align:center}
 .cta{--tilt:-2deg;display:inline-flex;align-items:center;gap:10px;
-     background:var(--lime);color:#000;font-size:clamp(14px,1.4vw,16px);font-weight:400;
+     background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 55%),var(--lime);color:#000;
+     box-shadow:inset 0 1.5px 0 rgba(255,255,255,.8),inset 0 -2px 5px rgba(0,0,0,.07),0 10px 22px -8px rgba(0,0,0,.22);font-size:clamp(14px,1.4vw,16px);font-weight:400;
      padding:clamp(12px,1.6vw,16px) clamp(20px,2.6vw,32px);border-radius:70px;
      text-decoration:none;white-space:nowrap;
      transition:transform .3s var(--spring)}
@@ -312,7 +323,10 @@ img{max-width:100%}
    homepage, contact icons included — there is no more standalone
    "Say hi sometime" section anywhere on the site). --- */
 .say-hi__icons{display:flex;gap:18px;justify-content:center}
-.say-hi__icon{--tilt:-1deg;width:82px;height:82px;border-radius:16px;border:2px solid #fff;
+.say-hi__icon{--tilt:-1deg;width:82px;height:82px;border-radius:16px;border:1.5px solid rgba(255,255,255,.7);
+      background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.04));
+      -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+      box-shadow:var(--glass-rim),0 10px 24px -8px rgba(0,0,0,.18);
       display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;
       transition:transform .3s var(--spring),background .25s ease,color .2s ease,border-color .25s ease}
 .say-hi__icon:hover,.say-hi__icon:focus-visible{transform:translateY(-6px) rotate(var(--tilt));
@@ -352,8 +366,25 @@ img{max-width:100%}
 a.card:hover,a.card:focus-visible{transform:translateY(-6px) rotate(var(--tilt));outline:none}
 .card__panel{position:relative;background:rgba(255,255,255,.1);border-radius:22px;
       min-height:280px;height:100%;padding:34px;text-align:left;display:flex;flex-direction:column;gap:16px;
-      transition:background-color .3s ease,color .3s ease;will-change:background-color}
+      transition:background-color .3s ease,color .3s ease,box-shadow .3s ease;will-change:background-color}
 a.card:hover .card__panel,a.card:focus-visible .card__panel{background:#fff;color:var(--charcoal)}
+/* --- liquid glass (live cards only; "coming soon" stays a flat ghost so
+   it still reads as disabled). Three layers: a frosted blur of whatever
+   sits behind, a thin lit rim (bright along the top-left edge where the
+   light "hits", faint along the bottom-right), and a soft specular sheen
+   across the upper-left corner. The sheen is a ::before sunk behind the
+   content (z-index:-1 inside the panel's own stacking context) so it
+   never washes out text. On hover the panel flips to solid white as
+   before, so the sheen and glow fade out with it. --- */
+.card:not(.card--soon) .card__panel{
+      -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+      box-shadow:var(--glass-rim),0 12px 32px -8px rgba(0,0,0,.16);isolation:isolate}
+.card:not(.card--soon) .card__panel::before{content:"";position:absolute;inset:0;z-index:-1;
+      border-radius:inherit;pointer-events:none;transition:opacity .3s ease;
+      background:linear-gradient(135deg,rgba(255,255,255,.30) 0%,rgba(255,255,255,.06) 34%,rgba(255,255,255,0) 52%),
+                 radial-gradient(90% 70% at 100% 100%,rgba(255,255,255,.12),rgba(255,255,255,0) 65%)}
+a.card:hover .card__panel::before,a.card:focus-visible .card__panel::before{opacity:0}
+a.card:hover .card__panel,a.card:focus-visible .card__panel{box-shadow:0 14px 36px -8px rgba(0,0,0,.22)}
 a.card:hover .card__tag,a.card:focus-visible .card__tag{background:#f455a7;color:#fff}
 a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
 .card--soon{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%E2%8F%B3</text></svg>") 16 16,default}

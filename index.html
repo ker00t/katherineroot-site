@@ -490,7 +490,7 @@
      to be pinned to the viewport edges instead of the image itself. */
   #screens-lightbox{border:none;background:transparent;padding:0;max-width:none;
         max-height:none;position:fixed;inset:0;margin:auto;overflow:visible}
-  #screens-lightbox::backdrop{background:rgba(0,0,0,.85)}
+  #screens-lightbox::backdrop{background:rgba(0,0,0,.7);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
   #screens-lightbox[open]{display:flex;align-items:center;justify-content:center}
   .lightbox-body{display:grid;grid-template-columns:auto auto auto;
         grid-template-areas:"prev img next";align-items:center;gap:20px}
@@ -506,15 +506,16 @@
   /* close: desktop can Escape or click the backdrop, so the X is
      mobile-only, where tapping outside the image is less reliable. */
   #screens-lightbox-close{display:none;position:fixed;top:24px;right:24px;
-        width:44px;height:44px;border-radius:50%;border:2px solid #fff;
-        background:rgba(0,0,0,.3);color:#fff;font-size:24px;line-height:1;cursor:pointer;
+        width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.55);background:linear-gradient(135deg,rgba(255,255,255,.26),rgba(255,255,255,.06));
+        -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);box-shadow:var(--glass-rim),0 8px 22px rgba(0,0,0,.28);color:#fff;font-size:24px;line-height:1;cursor:pointer;
         align-items:center;justify-content:center;outline:none;
         -webkit-tap-highlight-color:transparent;
         transition:background .2s ease,transform .2s var(--spring)}
   /* prev/next: same circular-button treatment as close, but normal
      grid items instead of being pinned to the viewport edge. */
   #screens-lightbox-prev,#screens-lightbox-next{width:48px;height:48px;border-radius:50%;
-        border:2px solid #fff;background:rgba(0,0,0,.3);color:#fff;cursor:pointer;
+        border:1px solid rgba(255,255,255,.55);background:linear-gradient(135deg,rgba(255,255,255,.26),rgba(255,255,255,.06));
+        -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);box-shadow:var(--glass-rim),0 8px 22px rgba(0,0,0,.28);color:#fff;cursor:pointer;
         display:flex;align-items:center;justify-content:center;outline:none;
         -webkit-tap-highlight-color:transparent;
         transition:background .2s ease,transform .2s var(--spring)}
