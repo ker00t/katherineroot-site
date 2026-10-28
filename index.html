@@ -363,59 +363,6 @@
           padding-top:32px}
   }
 
-  /* --- ai: the "How do I feel about AI?" section (Figma node 105:23071),
-     reusing .section__title for the heading and the shared .cta pill for
-     the CTA, same as every other section — just this section's own body
-     copy + reading-list links. --- */
-  #ai{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%F0%9F%A4%96</text></svg>") 16 16,auto}
-  #ai .ai__body{margin-top:-24px}
-  /* browsers swap an inherited custom cursor for their own native
-     pointer over links/buttons, so the robot has to be re-declared
-     directly on the clickable items rather than relying on it
-     cascading down from #ai. */
-  #ai .ai__link,#ai .cta{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%F0%9F%A4%96</text></svg>") 16 16,pointer}
-  /* --- beep/boop: a tiny playful robot-noise flourish wherever you
-     click/tap inside the AI section — matches the robot cursor. Each
-     span is positioned at the click point (fixed, so it's unaffected by
-     scroll) and animates itself out, then removes itself from the DOM. --- */
-  .ai__beep-boop{position:fixed;z-index:70;pointer-events:none;
-        font-size:12px;font-weight:600;letter-spacing:.02em;color:#fff;
-        transform:translate(-50%,-50%);
-        animation:aiBeepBoop .9s ease-out forwards}
-  @keyframes aiBeepBoop{
-    0%{opacity:0;transform:translate(-50%,-50%) translateY(0) scale(.7)}
-    20%{opacity:1;transform:translate(-50%,-50%) translateY(-8px) scale(1)}
-    100%{opacity:0;transform:translate(-50%,-50%) translateY(-36px) scale(1)}
-  }
-  @media (prefers-reduced-motion: reduce){
-    .ai__beep-boop{animation:none;display:none}
-  }
-  .ai__body{display:flex;flex-direction:column;gap:40px;max-width:1100px;
-        line-height:1.5;color:#fff;text-align:center}
-  .ai__body p{margin:0 auto;max-width:800px}
-  /* --- ai links: restyled per Figma node 105:23102 as a row of 3 cards
-     (was plain underlined text), reusing the case-study card's exact
-     hover treatment — lift+tilt on the link itself, translucent-white
-     panel to solid white + charcoal text on hover/focus (see .card /
-     .card__panel in /assets/site.css). --- */
-  .ai__links{display:flex;gap:10px}
-  .ai__link{--tilt:-2deg;flex:1;display:flex;flex-direction:column;align-items:center;
-        justify-content:center;gap:4px;min-height:160px;
-        padding:24px clamp(20px,4vw,64px);border-radius:22px;
-        background:rgba(255,255,255,.1);color:#fff;text-decoration:none;
-        transition:transform .3s var(--spring),background-color .3s ease,color .3s ease}
-  .ai__link:hover,.ai__link:focus-visible{
-        transform:translateY(-6px) rotate(var(--tilt));
-        background:#fff;color:var(--charcoal);outline:none}
-  .ai__link-title{margin:0;font-weight:600;font-size:20px;line-height:1.15;text-align:center;
-        transition:color .3s ease}
-  .ai__link:hover .ai__link-title,.ai__link:focus-visible .ai__link-title{color:#f455a7}
-  .ai__link-author{margin:0;font-weight:400;font-size:18px}
-  @media (max-width:768px){
-    .ai__links{flex-direction:column}
-    .ai__link{padding:24px 32px}
-  }
-
   /* --- case-study cards: strategy / people / leadership sections. The
      card design itself (.card/.card__panel/tag/title/desc/arrow,
      .card--soon) is fully shared site-wide now — see /assets/site.css.
@@ -1046,31 +993,7 @@
         </div>
       </div>
     </div>
-    <a class="cta" href="#ai" style="--tilt:-3deg">But what about AI <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-  </section>
-
-  <!-- ============ ai ============ -->
-  <section class="section" id="ai">
-    <h2 class="section__title">How do I feel about AI?</h2>
-    <div class="ai__body desc">
-      <p>Ah, the question of the hour. AI is incredible. It's allowing us all more freedom to express and explore our ideas in real time, and has the capacity to take a lot of burden out of our processes and workflows. In fact, I built this site using Claude Code. But it has its limitations, and there's still a lot of the creative process I prefer to do by hand. Whatever work you see from me, my ideas and fingerprints are still all over it, even if I used AI for help.</p>
-      <p>Here are some posts from other people that sum up my thoughts pretty well:</p>
-      <div class="ai__links">
-        <a class="ai__link" href="https://www.linkedin.com/pulse/you-need-time-stare-space-heidi-phelps-wzgfe/" target="_blank" rel="noopener noreferrer" style="--tilt:-2deg">
-          <p class="ai__link-title">You Need Time to Stare Into Space</p>
-          <p class="ai__link-author">Heidi Phelps</p>
-        </a>
-        <a class="ai__link" href="https://www.linkedin.com/pulse/design-paradox-ethan-eismann-r8dyc/" target="_blank" rel="noopener noreferrer" style="--tilt:2deg">
-          <p class="ai__link-title">The Design Paradox</p>
-          <p class="ai__link-author">Ethan Eismann</p>
-        </a>
-        <a class="ai__link" href="https://wattenberger.com/thoughts/our-interfaces-have-lost-their-senses/" target="_blank" rel="noopener noreferrer" style="--tilt:-3deg">
-          <p class="ai__link-title">Our Interfaces Have Lost Their Senses</p>
-          <p class="ai__link-author">Amelia Wattenberger</p>
-        </a>
-      </div>
-    </div>
-    <a class="cta" href="#tldr" style="--tilt:2deg">Anything else? <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+    <a class="cta" href="#tldr" style="--tilt:-3deg">Anything else? <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
   <!-- ============ tldr ============ -->
@@ -1146,32 +1069,6 @@
   </div>
 
 <script src="/assets/secret-menu.js" defer></script>
-<script>
-// --- ai section: click/tap anywhere inside to pop up tiny "beep" and
-// "boop" text at that point, echoing the robot cursor. ---
-(function () {
-  var ai = document.getElementById('ai');
-  if (!ai) return;
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduceMotion) return;
-
-  function spawn(text, x, y, delay) {
-    var el = document.createElement('span');
-    el.className = 'ai__beep-boop';
-    el.textContent = text;
-    el.style.left = x + 'px';
-    el.style.top = y + 'px';
-    el.style.animationDelay = delay + 's';
-    document.body.appendChild(el);
-    el.addEventListener('animationend', function () { el.remove(); });
-  }
-
-  ai.addEventListener('click', function (e) {
-    spawn('beep', e.clientX - 18, e.clientY, 0);
-    spawn('boop', e.clientX + 18, e.clientY, .15);
-  });
-})();
-</script>
 <script>
 // --- hero letter-flip: same interaction as the live site (hover flips a
 // letter and shows its tag; touch taps one letter active at a time;
