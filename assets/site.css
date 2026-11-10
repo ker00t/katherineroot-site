@@ -187,14 +187,14 @@ img{max-width:100%}
    tuned for the pink footer and would wash out against this panel's
    lime background; charcoal keeps it legible while matching every
    other dimension exactly. --- */
-.secret-menu__socials{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:auto;padding-top:32px}
-.secret-menu__social{width:82px;height:82px;border:2px solid var(--charcoal);border-radius:16px;
+.secret-menu__socials{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:auto;padding-top:32px}
+.secret-menu__social{width:62px;height:62px;border:2px solid var(--charcoal);border-radius:14px;
       display:flex;align-items:center;justify-content:center;color:var(--charcoal);
       text-decoration:none;transition:transform .3s var(--spring)}
 .secret-menu__social:hover,.secret-menu__social:focus-visible{
       transform:translateY(-6px) rotate(var(--tilt));outline:none}
-.secret-menu__social svg{width:32px;height:32px}
-.secret-menu__social--linkedin{font-size:32px;font-weight:700;letter-spacing:-.02em}
+.secret-menu__social svg{width:26px;height:26px}
+.secret-menu__social--linkedin{font-size:26px;font-weight:700;letter-spacing:-.02em}
 @media (prefers-reduced-motion: reduce){
   .secret-menu__panel,.secret-menu__panel a,.secret-menu__scrim,
   .secret-menu__trigger,.secret-menu__social{transition:none !important}
@@ -333,6 +333,12 @@ img{max-width:100%}
       background:var(--lime);color:#000;border-color:var(--lime);outline:none}
 .say-hi__icon svg{width:32px;height:32px}
 .say-hi__icon--linkedin{font-size:32px;font-weight:700;letter-spacing:-.02em}
+@media (max-width:480px){
+  .say-hi__icons{gap:12px}
+  .say-hi__icon{width:68px;height:68px}
+  .say-hi__icon svg{width:28px;height:28px}
+  .say-hi__icon--linkedin{font-size:28px}
+}
 
 /* --- footer: gradient close, giant linked name, stacked links, contact
    icons. Identical on every page — the homepage's version is the only
