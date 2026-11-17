@@ -391,15 +391,22 @@ a.card:hover .card__panel,a.card:focus-visible .card__panel{background:#fff;colo
                  radial-gradient(90% 70% at 100% 100%,rgba(255,255,255,.12),rgba(255,255,255,0) 65%)}
 a.card:hover .card__panel::before,a.card:focus-visible .card__panel::before{opacity:0}
 a.card:hover .card__panel,a.card:focus-visible .card__panel{box-shadow:0 14px 36px -8px rgba(0,0,0,.22)}
-a.card:hover .card__tag,a.card:focus-visible .card__tag{background:#f455a7;color:#fff}
+a.card:hover .card__tag,a.card:focus-visible .card__tag{background:#f455a7;color:#fff;box-shadow:none}
 a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
 .card--soon{cursor:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='28'>%E2%8F%B3</text></svg>") 16 16,default}
 .card--soon .card__panel{background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.3);
       filter:grayscale(.6)}
-.card__tag{align-self:flex-start;background:#fff;color:#f455a7;font-size:16px;font-weight:600;
-      padding:4px 14px;border-radius:100px;transition:background-color .3s ease,color .3s ease;
+/* tags: small frosted-glass chips (same recipe as the glass surfaces —
+   tokens at the top of this file; shared with .split__tag on the
+   split-layout case studies). On hover the card flips to solid white, so
+   the chip flips to solid pink with it — glass would vanish on white. */
+.card__tag{align-self:flex-start;font-size:16px;line-height:1;padding:10px 16px;border-radius:12px;
+      background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.07));
+      -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+      box-shadow:var(--glass-rim);
+      transition:background-color .3s ease,color .3s ease,box-shadow .3s ease;
       will-change:background-color}
-.card--soon .card__tag{background:rgba(255,255,255,.25);color:rgba(255,255,255,.8)}
+.card--soon .card__tag{opacity:.7}
 .card__title{font-size:clamp(22px,2.6vw,32px);font-weight:600;margin:0}
 .card--soon .card__title{color:rgba(255,255,255,.7)}
 /* --- desc: shared body-copy size/weight for description-style text
@@ -479,5 +486,6 @@ a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
 .js-hover-suspended .card__fan-img{opacity:0 !important}
 .js-hover-suspended a.card{transform:none !important}
 .js-hover-suspended a.card .card__panel{background:rgba(255,255,255,.1) !important;color:#fff !important}
-.js-hover-suspended a.card .card__tag{background:#fff !important;color:#f455a7 !important}
+.js-hover-suspended a.card .card__tag{background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.07)) !important;
+      color:#fff !important;box-shadow:var(--glass-rim) !important}
 .js-hover-suspended a.card .card__desc{opacity:.9 !important}
