@@ -9,7 +9,7 @@
   var closeBtn = document.getElementById('article-lightbox-close');
   if (!dialog || !lightboxImg || !closeBtn) return;
 
-  document.querySelectorAll('.article img').forEach(function (img) {
+  document.querySelectorAll('.article img, .split__fig img').forEach(function (img) {
     img.addEventListener('click', function () {
       lightboxImg.src = img.currentSrc || img.src;
       lightboxImg.alt = img.alt;

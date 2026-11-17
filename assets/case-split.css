@@ -1,0 +1,81 @@
+/* --- split-screen case study ("simple" case study template) ---
+   Layout borrowed from a reference portfolio page: a text column pinned
+   to the left half of the screen while the right half is a scrolling
+   stack of images, so the write-up stays readable the whole time you
+   look through the work. Visual language is this site's own (animated
+   background, Bricolage Grotesque, glass chips, shared footer + secret
+   menu from /assets/site.css) — only the layout is borrowed.
+
+   Structure (see casestudies/_template/index.html):
+     .split
+       .split__info   (sticky, 100vh, left half)
+         .split__back, .split__text (.split__title/year/lead/metric/
+         more/tags)
+       .split__media  (right half; .split__fig > img | video | .split__ph)
+   The footer follows .split in normal flow. The info column is
+   position:sticky, not fixed, inside .split — so it un-pins when the
+   image column ends and the footer scrolls in full-width underneath.
+
+   Phones (<=768px) collapse to one column: text first, images below. --- */
+
+.split{display:flex;align-items:flex-start}
+
+/* --- left: text column --- */
+.split__info{position:sticky;top:0;flex:0 0 50%;max-width:50%;height:100vh;box-sizing:border-box;
+      overflow-y:auto;display:flex;flex-direction:column;
+      padding:clamp(20px,2.4vw,32px) clamp(24px,3.2vw,48px) clamp(20px,2.4vw,32px) clamp(20px,2.4vw,32px)}
+.split__back{--tilt:-2deg;display:inline-flex;align-items:center;gap:10px;align-self:flex-start;
+      color:#fff;text-decoration:none;font-size:18px;
+      transition:transform .3s var(--spring),color .2s ease}
+.split__back:hover,.split__back:focus-visible{transform:translateX(-6px) rotate(var(--tilt));
+      color:var(--lime);outline:none}
+.split__back svg{width:22px;height:22px;flex:none}
+
+/* margin:auto 0 centers the text block in whatever height is left under
+   the back link; the padding keeps it off the back link when the text is
+   tall enough to scroll the column. */
+.split__text{margin:auto 0;padding:32px 0;max-width:540px}
+.split__title{font-size:clamp(28px,2.8vw,40px);font-weight:600;letter-spacing:-.02em;
+      line-height:1.1;margin:0 0 8px}
+.split__year{font-size:18px;opacity:.75;margin:0 0 28px}
+.split__text p{font-size:18px;font-weight:400;line-height:1.45;margin:0 0 20px}
+.split__text .split__lead{font-weight:600}
+.split__text .split__metric{font-weight:600;color:var(--lime)}
+.split__more{--tilt:-2deg;display:inline-block;color:#fff;font-size:18px;
+      text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1.5px;
+      transition:transform .3s var(--spring),color .2s ease}
+.split__more:hover,.split__more:focus-visible{transform:translateY(-3px) rotate(var(--tilt));
+      color:var(--lime);outline:none}
+
+/* tags: small frosted-glass chips, same recipe as the site's glass
+   surfaces (tokens live in site.css) */
+.split__tags{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 0;padding:0}
+.split__tag{font-size:16px;line-height:1;padding:10px 16px;border-radius:12px;
+      background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.07));
+      -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+      box-shadow:var(--glass-rim)}
+
+/* --- right: image column. Top padding clears the secret-menu button
+   that floats in the page's top-right corner. --- */
+.split__media{flex:1 1 50%;min-width:0;display:flex;flex-direction:column;gap:20px;
+      padding:104px 20px 20px 0}
+.split__fig{margin:0;border-radius:20px;overflow:hidden;background:rgba(255,255,255,.12)}
+.split__fig img,.split__fig video{display:block;width:100%;height:auto}
+.split__fig img{cursor:zoom-in}
+
+/* placeholder block for template pages: swap for a real <img>/<video> */
+.split__ph{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;
+      text-align:center;padding:24px;font-size:16px;opacity:.75;
+      border:1.5px dashed rgba(255,255,255,.45);border-radius:20px}
+
+/* --- phones: one column, text first, images below --- */
+@media (max-width:768px){
+  .split{display:block}
+  .split__info{position:static;max-width:none;height:auto;overflow:visible;padding:20px 20px 8px}
+  .split__text{margin:36px 0 0;padding:0}
+  .split__media{padding:20px}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .split__back,.split__more{transition:none !important}
+}
