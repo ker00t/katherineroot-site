@@ -50,6 +50,13 @@
    Reusable for any "a | b | c" line on these pages. */
 .split__pipes{display:flex;flex-wrap:wrap;align-items:baseline}
 .split__pipes>span:not(:last-child)::after{content:"|";margin:0 .7em;opacity:.55}
+/* the results line wraps like ordinary text (a result can break across
+   lines) instead of each result moving to a new line as a block. The
+   separator is real text — two non-breaking spaces, the pipe, two more,
+   then one breakable space — so the pipe stays glued to the end of the
+   line it follows and the next result starts after it. */
+.split__metric.split__pipes{display:block}
+.split__metric.split__pipes>span:not(:last-child)::after{content:"\00a0\00a0|\00a0\00a0 ";margin:0}
 .split__text p{font-size:18px;font-weight:300;line-height:1.45;margin:0 0 18px}
 /* every paragraph is the same size (18px, set on .split__text p above);
    the lead and the result line stand out through weight and color only */
