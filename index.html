@@ -363,6 +363,15 @@
           padding-top:32px}
   }
 
+  /* --- tldr emoji reactions: a fixed, click-through, full-viewport layer
+     the script below floats emojis up through while #tldr is on screen
+     (live-stream "reactions" style). Below the secret menu (z 60) and
+     above page content; overflow:hidden so a sway can never create
+     horizontal scroll. --- */
+  #emoji-rain{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:45}
+  .emoji-rain__item{position:absolute;bottom:0;line-height:1;user-select:none;
+        will-change:transform,opacity}
+
   /* --- case-study cards: strategy / people / leadership sections. The
      card design itself (.card/.card__panel/tag/title/desc/arrow,
      .card--soon) is fully shared site-wide now — see /assets/site.css.
@@ -1187,6 +1196,72 @@
   }
   if (document.readyState === 'complete') centerMiddleSizzleItem();
   else window.addEventListener('load', centerMiddleSizzleItem);
+})();
+
+// --- tldr emoji reactions: while the "tldr" section is across the middle
+// of the screen,
+// a steady trickle of emojis floats up from the bottom edge, swaying
+// side to side and fading out near the top — like reactions bubbling up
+// on a live stream — with a small burst on entry. Stops when the section
+// scrolls away (in-flight ones finish their float), resumes on re-entry.
+// Pure transform/opacity via the Web Animations API, capped concurrent
+// count, paused while the tab is hidden; nothing at all for reduced-
+// motion users. ---
+(function () {
+  var section = document.getElementById('tldr');
+  if (!section || !('IntersectionObserver' in window)) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var EMOJI = ['💖', '❤️', '😍', '🔥', '✨', '🎉', '👏', '🙌', '🥳', '🌈', '🦄', '🤩', '🫶', '💅', '💜', '😭'];
+  var MAX_LIVE = 28;
+  var layer = document.createElement('div');
+  layer.id = 'emoji-rain';
+  layer.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(layer);
+
+  var live = 0, timer = null, active = false;
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function spawn() {
+    if (document.hidden || live >= MAX_LIVE) return;
+    var small = window.innerWidth < 640;
+    var el = document.createElement('span');
+    el.className = 'emoji-rain__item';
+    el.textContent = EMOJI[Math.floor(Math.random() * EMOJI.length)];
+    el.style.left = rand(4, 92) + '%';
+    el.style.fontSize = Math.round(small ? rand(24, 40) : rand(30, 56)) + 'px';
+    layer.appendChild(el);
+    live++;
+
+    var rise = window.innerHeight * rand(.7, 1.05) + 60;
+    var sway = rand(18, 46) * (Math.random() < .5 ? -1 : 1);
+    var tilt = rand(-18, 18);
+    var anim = el.animate([
+      { transform: 'translate(0,30px) scale(.4) rotate(0deg)', opacity: 0 },
+      { transform: 'translate(' + sway * .5 + 'px,' + (-rise * .12) + 'px) scale(1) rotate(' + tilt * .4 + 'deg)', opacity: 1, offset: .12 },
+      { transform: 'translate(' + (-sway) + 'px,' + (-rise * .45) + 'px) scale(1) rotate(' + (-tilt) + 'deg)', opacity: 1, offset: .45 },
+      { transform: 'translate(' + sway * .8 + 'px,' + (-rise * .75) + 'px) scale(.95) rotate(' + tilt + 'deg)', opacity: .9, offset: .75 },
+      { transform: 'translate(' + (-sway * .4) + 'px,' + (-rise) + 'px) scale(.8) rotate(0deg)', opacity: 0 }
+    ], { duration: rand(3600, 5600), easing: 'ease-out', fill: 'forwards' });
+    anim.onfinish = function () { el.remove(); live--; };
+  }
+
+  function tick() {
+    if (!active) return;
+    spawn();
+    timer = setTimeout(tick, rand(260, 640));
+  }
+  function start() {
+    if (active) return;
+    active = true;
+    for (var i = 0; i < 5; i++) setTimeout(spawn, i * 90);
+    timer = setTimeout(tick, 500);
+  }
+  function stop() { active = false; clearTimeout(timer); }
+
+  new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) start(); else stop(); });
+  }, { rootMargin: '-30% 0px -30% 0px', threshold: 0 }).observe(section);
 })();
 
 // --- hero "Tell me more": paced scroll past the sizzle reel. The
