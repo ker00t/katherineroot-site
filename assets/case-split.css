@@ -45,10 +45,10 @@
       line-height:1.05;margin:0 0 12px}
 .split__year{font-size:18px;font-weight:700;margin:0 0 22px}
 .split__text p{font-size:18px;font-weight:300;line-height:1.45;margin:0 0 18px}
-.split__text .split__lead{font-size:clamp(19px,1.5vw,22px);font-weight:600;line-height:1.3}
-/* the headline result reads like the homepage's big lime stats */
-.split__text .split__metric{font-size:clamp(20px,1.9vw,26px);font-weight:600;line-height:1.2;
-      color:var(--lime);margin:24px 0}
+/* every paragraph is the same size (18px, set on .split__text p above);
+   the lead and the result line stand out through weight and color only */
+.split__text .split__lead{font-weight:600}
+.split__text .split__metric{font-weight:600;color:var(--lime);margin:24px 0}
 .split__more{--tilt:2deg;margin:0 0 4px}
 
 /* tags: small frosted-glass chips, same recipe as the site's glass
