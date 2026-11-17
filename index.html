@@ -71,6 +71,12 @@
      stay visually seamless with it. */
   .hero{gap:clamp(0px,0vw,24px);position:relative;z-index:2;
         animation:bgCycle 200s ease-in-out infinite;animation-delay:var(--bg-delay,0s)}
+  /* the shared corner sparkle (site.css, z-index:1) would be painted over by
+     the hero — which sits at z-index:2 with its own opaque background for
+     the sizzle reveal — so on the homepage lift it above the hero. Still
+     below the secret menu (z-index:60) and pointer-events:none, so it
+     never blocks a click. */
+  .corner-sparkle{z-index:3}
   .hero__lead{font-size:clamp(17px,2vw,24px);margin:0}
   .hero .cta{margin-top:clamp(20px,4vw,40px)}
   .name{display:flex;flex-wrap:wrap;justify-content:center;row-gap:.05em;
