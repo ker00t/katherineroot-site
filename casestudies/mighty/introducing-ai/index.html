@@ -5,163 +5,59 @@
 <script src="/assets/bg-continuity.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="/assets/favicon.png" type="image/png">
-<title>Introducing AI | Katherine Root</title>
+<title>AI Hackathon | Katherine Root</title>
 <meta name="description" content="When AI started changing the tech industry in 2023, we held a hackathon to put it to work for Mighty — and released a powerful set of AI features.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Katherine Root">
-<meta property="og:title" content="Introducing AI | Katherine Root">
+<meta property="og:title" content="AI Hackathon | Katherine Root">
 <meta property="og:description" content="When AI started changing the tech industry in 2023, we held a hackathon to put it to work for Mighty — and released a powerful set of AI features.">
 <meta property="og:url" content="https://www.katherineroot.com/casestudies/mighty/introducing-ai/">
 <meta property="og:image" content="https://www.katherineroot.com/assets/thumbnail.png">
 <meta property="og:image:width" content="1920">
 <meta property="og:image:height" content="1080">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Introducing AI | Katherine Root">
+<meta name="twitter:title" content="AI Hackathon | Katherine Root">
 <meta name="twitter:description" content="When AI started changing the tech industry in 2023, we held a hackathon to put it to work for Mighty — and released a powerful set of AI features.">
 <meta name="twitter:image" content="https://www.katherineroot.com/assets/thumbnail.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
-<style>
-  /* --- case-study article shell: shared tokens/animated background/
-     back-link/page-head/article typography/nav/cta/say-hi/footer now
-     live in /assets/site.css. What's left here is this page's own
-     say-hi/footer size overrides (shrunk to the subpage-template scale),
-     the fixed-size cta variant this page uses, and this page's own
-     image/video margin treatment. --- */
-
-  .article__img{margin:32px auto}
-  .article__video{max-width:100%}
-
-  /* header sits in plain document flow — a fixed 120px gap to the
-     lead screenshot below (see .article__breakout:first-child)
-     matches Figma's actual auto-layout numbers exactly. */
-  .page-head{padding-bottom:0}
-  .article{padding-top:0}
-  .article::before{background:linear-gradient(to bottom,rgba(255,255,255,0) 0,rgba(255,255,255,0) 200px,#fff 300px,#fff calc(100% - 220px),rgba(255,255,255,0) 100%)}
-  .article__breakout{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
-  .article>.article__breakout:first-child{margin-top:120px}
-  .article__breakout .article__img-row{max-width:1100px;margin:0 auto}
-  .article__breakout .article__img{width:100%;height:auto;margin:0}
-
-  .cta{font-size:16px;padding:14px 28px}
-
-  @media (prefers-reduced-motion: reduce){
-    .cta{transition:none !important}
-  }
-</style>
+<link rel="stylesheet" href="/assets/case-split.css">
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <img class="corner-sparkle" src="/assets/sparkle.svg" alt="" aria-hidden="true">
 
-
-  <div class="back-link">
-    <a href="/casestudies/index.html" aria-label="Back to Mighty Networks">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-    </a>
-  </div>
-
-  <div class="page-head">
-    <h1 class="page-head__title">Introducing AI</h1>
-    <p class="page-head__meta">Case Study · Mighty Networks</p>
-    <p class="page-head__intro">When it became clear in early 2023 that AI was changing the tech industry, we held a hackathon to ensure Mighty was using this awesome technology to our advantage, and ultimately released a powerful set of AI features.</p>
-    <a class="cta page-head__cta" href="#article" style="--tilt:-2deg">Read on <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg></a>
-  </div>
-
-  <article class="article" id="article">
-    <div class="article__breakout">
-      <div class="article__img-row">
-        <img class="article__img" src="media/ai-1.png" alt="">
+  <div class="split">
+    <aside class="split__info">
+      <a class="split__back" href="/casestudies/index.html" aria-label="Back to case studies">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      </a>
+      <div class="split__text">
+        <h1 class="split__title">AI Hackathon</h1>
+        <p class="split__year">2023</p>
+        <p class="split__lead">We had a full roadmap and two weeks to figure out where AI belonged in the product.</p>
+        <p>When it became clear in early 2023 that AI was changing the tech industry, Mighty ran a two-week, company-wide hackathon to bring it into the product fast. It started with over 50 ideas, squads built 22 hacks, and 11 went into production, all released within a couple of weeks. The design team learned prompt engineering, created a visual language that made AI features feel alive, approachable, and contained, and consulted on every hack team.</p>
+        <p>As Director of Design, I led the design team&#x27;s part in the hackathon, from defining the AI visual language to shaping use cases with each team.</p>
+        <p class="split__metric">11 of 22 hacks shipped within weeks, one of Mighty&#x27;s most successful hackathons ever</p>
+        <a class="cta split__more" href="/casestudies/mighty/introducing-ai/full/">Full case study <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <ul class="split__tags">
+          <li class="split__tag">AI Design</li>
+          <li class="split__tag">Visual Language</li>
+        </ul>
       </div>
-    </div>
+    </aside>
 
-    <h2>The Problem</h2>
-    <p>"With AI setting new consumer expectations, we needed to raise the bar for the services we provided at Mighty to show we were on the leading edge."</p>
-    <p>The challenge involved three key objectives:</p>
-    <ul>
-      <li>Be radically more helpful to our Hosts and members by incorporating AI into the core of our platform.</li>
-      <li>Maintain our position as a leader in tech innovation. The timeline was tight &mdash; if we didn't move quickly, someone else would.</li>
-      <li>Learn to work with the technology. With AI advancing rapidly, it was crucial to dive in and start experimenting.</li>
-    </ul>
-    <p>All of that being said, we already had a full roadmap of critical projects for the year, leaving us wondering where we could possibly fit in this brand new set of work.</p>
+    <main class="split__media">
+      <figure class="split__fig"><img src="/casestudies/mighty/introducing-ai/media/ai-1.png" alt="AI Projects Summary: the hackathon projects grouped by area and audience"></figure>
+      <figure class="split__fig"><video src="/casestudies/mighty/introducing-ai/media/ai-video-1.mp4" autoplay loop muted playsinline aria-label="Hackathon by the numbers, starting with 50+ ideas gathered"></video></figure>
+      <figure class="split__fig"><img src="/casestudies/mighty/introducing-ai/media/ai-2.png" alt="The AI visual language spec for buttons and components"></figure>
+      <figure class="split__fig"><video src="/casestudies/mighty/introducing-ai/media/ai-video-3.mp4" autoplay loop muted playsinline aria-label="Another AI feature in action in Mighty Networks"></video></figure>
+    </main>
+  </div>
 
-    <h2>The Solution</h2>
-    <p>The approach used a two-week company-wide hackathon with strategic benefits:</p>
-    <ul>
-      <li>It allowed us to integrate AI into our product workflows quickly and organically.</li>
-      <li>The hackathon format demonstrated how fast and agile our teams could be.</li>
-      <li>Our squads were already adept at delivering meaningful results, so this was an opportunity to adapt under pressure.</li>
-    </ul>
-
-    <h3>Hackathon Criteria</h3>
-    <ul>
-      <li>Features must help Hosts or members.</li>
-      <li>AI-powered tools, not chatbots.</li>
-      <li>No popularity contests.</li>
-      <li>Attach to an AI identity.</li>
-    </ul>
-
-    <h3>Product Design Team Responsibilities</h3>
-    <ul>
-      <li>Learning prompt engineering to optimize user interaction with AI features.</li>
-      <li>Creating a clear visual language to distinguish AI-powered elements and ensuring consistency.</li>
-      <li>Consulting across every hack team to help define use cases and create visuals.</li>
-    </ul>
-
-    <h2>How Did It Go?</h2>
-    <p>The hackathon moved quickly over the course of two weeks. We began with a brainstorming phase that generated over 50 ideas.</p>
-    <ul>
-      <li>Squads sponsored the projects they were passionate about, working on 22 hacks.</li>
-      <li>After intense collaboration, we selected 11 projects to move forward into production.</li>
-      <li>We were ultimately able to release them all over the course of the next couple of weeks.</li>
-    </ul>
-    <video class="article__video" src="media/ai-video-1.mp4" autoplay loop muted playsinline></video>
-
-    <h2>Visual Language</h2>
-    <p>The design team created AI features that felt:</p>
-    <h3>Alive</h3>
-    <p>"One of our product principles at Mighty is that a Network should always feel alive with activity, and AI should be no exception to that."</p>
-    <h3>Approachable</h3>
-    <p>"While people in the tech industry are all super familiar with AI and its benefits, our user base is extremely broad, and often includes those who are not as technically savvy."</p>
-    <h3>Contained</h3>
-    <p>"As much as our AI features needed to blend into the rest of the Network, we also wanted to be clear about what was making use of AI and what wasn't."</p>
-    <p>Below is an example of a spec created for the buttons, which addresses all of these areas.</p>
-    <img class="article__img" src="media/ai-2.png" alt="">
-    <blockquote>"As with every project at a fast moving startup, especially during a hackathon, you'll notice that even with these guidelines our visual language is not as consistent as we'd like."</blockquote>
-
-    <h2>Favorite AI Features</h2>
-    <h3>Show Similarities and Conversation Starter</h3>
-    <video class="article__video" src="media/ai-video-2.mp4" autoplay loop muted playsinline></video>
-    <p>Found on member profiles, this feature suggests commonalities between users based on engagement, location, bios, and more, and uses those commonalities to generate conversation starters.</p>
-    <p>These features speak to one of the core principals at Mighty &mdash; People Magic. In this instance, AI helped us find ways to alleviate some of the awkward moments one encounters when trying to connect with someone new.</p>
-
-    <h3>Suggested Hashtags</h3>
-    <video class="article__video" src="media/ai-video-3.mp4" autoplay loop muted playsinline></video>
-    <p>This feature appears in Quick Posts and Articles, providing hashtag suggestions where none exist, marked by a sparkle icon.</p>
-    <p>Removing the work of deciding what hashtag to add to a post makes it feel less onerous and therefore more likely for people to use them.</p>
-
-    <h3>Inactive Member Re-Engagement</h3>
-    <p>In this instance, AI helped us meet a longstanding Host ask in our platform more quickly than would have otherwise been possible.</p>
-    <p>With this feature, Hosts can identify who in their Network is considered to be "inactive," and quickly reach out to try and re-engage them.</p>
-
-    <h2>Conclusion</h2>
-    <h3>Skills Gained</h3>
-    <ul>
-      <li><strong>Rapid demos and prototypes</strong> &mdash; culturally this was not a skill we were particularly good at practicing.</li>
-      <li><strong>AI as a product tool</strong> &mdash; because we made such a big deal about AI early on, it gave permission to our product team to think of other ways we could incorporate AI.</li>
-    </ul>
-    <h3>Learnings and Adjustments</h3>
-    <ul>
-      <li><strong>Ability to toggle AI features</strong> &mdash; some Hosts were particularly skeptical about the use of AI in the product.</li>
-      <li><strong>Feedback mechanisms</strong> &mdash; while we acknowledged the risks of this decision ahead of time, we released our suite of AI features without any in-product feedback mechanisms.</li>
-      <li><strong>Mighty Co-Host</strong> &mdash; as a B2B2C business, we serve two sets of users: Hosts and members. We decided to call our AI "Mighty Co-Host," which ultimately ended up causing quite a bit of confusion.</li>
-    </ul>
-    <p>In the end, this was one of our most successful hackathons ever at Mighty. And while not every feature we built was the most innovative or unique, we were able to meet our goals of accelerating AI adoption, proving the strength of our teams to quickly deliver impactful innovations under pressure, and embrace the wild world that is modern technology.</p>
-  </article>
-
-  <!-- click any article image to open it larger here -->
+  <!-- click any image in the media column to open it larger here -->
   <dialog id="article-lightbox">
     <button type="button" id="article-lightbox-close" aria-label="Close">&times;</button>
     <img id="article-lightbox-img" src="" alt="">
