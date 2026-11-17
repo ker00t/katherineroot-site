@@ -44,6 +44,12 @@
 .split__title{font-size:clamp(32px,3.5vw,54px);font-weight:600;letter-spacing:-.02em;
       line-height:1.05;margin:0 0 12px}
 .split__year{font-size:18px;font-weight:700;margin:0 0 22px}
+/* a run of short items separated by pipes ("Company  |  Role  |  Year"):
+   each item is a <span>, and every item but the last gets a pipe after it,
+   so a wrapped line ends with a pipe rather than starting with one.
+   Reusable for any "a | b | c" line on these pages. */
+.split__pipes{display:flex;flex-wrap:wrap;align-items:baseline}
+.split__pipes>span:not(:last-child)::after{content:"|";margin:0 .7em;opacity:.55}
 .split__text p{font-size:18px;font-weight:300;line-height:1.45;margin:0 0 18px}
 /* every paragraph is the same size (18px, set on .split__text p above);
    the lead and the result line stand out through weight and color only */
