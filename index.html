@@ -369,7 +369,12 @@
      What's left here is this page's own .cards container and the
      fan-hover phone mockups below, an optional extra on top of the
      shared card design that only the homepage uses. --- */
-  .cards{display:flex;gap:25px;flex-wrap:wrap;justify-content:center;max-width:1280px}
+  /* width:100% — .cards is a bare flex item of the section (align-items:
+     center), so without it the row shrink-wraps to its cards' content
+     width. Cards with long descriptions happened to fill the 1280px max,
+     but short/empty ones (e.g. "coming soon" cards) collapsed it to one
+     card wide and wrapped the second card onto its own line. */
+  .cards{display:flex;gap:25px;flex-wrap:wrap;justify-content:center;width:100%;max-width:1280px}
 
   /* --- card fan-hover: same pop-from-the-corner phone fan as the live
      site's company-hover on Manta/Mighty, ported verbatim (same image
@@ -814,7 +819,7 @@
     <a class="cta" href="#people" style="--tilt:-4deg">Very Cool <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
-  <!-- ============ people ============ -->
+  <!-- ============ empathy ============ -->
   <section class="section" id="people">
     <h2 class="section__title">My work is grounded in empathy and understanding. Always.</h2>
     <div class="cards-scroll">
@@ -846,23 +851,23 @@
     <a class="cta" href="#leadership" style="--tilt:3deg">Interesting <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </section>
 
-  <!-- ============ leadership ============ -->
+  <!-- ============ systems ============ -->
   <section class="section" id="leadership">
-    <h2 class="section__title">That empathy also allows me to build thriving teams, systems, and cultures.</h2>
+    <h2 class="section__title">That deep understanding allows me to design complex systems that last.</h2>
     <div class="cards-scroll">
     <div class="cards">
       <div class="card card--soon" style="--tilt:-2deg">
         <span class="card__panel">
           <span class="card__tag">COMING SOON</span>
-          <span class="card__title">Building Remote Culture</span>
-          <span class="card__desc desc">Scaling the design team at Mighty from 2 members to 10, all while navigating the new waters of working remotely &mdash; and building a collaborative, creative environment online.</span>
+          <span class="card__title">Membership Plans</span>
+          <span class="card__desc desc"></span>
         </span>
       </div>
       <div class="card card--soon" style="--tilt:3deg">
         <span class="card__panel">
           <span class="card__tag">COMING SOON</span>
-          <span class="card__title">Make Mighty Cool</span>
-          <span class="card__desc desc">How do you build a product organization that not only understands the value of design, but actively contributes to delightful interactions? An initiative to get full org buy-in on the power of design details.</span>
+          <span class="card__title">Mighty UI2</span>
+          <span class="card__desc desc"></span>
         </span>
       </div>
     </div>
@@ -872,7 +877,7 @@
 
   <!-- ============ screens ============ -->
   <section class="section" id="screens">
-    <h2 class="section__title">Oh and I make things look pretty ✨</h2>
+    <h2 class="section__title">Oh, and I make things look pretty ✨</h2>
     <div class="screens-gallery">
     <div class="screens__row embla">
       <div class="embla__viewport" id="screens-viewport">
