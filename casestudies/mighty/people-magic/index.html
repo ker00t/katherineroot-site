@@ -23,87 +23,38 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
-<style>
-  /* --- case-study article shell: shared tokens/animated background/
-     back-link/page-head/article typography/nav/cta/say-hi/footer now
-     live in /assets/site.css. What's left here is this page's own
-     "idea" list treatment (h3 sits right under an .idea-label instead
-     of standalone, so it needs less top margin), the full-width image/
-     max-width video this page uses, the fixed-size + opposite-tilt cta
-     variant, and the say-hi/footer size overrides shrunk to the
-     subpage-template scale. --- */
-
-  .article h3{margin-bottom:4px}
-  .article .idea-label{display:block;font-size:14px;font-weight:600;letter-spacing:.04em;
-        text-transform:uppercase;opacity:.7;margin:36px 0 2px}
-  .article__img{width:100%}
-  .article__video{max-width:100%}
-
-  /* header sits in plain document flow — a fixed 120px gap to the
-     banner image below matches Figma's actual auto-layout numbers
-     exactly. */
-  .page-head{padding-bottom:0}
-  .article{padding-top:0}
-  .article::before{background:linear-gradient(to bottom,rgba(255,255,255,0) 0,rgba(255,255,255,0) 200px,#fff 300px,#fff calc(100% - 220px),rgba(255,255,255,0) 100%)}
-  .article__breakout{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
-  .article>.article__breakout:first-child{margin-top:120px}
-  .article__breakout .article__img-row{max-width:1100px;margin:0 auto}
-  .article__breakout .article__img{width:100%;height:auto}
-
-  .cta{--tilt:2deg;font-size:16px;padding:14px 28px}
-
-  @media (prefers-reduced-motion: reduce){
-    .cta{transition:none !important}
-  }
-</style>
+<link rel="stylesheet" href="/assets/case-split.css">
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <img class="corner-sparkle" src="/assets/sparkle.svg" alt="" aria-hidden="true">
 
-
-  <div class="back-link">
-    <a href="/casestudies/index.html" aria-label="Back to Mighty Networks">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-    </a>
-  </div>
-
-  <div class="page-head">
-    <h1 class="page-head__title">Unlocking People Magic</h1>
-    <p class="page-head__meta">Case Study · Mighty Networks</p>
-    <p class="page-head__intro">As a B2B2C company, Mighty Networks has to balance catering not just to our Hosts, but to their members. In my experience, if you build for the members, the Hosts will follow &mdash; so how do we make their experience truly magical?</p>
-    <a class="cta page-head__cta" href="#article" style="--tilt:-2deg">Read on <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg></a>
-  </div>
-
-  <article class="article" id="article">
-    <div class="article__breakout">
-      <div class="article__img-row">
-        <img class="article__img" src="media/pm-banner.png" alt="">
+  <div class="split">
+    <aside class="split__info">
+      <a class="split__back" href="/casestudies/index.html" aria-label="Back to case studies">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      </a>
+      <div class="split__text">
+        <h1 class="split__title">Unlocking People Magic</h1>
+        <p class="split__year">[Year TBD]</p>
+        <p class="split__lead">People magic was the promise of the platform, but it was missing from the small moments of using it.</p>
+        <p>Mighty Networks is a B2B2C product, so we serve Hosts and their members at once, and my bet is that if you build for the members, the Hosts will follow. Yet for all our talk about people magic, the feeling of being seen and connected was often missing from everyday use. So I started collecting small moments that could close the gap. A modern member list organizes people into smaller, more intentional groups, with profiles that offer a mini bio and quick, low-barrier ways to say hello. Recognitions got a frictionless way to say thanks, with in-chat reactions and AI-suggested messages that skip the dreaded blank page.</p>
+        <p>As Director of Design, I keep a rolling list of these moments and design them one by one, with more on the way.</p>
+        <ul class="split__tags">
+          <li class="split__tag">Interaction Design</li>
+          <li class="split__tag">Product Design</li>
+        </ul>
       </div>
-    </div>
+    </aside>
 
-    <h2>The Premise</h2>
-    <blockquote>At the heart of the Mighty Networks platform lies the idea of "people magic" &mdash; a spark that makes members feel seen, appreciated, and authentically connected.</blockquote>
-    <p>Yet for all the talk about people magic, it's often missing in the small, day-to-day moments of using the product. Part of my role as Director of Design is to constantly look for ways to deliver on the promise of meaningful human connection, rather than just talk about it. In this case study, I collect and explore a rolling list of little moments I've defined over the years.</p>
+    <main class="split__media">
+      <figure class="split__fig"><img src="media/pm-banner.png" alt="People magic: member profiles, recognitions, and connections in Mighty Networks"></figure>
+      <figure class="split__fig"><video src="media/pm-video-1.mp4" autoplay loop muted playsinline aria-label="A modern member list: smaller groups and a mini-bio profile with quick actions"></video></figure>
+      <figure class="split__fig"><video src="media/pm-video-2.mp4" autoplay loop muted playsinline aria-label="Saying thanks for a recognition with an in-chat reaction or AI-suggested message"></video></figure>
+    </main>
+  </div>
 
-    <span class="idea-label">Idea #1</span>
-    <h3>A Modern Member List</h3>
-    <video class="article__video" src="media/pm-video-1.mp4" autoplay loop muted playsinline></video>
-    <p>We already have a "people explorer," but simply showing faces doesn't automatically spark connection. I refreshed this feature by reducing clutter and organizing members into smaller, more intentional groups. Tapping on a face reveals a modern profile with a mini bio about the person, and a selection of quick, low-barrier actions.</p>
-    <p>These small, targeted interactions invite people to connect over shared interests or experiences, rather than leaving them to guess how or why they should reach out. Over time, we aim to introduce a "meet others like this person" feature to keep that thread of connection strong, helping members naturally build their network.</p>
-
-    <span class="idea-label">Idea #2</span>
-    <h3>Say Thanks for Recognitions</h3>
-    <video class="article__video" src="media/pm-video-2.mp4" autoplay loop muted playsinline></video>
-    <p>A recognition should be effortless and feel fantastic &mdash; both for the giver and the receiver. But writing a full message of thanks can be intimidating, especially when the space feels blank and formal. To solve this, I envision a frictionless way to react in-chat or send a quick AI-suggested message, preserving the good vibes of getting recognized without burdening users with the dreaded "blank page" problem.</p>
-    <p>This design also taps into shared values and familiar faces &mdash; small moments that make gratitude feel magical and keep the momentum going.</p>
-
-    <span class="idea-label">Ideas #3, #4, #5, #6&hellip;</span>
-    <h3>On Their Way 😉</h3>
-    <p>Finding these magical moments in a product experience is the never ending work of a designer &mdash; they're the kinds of things that keep me up in the middle of the night. Keep checking back here to see what new ideas are on my mind lately!</p>
-  </article>
-
-  <!-- click any article image to open it larger here -->
+  <!-- click any image in the media column to open it larger here -->
   <dialog id="article-lightbox">
     <button type="button" id="article-lightbox-close" aria-label="Close">&times;</button>
     <img id="article-lightbox-img" src="" alt="">

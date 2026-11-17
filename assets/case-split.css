@@ -70,7 +70,11 @@
       background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.08));
       box-shadow:var(--glass-rim),0 14px 36px -10px rgba(0,0,0,.25);
       transition:transform .3s var(--spring)}
-.split__fig img,.split__fig video{display:block;width:100%;height:auto}
+/* tall media (phone recordings/screenshots) is capped at roughly one
+   screen so it never takes more than a viewport to scroll past; object-fit
+   letterboxes it inside the frame instead of stretching it */
+.split__fig img,.split__fig video{display:block;width:100%;height:auto;
+      max-height:calc(100vh - 40px);object-fit:contain}
 .split__fig img{cursor:zoom-in}
 @media (hover:hover){
   .split__fig:hover{transform:translateY(-4px)}
