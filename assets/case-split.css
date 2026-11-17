@@ -37,10 +37,10 @@
       color:var(--lime);outline:none}
 .split__back svg{width:48px;height:48px}
 
-/* margin:auto 0 centers the text block in whatever height is left under
-   the back arrow; the padding keeps it off the arrow when the text is
-   tall enough to scroll the column. */
-.split__text{margin:auto 0;padding:12px 0 24px;max-width:600px}
+/* margin-top:auto pushes the text block to the bottom of the column
+   (the back arrow stays at the top); the top padding keeps it off the
+   arrow when the text is tall enough to scroll the column. */
+.split__text{margin:auto 0 0;padding:12px 0 0;max-width:600px}
 .split__title{font-size:clamp(32px,3.5vw,54px);font-weight:600;letter-spacing:-.02em;
       line-height:1.05;margin:0 0 12px}
 .split__year{font-size:18px;font-weight:700;margin:0 0 22px}
