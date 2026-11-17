@@ -1211,7 +1211,7 @@
 // off only slightly, drift side to side on a gentle sine wave with a
 // slight matching tilt, and fade in and out softly. Each path is sampled
 // into ~48 keyframes from smooth curves so there are no visible kinks.
-// Smaller emojis are a touch lighter and slower, a subtle sense of depth.
+// Smaller emojis are a touch lighter, a subtle sense of depth.
 // transform/opacity only (Web Animations API); capped concurrent count,
 // paused while the tab is hidden; nothing at all for reduced-motion
 // users. ---
@@ -1260,7 +1260,7 @@
 
     var startY = size * 1.4;                      // begins just below the screen edge
     var travel = startY + window.innerHeight * rand(.8, 1.0);
-    var duration = rand(5600, 7400) * (1.1 - .1 * depth);
+    var duration = rand(3600, 5600);              // the original float speed
     var peak = .72 + .28 * depth;                 // furthest ones are a little lighter
     var dir = Math.random() < .5 ? -1 : 1;
     var swayAmp = rand(9, 18) * dir;              // px, deliberately small
