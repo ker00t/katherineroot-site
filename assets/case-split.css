@@ -4,8 +4,8 @@
    stack of images, so the write-up stays readable the whole time you
    look through the work. Everything visual is this site's own, reusing
    the same pieces as the other pages: the oversized bare back arrow,
-   big tight-tracked headline, lime stat line, white-pill tags (same as
-   .card__tag), glossy lime .cta, corner sparkle, frosted-glass image
+   big tight-tracked headline, lime stat line, frosted-glass tag chips,
+   glossy lime .cta, corner sparkle, frosted-glass image
    frames with the spring hover lift, and the shared footer + secret
    menu from /assets/site.css.
 
@@ -51,11 +51,13 @@
       color:var(--lime);margin:24px 0}
 .split__more{--tilt:2deg;margin:0 0 4px}
 
-/* tags: the same white pill + pink text as the case-study cards' tag
-   (.card__tag in site.css) */
+/* tags: small frosted-glass chips, same recipe as the site's glass
+   surfaces (tokens live in site.css) */
 .split__tags{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 0;padding:0}
-.split__tag{background:#fff;color:#f455a7;font-size:16px;font-weight:600;line-height:1.5;
-      padding:4px 14px;border-radius:100px;text-transform:uppercase}
+.split__tag{font-size:16px;line-height:1;padding:10px 16px;border-radius:12px;
+      background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.07));
+      -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+      box-shadow:var(--glass-rim)}
 
 /* --- right: image column. Top padding clears the secret-menu button and
    corner sparkle that float in the page's top-right corner. --- */
