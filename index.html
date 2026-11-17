@@ -1201,67 +1201,107 @@
 })();
 
 // --- tldr emoji reactions: while the "tldr" section is across the middle
-// of the screen,
-// a steady trickle of emojis floats up from the bottom edge, swaying
-// side to side and fading out near the top — like reactions bubbling up
-// on a live stream — with a small burst on entry. It runs for a few
-// seconds after landing, then stops by itself (in-flight ones finish
-// their float); scrolling away and back in runs it again.
-// Pure transform/opacity via the Web Animations API, capped concurrent
-// count, paused while the tab is hidden; nothing at all for reduced-
-// motion users. ---
+// of the screen, a short, evenly spaced stream of emojis glides up from
+// the bottom edge — like reactions rising on a live stream. It runs for
+// a couple of seconds after landing, then stops by itself (in-flight ones
+// finish their float); scrolling away and back in runs it again.
+// Motion is meant to feel calm and polished rather than bouncy: emojis
+// never change size — they enter by rising in from below the screen edge
+// (the layer clips them), travel up at a nearly steady pace that eases
+// off only slightly, drift side to side on a gentle sine wave with a
+// slight matching tilt, and fade in and out softly. Each path is sampled
+// into ~48 keyframes from smooth curves so there are no visible kinks.
+// Smaller emojis are a touch lighter and slower, a subtle sense of depth.
+// transform/opacity only (Web Animations API); capped concurrent count,
+// paused while the tab is hidden; nothing at all for reduced-motion
+// users. ---
 (function () {
   var section = document.getElementById('tldr');
   if (!section || !('IntersectionObserver' in window)) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   var EMOJI = ['💖', '❤️', '😍', '🔥', '✨', '🎉', '👏', '🙌', '🥳', '🌈', '🦄', '🤩', '🫶', '💅', '💜', '😭'];
-  var MAX_LIVE = 28;
+  var MAX_LIVE = 24;
+  var STEPS = 48;     // keyframes per emoji
   var layer = document.createElement('div');
   layer.id = 'emoji-rain';
   layer.setAttribute('aria-hidden', 'true');
   document.body.appendChild(layer);
 
   var RUN_MS = 2000;  // how long the reactions keep coming after landing
-  var live = 0, timer = null, endTimer = null, active = false;
+  var live = 0, timer = null, endTimer = null, active = false, recentX = [];
   function rand(a, b) { return a + Math.random() * (b - a); }
+  function smooth(t) { t = t < 0 ? 0 : t > 1 ? 1 : t; return t * t * (3 - 2 * t); }
+
+  // pick a spot along the bottom that isn't right next to the last few
+  function pickX() {
+    var x, tries = 0;
+    do { x = rand(5, 92); tries++; }
+    while (tries < 8 && recentX.some(function (r) { return Math.abs(r - x) < 12; }));
+    recentX.push(x);
+    if (recentX.length > 4) recentX.shift();
+    return x;
+  }
 
   function spawn() {
     if (document.hidden || live >= MAX_LIVE) return;
     var small = window.innerWidth < 640;
+    var lo = small ? 26 : 30, hi = small ? 36 : 44;
+    var size = Math.round(rand(lo, hi));
+    var depth = (size - lo) / (hi - lo);         // 0 = smallest/furthest, 1 = largest/nearest
+
     var el = document.createElement('span');
     el.className = 'emoji-rain__item';
     el.textContent = EMOJI[Math.floor(Math.random() * EMOJI.length)];
-    el.style.left = rand(4, 92) + '%';
-    el.style.fontSize = Math.round(small ? rand(24, 40) : rand(30, 56)) + 'px';
+    el.style.left = pickX() + '%';
+    el.style.fontSize = size + 'px';
     layer.appendChild(el);
     live++;
 
-    var rise = window.innerHeight * rand(.7, 1.05) + 60;
-    var sway = rand(18, 46) * (Math.random() < .5 ? -1 : 1);
-    var tilt = rand(-18, 18);
-    var anim = el.animate([
-      { transform: 'translate(0,30px) scale(.4) rotate(0deg)', opacity: 0 },
-      { transform: 'translate(' + sway * .5 + 'px,' + (-rise * .12) + 'px) scale(1) rotate(' + tilt * .4 + 'deg)', opacity: 1, offset: .12 },
-      { transform: 'translate(' + (-sway) + 'px,' + (-rise * .45) + 'px) scale(1) rotate(' + (-tilt) + 'deg)', opacity: 1, offset: .45 },
-      { transform: 'translate(' + sway * .8 + 'px,' + (-rise * .75) + 'px) scale(.95) rotate(' + tilt + 'deg)', opacity: .9, offset: .75 },
-      { transform: 'translate(' + (-sway * .4) + 'px,' + (-rise) + 'px) scale(.8) rotate(0deg)', opacity: 0 }
-    ], { duration: rand(3600, 5600), easing: 'ease-out', fill: 'forwards' });
+    var startY = size * 1.4;                      // begins just below the screen edge
+    var travel = startY + window.innerHeight * rand(.8, 1.0);
+    var duration = rand(5600, 7400) * (1.1 - .1 * depth);
+    var peak = .72 + .28 * depth;                 // furthest ones are a little lighter
+    var dir = Math.random() < .5 ? -1 : 1;
+    var swayAmp = rand(9, 18) * dir;              // px, deliberately small
+    var cycles = rand(.8, 1.2);                   // roughly one slow S-curve
+    var phase = rand(0, Math.PI * 2);
+    var tiltAmp = rand(3, 6) * dir;               // deg, follows the sway
+
+    var frames = [];
+    for (var i = 0; i <= STEPS; i++) {
+      var t = i / STEPS;
+      var ease = t * (1.35 - .35 * t);            // steady rise, easing off only slightly (0→1, no overshoot)
+      var env = smooth(t / .2);                   // sway builds in gently from the entry
+      var wave = Math.PI * 2 * cycles * t + phase;
+      var x = swayAmp * env * Math.sin(wave);
+      var y = startY - travel * ease;
+      var rot = tiltAmp * env * Math.cos(wave);
+      var o = peak * smooth(t / .14) * (1 - smooth((t - .62) / .38));
+      frames.push({
+        transform: 'translate3d(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px,0) rotate(' + rot.toFixed(2) + 'deg)',
+        opacity: o.toFixed(3),
+        offset: t
+      });
+    }
+    var anim = el.animate(frames, { duration: duration, easing: 'linear', fill: 'forwards' });
     anim.onfinish = function () { el.remove(); live--; };
   }
 
   function tick() {
     if (!active) return;
     spawn();
-    timer = setTimeout(tick, rand(260, 640));
+    timer = setTimeout(tick, rand(280, 400));
   }
   function start() {
     if (active) return;
     active = true;
-    for (var i = 0; i < 5; i++) setTimeout(spawn, i * 90);
-    timer = setTimeout(tick, 500);
-    // a few seconds of reactions, then it quiets down on its own; leaving
-    // and re-entering the section runs it again
+    spawn();
+    setTimeout(spawn, 170);
+    setTimeout(spawn, 340);
+    timer = setTimeout(tick, 560);
+    // a couple of seconds of reactions, then it quiets down on its own;
+    // leaving and re-entering the section runs it again
     endTimer = setTimeout(stop, RUN_MS);
   }
   function stop() { active = false; clearTimeout(timer); clearTimeout(endTimer); }
