@@ -114,9 +114,16 @@
 /* --- phones: one column, text first, images below --- */
 @media (max-width:768px){
   .split{display:block}
-  .split__info{position:static;max-width:none;height:auto;overflow:visible;padding:20px 20px 8px}
-  .split__back svg{width:48px;height:48px}
-  .split__text{margin:20px 0 0;padding:0}
+  /* the header mirrors the "Case Studies" page's (same numbers as its
+     .back-link + .page-head__title in site.css): arrow starts 120px down,
+     64px, with the page's responsive side margin; the title uses the same
+     clamp(40px,8vw,88px) size and starts where that page's title does
+     (arrow bottom + 16px padding + the 5px inline gap = 21px) */
+  .split__info{position:static;max-width:none;height:auto;overflow:visible;
+        padding:120px clamp(20px,6vw,64px) 8px}
+  .split__back svg{width:64px;height:64px}
+  .split__text{margin:21px 0 0;padding:0}
+  .split__title{font-size:clamp(40px,8vw,88px);margin-bottom:16px}
   .split__media{padding:20px}
 }
 
