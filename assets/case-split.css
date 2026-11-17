@@ -76,6 +76,11 @@
 .split__fig img,.split__fig video{display:block;width:100%;height:auto;
       max-height:calc(100vh - 40px);object-fit:contain}
 .split__fig img{cursor:zoom-in}
+/* a phone video cropped tight to the device (the white backdrop around it
+   was cut away in the file): the element is sized to the phone itself and
+   centered, and --r (set inline per video) rounds its corners to match
+   the phone's bezel, so no white shows in the corners */
+.split__fig video.split__phone{width:auto;max-width:100%;margin:0 auto;border-radius:var(--r,0)}
 @media (hover:hover){
   .split__fig:hover{transform:translateY(-4px)}
 }
