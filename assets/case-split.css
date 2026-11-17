@@ -99,6 +99,9 @@
    the whole screen), with a little air above and below inside the frame, so
    the whole phone is visible at once next to the text */
 .split__fig--phone{padding:clamp(16px,2.4vw,28px) 0}
+/* an image whose content runs right up to its own edges (e.g. phones that
+   touch the sides of the artboard) gets even padding inside the frame */
+.split__fig--pad{padding:clamp(16px,2.4vw,28px)}
 @media (hover:hover){
   .split__fig:hover{transform:translateY(-4px)}
 }
