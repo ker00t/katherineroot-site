@@ -80,7 +80,12 @@
    was cut away in the file): the element is sized to the phone itself and
    centered, and --r (set inline per video) rounds its corners to match
    the phone's bezel, so no white shows in the corners */
-.split__fig video.split__phone{width:auto;max-width:100%;margin:0 auto;border-radius:var(--r,0)}
+.split__fig video.split__phone{width:auto;max-width:100%;margin:0 auto;border-radius:var(--r,0);
+      max-height:min(70vh,620px)}
+/* phone media is capped at ~70% of the screen height (instead of filling
+   the whole screen), with a little air above and below inside the frame, so
+   the whole phone is visible at once next to the text */
+.split__fig--phone{padding:clamp(16px,2.4vw,28px) 0}
 @media (hover:hover){
   .split__fig:hover{transform:translateY(-4px)}
 }
