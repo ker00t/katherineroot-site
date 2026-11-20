@@ -344,7 +344,12 @@ img{max-width:100%}
    icons. Identical on every page — the homepage's version is the only
    version, per the site's "every page shares the exact same footer"
    rule; clicking the name always returns to the homepage. --- */
-.site-footer{background:linear-gradient(180deg,rgba(189,243,0,0) 0%,var(--lime) 100%);
+/* margin-top: breathing room between the end of a page's content and the
+   start of the footer (otherwise a page whose last element is an image or
+   card ends right where the footer's gradient begins). The homepage opts
+   out — see index.html — since its footer follows the "say hi" section. */
+.site-footer{margin-top:clamp(64px,10vw,120px);
+      background:linear-gradient(180deg,rgba(189,243,0,0) 0%,var(--lime) 100%);
       padding:clamp(64px,10vw,120px) 24px clamp(48px,8vw,80px);
       display:flex;flex-direction:column;align-items:center;gap:40px;text-align:center}
 .site-footer__heading{display:flex;flex-direction:column;gap:6px}
