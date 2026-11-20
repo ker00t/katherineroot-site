@@ -349,6 +349,30 @@ img{max-width:100%}
       display:flex;flex-direction:column;align-items:center;gap:40px;text-align:center}
 .site-footer__heading{display:flex;flex-direction:column;gap:6px}
 .site-footer__name{font-size:clamp(48px,11vw,150px);font-weight:600;letter-spacing:-.04em;margin:0;text-decoration:none}
+/* --- "Take me home" tag: on every page except the homepage, hovering (or
+   keyboard-focusing) the big footer name pops a tilted lime tag above it
+   with a back arrow that leads home. Same recipe as the homepage's own
+   "Beam me up, Scotty!" tag (which is local to index.html and returns to
+   the top instead), tilted the opposite way (+4deg vs -3deg). Real mouse
+   hover only — hover:hover keeps it from sticking on after a touch. --- */
+.site-footer__name{position:relative}
+.site-footer__home-tag{--tilt:4deg;position:absolute;left:50%;bottom:100%;margin-bottom:16px;
+      display:inline-flex;align-items:center;gap:8px;white-space:nowrap;
+      font-size:15px;font-weight:600;letter-spacing:normal;padding:8px 18px 8px 14px;border-radius:999px;
+      background:var(--lime);color:var(--charcoal);
+      opacity:0;pointer-events:none;
+      transform:translateX(-50%) translateY(10px) scale(.75) rotate(var(--tilt));
+      transition:opacity .3s var(--spring),transform .3s var(--spring)}
+.site-footer__home-tag svg{width:16px;height:16px;flex:none}
+/* invisible bridge across the gap between the name and the tag so moving
+   the mouse up to the tag doesn't drop :hover and fade it out early */
+.site-footer__home-tag::before{content:"";position:absolute;left:0;right:0;bottom:-16px;height:16px}
+@media (hover:hover){
+  .site-footer__name:hover .site-footer__home-tag,
+  .site-footer__name:focus-visible .site-footer__home-tag{
+        opacity:1;pointer-events:auto;
+        transform:translateX(-50%) translateY(0) scale(1) rotate(var(--tilt))}
+}
 .site-footer__tag{font-size:clamp(15px,1.8vw,22px);margin:0;opacity:.9}
 .site-footer__links{display:flex;flex-direction:column;gap:6px}
 .site-footer__links a{--tilt:-2deg;font-size:clamp(28px,4.5vw,56px);font-weight:600;letter-spacing:-.03em;
@@ -462,7 +486,7 @@ a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   body{animation:none;background-color:#f455a7}
-  .back-link a,.say-hi__icon,.site-footer__links a{transition:none !important}
+  .back-link a,.say-hi__icon,.site-footer__links a,.site-footer__home-tag{transition:none !important}
   .article__img,.article__img-row img{transition:none !important}
 }
 
@@ -489,3 +513,4 @@ a.card:hover .card__desc,a.card:focus-visible .card__desc{opacity:.7}
 .js-hover-suspended a.card .card__tag{background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.07)) !important;
       color:#fff !important;box-shadow:var(--glass-rim) !important}
 .js-hover-suspended a.card .card__desc{opacity:.9 !important}
+.js-hover-suspended .site-footer__home-tag{opacity:0 !important;pointer-events:none !important}
